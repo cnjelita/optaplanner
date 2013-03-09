@@ -23,6 +23,7 @@ import org.optaplanner.config.bruteforce.BruteForceSolverPhaseConfig;
 import org.optaplanner.config.constructionheuristic.ConstructionHeuristicSolverPhaseConfig;
 import org.optaplanner.config.localsearch.LocalSearchSolverPhaseConfig;
 import org.optaplanner.config.phase.custom.CustomSolverPhaseConfig;
+import org.optaplanner.config.geneticalgorithm.GeneticAlgorithmSolverPhaseConfig;
 import org.optaplanner.config.termination.TerminationConfig;
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.phase.AbstractSolverPhase;
@@ -35,7 +36,8 @@ import org.optaplanner.core.termination.Termination;
         CustomSolverPhaseConfig.class,
         BruteForceSolverPhaseConfig.class,
         ConstructionHeuristicSolverPhaseConfig.class,
-        LocalSearchSolverPhaseConfig.class
+        LocalSearchSolverPhaseConfig.class,
+        GeneticAlgorithmSolverPhaseConfig.class
 })
 public abstract class SolverPhaseConfig {
 
