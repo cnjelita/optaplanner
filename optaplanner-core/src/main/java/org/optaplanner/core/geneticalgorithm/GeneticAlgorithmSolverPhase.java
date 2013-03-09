@@ -82,7 +82,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         //TODO initialize population
 
         GeneticAlgorithmStepScope stepScope = createNextStepScope(phaseScope, null);
-
+        
         while (!termination.isPhaseTerminated(phaseScope)) {
             stepStarted(stepScope);
             //TODO assess fitness of individuals
@@ -94,6 +94,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
              /*
              * TODO perform replacement of individuals from new population and old one (done in stepEnded?)
              * where to do assessment? During replacement or before? Where to do score assertion?
+             * stepEnded(StepScope)
              * if (assertStepScoreIsUncorrupted) {
              *   phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
              *   phaseScope.assertExpectedWorkingScore(stepScope.getScore());
@@ -146,7 +147,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         crossoverOperator.phaseEnded(phaseScope);
         solutionSelector.phaseEnded(phaseScope);
 
-        logger.info("Phase ({}) localSearch ended: step total ({}), time spend ({}), best score ({}).",
+        logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
                 phaseIndex,
                 phaseScope.getLastCompletedStepScope().getStepIndex() + 1,
                 phaseScope.calculateSolverTimeMillisSpend(),
