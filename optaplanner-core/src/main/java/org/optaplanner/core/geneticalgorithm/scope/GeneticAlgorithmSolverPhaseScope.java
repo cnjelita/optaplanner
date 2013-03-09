@@ -18,6 +18,7 @@ package org.optaplanner.core.geneticalgorithm.scope;
 
 import org.optaplanner.core.phase.AbstractSolverPhaseScope;
 import org.optaplanner.core.phase.step.AbstractStepScope;
+import org.optaplanner.core.score.Score;
 import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
@@ -27,8 +28,16 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
         super(solverScope);
     }
 
+    //TODO why should this method be implemented for all phases? Useless for genetic algorithm
+    //Seems like it's used to assert undoMoves.
     @Override
     public AbstractStepScope getLastCompletedStepScope() {
-        return null; //TODO implement
+        return null;
+    }
+
+    //TODO overridden because might be used to calculate population fitness
+    @Override
+    public Score calculateScore() {
+        return null; //TODO return something
     }
 }

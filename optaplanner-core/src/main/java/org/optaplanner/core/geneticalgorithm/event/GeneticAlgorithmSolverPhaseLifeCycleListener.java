@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm;
+package org.optaplanner.core.geneticalgorithm.event;
 
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;

@@ -16,7 +16,8 @@
 
 package org.optaplanner.core.geneticalgorithm.operator.crossover;
 
-//TODO make interface
-public class CrossoverOperator {
+import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+
+public interface CrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCycleListener {
     //TODO add method definitions
 }

@@ -16,6 +16,7 @@
 
 package org.optaplanner.core.geneticalgorithm;
 
+import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
@@ -75,47 +76,113 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
     @Override
     public void solve(DefaultSolverScope solverScope) {
-        //TODO implement solve method for genetic algorithm
-
-        //TODO Make geneticAlgorithmPhaseScope
-        //TODO phaseStarted - Tell operators phase started
+        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope);
+        phaseStarted(phaseScope);
 
         //TODO initialize population
 
-        //TODO make step scope
+        GeneticAlgorithmStepScope stepScope = createNextStepScope(phaseScope, null);
 
-        /*TODO perform loop as long as not terminated
-         *
-         *
-         *     assess fitness of individuals
-         *     use selector for parent selection
-         *     perform crossover on parents to form children
-         *     perform mutation on children
-         *     perform replacement of individuals from new population and old one
-         *
-         *     step ended - look for best individual, create new stepscope
-         */
+        while (!termination.isPhaseTerminated(phaseScope)) {
+            stepStarted(stepScope);
+            //TODO assess fitness of individuals
+            //TODO use selector for parent selection
+            //TODO perform crossover on parents to form children
+            //TODO perform mutation on children
 
-        //TODO phaseEnded
+
+             /*
+             * TODO perform replacement of individuals from new population and old one (done in stepEnded?)
+             * where to do assessment? During replacement or before? Where to do score assertion?
+             * if (assertStepScoreIsUncorrupted) {
+             *   phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
+             *   phaseScope.assertExpectedWorkingScore(stepScope.getScore());
+             * }
+             */
+            stepScope = createNextStepScope(phaseScope, stepScope);
+        }
+
+        phaseEnded(phaseScope);
+    }
+
+    //TODO do genetic algorithms really use step index, or can this method be removed?
+    private GeneticAlgorithmStepScope createNextStepScope(GeneticAlgorithmSolverPhaseScope phaseScope,
+            GeneticAlgorithmStepScope completedStepScope) {
+        GeneticAlgorithmStepScope stepScope = new GeneticAlgorithmStepScope(phaseScope);
+        if (completedStepScope == null) {
+            stepScope.setStepIndex(0);
+        } else {
+            stepScope.setStepIndex(1);
+        }
+        return null;  //To change body of created methods use File | Settings | File Templates.
     }
 
     @Override
-    public void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+    public void solvingStarted(DefaultSolverScope solverScope) {
+        super.solvingStarted(solverScope);
         //TODO implement
     }
 
     @Override
-    public void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+    public void solvingEnded(DefaultSolverScope solverScope) {
+        super.solvingEnded(solverScope);
         //TODO implement
+    }
+
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        //TODO Should something else be done when phase starts?
+        super.phaseStarted(phaseScope);
+        mutationOperator.phaseStarted(phaseScope);
+        crossoverOperator.phaseStarted(phaseScope);
+        solutionSelector.phaseStarted(phaseScope);
+    }
+
+    @Override
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        //TODO Should something else be done when phase ends?
+        super.phaseEnded(phaseScope);
+        mutationOperator.phaseEnded(phaseScope);
+        crossoverOperator.phaseEnded(phaseScope);
+        solutionSelector.phaseEnded(phaseScope);
+
+        logger.info("Phase ({}) localSearch ended: step total ({}), time spend ({}), best score ({}).",
+                phaseIndex,
+                phaseScope.getLastCompletedStepScope().getStepIndex() + 1,
+                phaseScope.calculateSolverTimeMillisSpend(),
+                phaseScope.getBestScore());
     }
 
     @Override
     public void stepStarted(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+        //TODO Should something else be done when step starts?
+        super.stepStarted(stepScope);
+        mutationOperator.stepStarted(stepScope);
+        crossoverOperator.stepStarted(stepScope);
+        solutionSelector.stepStarted(stepScope);
     }
 
     @Override
     public void stepEnded(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+        //TODO Should something else be done when step ends?
+        super.stepEnded(stepScope);
+        mutationOperator.stepEnded(stepScope);
+        crossoverOperator.stepEnded(stepScope);
+        solutionSelector.stepEnded(stepScope);
+
+        GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
+        if (assertStepScoreIsUncorrupted) {
+            stepScope.getPhaseScope().getSolverScope().getScoreDirector()
+                    .setWorkingSolution(stepScope.createOrGetClonedSolution());
+        }
+        if (logger.isDebugEnabled()) {
+            long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();
+            logger.debug("    Step index ({}), time spend ({}), score ({}), {} best score ({})",
+                    new Object[]{stepScope.getStepIndex(), timeMillisSpend,
+                            stepScope.getScore(),
+                            (stepScope.getBestScoreImproved() ? "new" : "   "),
+                            phaseScope.getBestScore()
+                    });
+        }
     }
 }

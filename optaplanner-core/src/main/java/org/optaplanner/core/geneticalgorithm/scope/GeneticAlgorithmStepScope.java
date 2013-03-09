@@ -21,18 +21,26 @@ import org.optaplanner.core.phase.step.AbstractStepScope;
 
 public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
-    @Override
-    public AbstractSolverPhaseScope getPhaseScope() {
-        return null; //TODO implement
+    private final GeneticAlgorithmSolverPhaseScope phaseScope;
+
+    public GeneticAlgorithmStepScope(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        this.phaseScope = phaseScope;
     }
 
+    @Override
+    public GeneticAlgorithmSolverPhaseScope getPhaseScope() {
+        return phaseScope;
+    }
+
+    //TODO what is this for?
     @Override
     public boolean isBestSolutionCloningDelayed() {
-        return false; //TODO implement
+        return false;
     }
 
+    //TODO what is this for?
     @Override
     public int getUninitializedVariableCount() {
-        return 0; //TODO implement
+        return 0;
     }
 }

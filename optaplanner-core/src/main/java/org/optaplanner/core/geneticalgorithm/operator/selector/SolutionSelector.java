@@ -16,7 +16,8 @@
 
 package org.optaplanner.core.geneticalgorithm.operator.selector;
 
-//TODO should be interface?
-public class SolutionSelector {
+import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+
+public interface SolutionSelector extends GeneticAlgorithmSolverPhaseLifeCycleListener {
     //TODO implement solution selector interface.
 }

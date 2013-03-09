@@ -14,26 +14,32 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm.operator.mutation;
+package org.optaplanner.core.geneticalgorithm.event;
 
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
-import org.optaplanner.core.heuristic.selector.move.MoveSelector;
+import org.optaplanner.core.solver.event.SolverLifecycleListenerAdapter;
 
-//TODO Should this be called DefaultMutationOperator?
-public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter {
+public class GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter extends SolverLifecycleListenerAdapter
+        implements GeneticAlgorithmSolverPhaseLifeCycleListener {
 
-    private MoveSelector moveSelector;
-
-    public void setMoveSelector(MoveSelector moveSelector) {
-        this.moveSelector = moveSelector;
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+        // Hook method
     }
 
-    public MoveSelector getMoveSelector() {
-        return moveSelector;
+    @Override
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+        // Hook method
     }
 
-    //TODO define methods for mutation
+    @Override
+    public void stepStarted(GeneticAlgorithmStepScope stepScope) {
+        // Hook method
+    }
+
+    @Override
+    public void stepEnded(GeneticAlgorithmStepScope stepScope) {
+        // Hook method
+    }
 }
