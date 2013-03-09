@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm;
+package org.optaplanner.core.geneticalgorithm.scope;
 
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.phase.AbstractSolverPhaseScope;
+import org.optaplanner.core.phase.step.AbstractStepScope;
+import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
-public interface GeneticAlgorithmSolverPhaseLifeCycleListener {
+public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
-    void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope);
+    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope) {
+        //TODO make complete
+        super(solverScope);
+    }
 
-    void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope);
-
-    void stepStarted(GeneticAlgorithmStepScope stepScope);
-
-    void stepEnded(GeneticAlgorithmStepScope stepScope);
+    @Override
+    public AbstractStepScope getLastCompletedStepScope() {
+        return null; //TODO implement
+    }
 }

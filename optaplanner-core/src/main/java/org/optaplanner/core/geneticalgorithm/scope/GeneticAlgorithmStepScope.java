@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm;
+package org.optaplanner.core.geneticalgorithm.scope;
 
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.phase.AbstractSolverPhaseScope;
+import org.optaplanner.core.phase.step.AbstractStepScope;
 
-public interface GeneticAlgorithmSolverPhaseLifeCycleListener {
+public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
-    void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope);
+    @Override
+    public AbstractSolverPhaseScope getPhaseScope() {
+        return null; //TODO implement
+    }
 
-    void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope);
+    @Override
+    public boolean isBestSolutionCloningDelayed() {
+        return false; //TODO implement
+    }
 
-    void stepStarted(GeneticAlgorithmStepScope stepScope);
-
-    void stepEnded(GeneticAlgorithmStepScope stepScope);
+    @Override
+    public int getUninitializedVariableCount() {
+        return 0; //TODO implement
+    }
 }

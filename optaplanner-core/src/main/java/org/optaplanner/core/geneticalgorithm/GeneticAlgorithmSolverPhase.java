@@ -19,6 +19,8 @@ package org.optaplanner.core.geneticalgorithm;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.phase.AbstractSolverPhase;
 import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
@@ -95,5 +97,25 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
          */
 
         //TODO phaseEnded
+    }
+
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+        //TODO implement
+    }
+
+    @Override
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+        //TODO implement
+    }
+
+    @Override
+    public void stepStarted(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
+
+    @Override
+    public void stepEnded(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
     }
 }
