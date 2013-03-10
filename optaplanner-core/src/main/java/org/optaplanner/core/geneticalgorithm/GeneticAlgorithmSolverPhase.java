@@ -17,6 +17,7 @@
 package org.optaplanner.core.geneticalgorithm;
 
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import org.optaplanner.core.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
@@ -28,11 +29,14 @@ import org.optaplanner.core.solver.scope.DefaultSolverScope;
 public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         implements GeneticAlgorithmSolverPhaseLifeCycleListener {
 
+    private int populationSize;
+
+    private boolean assertStepScoreIsUncorrupted;
+
     private SolutionSelector solutionSelector;
     private CrossoverOperator crossoverOperator;
     private MutationOperator mutationOperator;
-    private int populationSize;
-    private boolean assertStepScoreIsUncorrupted;
+    private PopulationInitializer populationInitializer;
 
     public void setSolutionSelector(SolutionSelector solutionSelector) {
         this.solutionSelector = solutionSelector;
@@ -74,15 +78,23 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         return assertStepScoreIsUncorrupted;
     }
 
+    public void setPopulationInitializer(PopulationInitializer populationInitializer) {
+        this.populationInitializer = populationInitializer;
+    }
+
+    public PopulationInitializer getPopulationInitializer() {
+        return populationInitializer;
+    }
+
     @Override
     public void solve(DefaultSolverScope solverScope) {
         GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope);
         phaseStarted(phaseScope);
 
-        //TODO initialize population
+        populationInitializer.initializePopulation(phaseScope);
 
         GeneticAlgorithmStepScope stepScope = createNextStepScope(phaseScope, null);
-        
+
         while (!termination.isPhaseTerminated(phaseScope)) {
             stepStarted(stepScope);
             //TODO assess fitness of individuals
@@ -137,6 +149,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         mutationOperator.phaseStarted(phaseScope);
         crossoverOperator.phaseStarted(phaseScope);
         solutionSelector.phaseStarted(phaseScope);
+        populationInitializer.phaseStarted(phaseScope);
     }
 
     @Override
@@ -146,6 +159,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         mutationOperator.phaseEnded(phaseScope);
         crossoverOperator.phaseEnded(phaseScope);
         solutionSelector.phaseEnded(phaseScope);
+        populationInitializer.phaseEnded(phaseScope);
 
         logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
                 phaseIndex,
@@ -186,4 +200,5 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
                     });
         }
     }
+
 }

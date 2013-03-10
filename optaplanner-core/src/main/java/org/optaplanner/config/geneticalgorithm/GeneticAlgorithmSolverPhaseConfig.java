@@ -23,6 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.collections.CollectionUtils;
 import org.optaplanner.config.EnvironmentMode;
+import org.optaplanner.config.geneticalgorithm.initializer.PopulationInitializerConfig;
 import org.optaplanner.config.geneticalgorithm.operator.SolutionSelector.SolutionSelectorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.crossover.CrossoverOperatorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.mutation.MutationOperatorConfig;
@@ -33,6 +34,8 @@ import org.optaplanner.config.heuristic.selector.move.generic.SwapMoveSelectorCo
 import org.optaplanner.config.phase.SolverPhaseConfig;
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.geneticalgorithm.GeneticAlgorithmSolverPhase;
+import org.optaplanner.core.geneticalgorithm.initializer.PopulationInitializer;
+import org.optaplanner.core.geneticalgorithm.initializer.RandomPopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
@@ -52,13 +55,16 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 
     //TODO all of the operators are read into a list due to XStream limitations
     @XStreamImplicit()
-    List<SolutionSelectorConfig> solutionSelectorConfigList = null;
+    private List<SolutionSelectorConfig> solutionSelectorConfigList = null;
 
     @XStreamImplicit()
-    List<CrossoverOperatorConfig> crossoverOperatorConfigList = null;
+    private List<CrossoverOperatorConfig> crossoverOperatorConfigList = null;
 
     @XStreamImplicit()
-    List<MutationOperatorConfig> mutationOperatorConfigList = null;
+    private List<MutationOperatorConfig> mutationOperatorConfigList = null;
+
+    @XStreamImplicit()
+    private List<PopulationInitializerConfig> populationInitializerConfigList = null;
 
     public PopulationParametersConfig getPopulationParametersConfig() {
         return populationParametersConfig;
@@ -103,12 +109,28 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         solverPhase.setSolutionSelector(buildSolutionSelector(solutionDescriptor));
         solverPhase.setCrossoverOperator(buildCrossoverOperator(solutionDescriptor));
         solverPhase.setMutationOperator(buildMutationOperator(environmentMode, solutionDescriptor));
+        solverPhase.setPopulationInitializer(buildPopulationInitializer(solutionDescriptor));
 
         if (environmentMode == EnvironmentMode.FAST_ASSERT || environmentMode == EnvironmentMode.FULL_ASSERT) {
             solverPhase.setAssertStepScoreIsUncorrupted(true);
         }
 
         return solverPhase;
+    }
+
+    private PopulationInitializer buildPopulationInitializer(SolutionDescriptor solutionDescriptor) {
+        PopulationInitializer populationInitializer;
+        if (CollectionUtils.isEmpty(populationInitializerConfigList)) {
+            //TODO set best as default
+            populationInitializer = new RandomPopulationInitializer();
+        } else if (populationInitializerConfigList.size() == 1) {
+            populationInitializer = populationInitializerConfigList.get(0).buildPopulationInitializer(
+                    solutionDescriptor);
+        } else {
+            throw new IllegalArgumentException("The populationInitializerConfigList (" + populationInitializerConfigList
+                    + ") must be a singleton or empty.");
+        }
+        return populationInitializer;
     }
 
     private MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
@@ -130,7 +152,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
                     environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
         } else {
             throw new IllegalArgumentException("The mutationOperatorConfigList (" + mutationOperatorConfigList
-                    + ") must a singleton or empty.");
+                    + ") must be a singleton or empty.");
         }
         return mutationOperator;
     }
@@ -162,7 +184,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
             solutionSelector = solutionSelectorConfigList.get(0).buildSolutionSelector(solutionDescriptor);
         } else {
             throw new IllegalArgumentException("The solutionSelectorConfigList (" + solutionSelectorConfigList
-                    + ") must a singleton or empty.");
+                    + ") must be a singleton or empty.");
         }
         return solutionSelector;
     }
