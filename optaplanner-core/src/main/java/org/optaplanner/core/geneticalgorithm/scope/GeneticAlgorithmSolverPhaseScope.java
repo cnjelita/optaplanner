@@ -57,6 +57,6 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     public void setNewGeneration(Population newGeneration) {
         this.newGeneration = newGeneration;
-        //TODO other stuff?
+        //TODO other stuff? Is called from replacementStrategy and solutionGenerator
     }
 }

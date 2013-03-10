@@ -16,11 +16,11 @@
 
 package org.optaplanner.core.geneticalgorithm.initializer;
 
-import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 
-//TODO should be in operator package?
+//TODO should be in operator package? of
+//TODO maybe add abstract class with code which is reused in every type of initializer
 public interface PopulationInitializer extends GeneticAlgorithmSolverPhaseLifeCycleListener {
 
     /**
