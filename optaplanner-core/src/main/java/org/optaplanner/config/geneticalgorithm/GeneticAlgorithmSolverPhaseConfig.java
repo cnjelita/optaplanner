@@ -24,10 +24,9 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.collections.CollectionUtils;
 import org.optaplanner.config.EnvironmentMode;
 import org.optaplanner.config.geneticalgorithm.initializer.PopulationInitializerConfig;
-import org.optaplanner.config.geneticalgorithm.operator.solutionselector.SolutionSelectorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.crossover.CrossoverOperatorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.mutation.MutationOperatorConfig;
-import org.optaplanner.config.geneticalgorithm.replacementstrategy.ReplacementStrategyConfig;
+import org.optaplanner.config.geneticalgorithm.operator.solutionselector.SolutionSelectorConfig;
 import org.optaplanner.config.heuristic.selector.common.SelectionOrder;
 import org.optaplanner.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
 import org.optaplanner.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
@@ -41,7 +40,10 @@ import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperato
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
 import org.optaplanner.core.geneticalgorithm.replacementstrategy.KeepBestStrategy;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.KeepNewStrategy;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.RandomStrategy;
 import org.optaplanner.core.geneticalgorithm.replacementstrategy.ReplacementStrategy;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.SteadyStateStrategy;
 import org.optaplanner.core.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.phase.SolverPhase;
 import org.optaplanner.core.score.definition.ScoreDefinition;
@@ -69,8 +71,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
     @XStreamImplicit()
     private List<PopulationInitializerConfig> populationInitializerConfigList = null;
 
-    @XStreamImplicit()
-    private List<ReplacementStrategyConfig> replacementStrategyConfigList = null;
+    private ReplacementStrategyType replacementStrategyType = null;
 
     public PopulationParametersConfig getPopulationParametersConfig() {
         return populationParametersConfig;
@@ -112,15 +113,15 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         this.populationInitializerConfigList = populationInitializerConfigList;
     }
 
-    public List<ReplacementStrategyConfig> getReplacementStrategyConfigList() {
-        return replacementStrategyConfigList;
+    public ReplacementStrategyType getReplacementStrategyType() {
+        return replacementStrategyType;
     }
 
-    public void setReplacementStrategyConfigList(List<ReplacementStrategyConfig> replacementStrategyConfigList) {
-        this.replacementStrategyConfigList = replacementStrategyConfigList;
+    public void setReplacementStrategyType(ReplacementStrategyType replacementStrategyType) {
+        this.replacementStrategyType = replacementStrategyType;
     }
 
-    // ************************************************************************
+// ************************************************************************
     // Builder methods
     // ************************************************************************
 
@@ -148,15 +149,26 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 
     private ReplacementStrategy buildReplacementStrategy() {
         ReplacementStrategy replacementStrategy;
-        if (CollectionUtils.isEmpty(replacementStrategyConfigList)) {
+        if (replacementStrategyType == null) {
             //TODO set best option as default
             replacementStrategy = new KeepBestStrategy();
-        } else if (replacementStrategyConfigList.size() == 1) {
-            replacementStrategy = replacementStrategyConfigList.get(0).buildReplacementStrategy();
         } else {
-            throw new IllegalArgumentException("The replacementStrategyConfigList (" + replacementStrategyConfigList
-                    + ") must be a singleton or empty.");
+            switch (replacementStrategyType) {
+                case KEEP_NEW:
+                    replacementStrategy = new KeepNewStrategy();
+                    break;
+                case RANDOM:
+                    replacementStrategy = new RandomStrategy();
+                    break;
+                case STEADY_STATE:
+                    replacementStrategy = new SteadyStateStrategy();
+                default:
+                    //TODO default to best replacement strategy
+                    replacementStrategy = new KeepBestStrategy();
+                    break;
+            }
         }
+
         return replacementStrategy;
     }
 

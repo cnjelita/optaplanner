@@ -20,15 +20,17 @@ import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.phase.AbstractSolverPhaseScope;
 import org.optaplanner.core.phase.step.AbstractStepScope;
 import org.optaplanner.core.score.Score;
-import org.optaplanner.core.score.director.ScoreDirector;
 import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     private Population generation;
+    private int populationSize;
+    private Population newGeneration;
 
     public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope) {
         //TODO make complete
+        //TODO initialize population size on creation
         super(solverScope);
     }
 
@@ -47,5 +49,14 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     public Population getGeneration() {
         return generation;
+    }
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+
+    public void setNewGeneration(Population newGeneration) {
+        this.newGeneration = newGeneration;
+        //TODO other stuff?
     }
 }

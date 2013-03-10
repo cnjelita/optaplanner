@@ -17,7 +17,6 @@
 package org.optaplanner.core.geneticalgorithm.scope;
 
 import org.optaplanner.core.geneticalgorithm.Population;
-import org.optaplanner.core.phase.AbstractSolverPhaseScope;
 import org.optaplanner.core.phase.step.AbstractStepScope;
 
 public class GeneticAlgorithmStepScope extends AbstractStepScope {
@@ -48,5 +47,18 @@ public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
     public Population getIntermediatePopulation() {
         return intermediatePopulation;
+    }
+
+    //TODO should ..OnIntermediatePopulation be added to method name?
+    public void performScoreCalculation() {
+        intermediatePopulation.performScoreCalculation();
+    }
+
+    public Population getCurrentGeneration() {
+        return phaseScope.getGeneration();
+    }
+
+    public void setNewGeneration(Population newGeneration) {
+        phaseScope.setNewGeneration(newGeneration);
     }
 }

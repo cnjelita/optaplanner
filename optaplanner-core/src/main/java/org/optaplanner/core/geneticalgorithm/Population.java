@@ -27,6 +27,7 @@ public class Population implements Iterable<ScoreDirector> {
 
     private List<ScoreDirector> individuals;
     private int populationSize;
+    private ScoreDirector bestIndividual;
 
     public Population(int populationSize) {
         this.populationSize = populationSize;
@@ -42,5 +43,24 @@ public class Population implements Iterable<ScoreDirector> {
         individuals.add(scoreDirector);
     }
 
+    public List<ScoreDirector> getIndividuals() {
+        return individuals;
+    }
 
+    public void setIndividuals(List<ScoreDirector> individuals) {
+        this.individuals = individuals;
+    }
+
+    public void performScoreCalculation() {
+        //TODO implement
+        //Should keep track of best, average and worst score per score level
+    }
+
+    public void setBestIndividual(ScoreDirector bestIndividual) {
+        this.bestIndividual = bestIndividual;
+    }
+
+    public ScoreDirector getBestIndividual() {
+        return bestIndividual;
+    }
 }

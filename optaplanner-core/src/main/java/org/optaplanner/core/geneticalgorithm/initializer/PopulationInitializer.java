@@ -16,6 +16,7 @@
 
 package org.optaplanner.core.geneticalgorithm.initializer;
 
+import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 

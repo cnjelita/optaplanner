@@ -45,6 +45,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
 
     @Override
     public void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        //TODO do this populationSize times
         Solution clone = solutionCloner.cloneSolution(phaseScope.getWorkingSolution());
         List<Object> planningEntityList = phaseScope.getSolutionDescriptor().getPlanningEntityList(clone);
         for (Object planningEntity : planningEntityList) {
@@ -58,11 +59,13 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                     //TODO implement chained variable option
                     //TODO should keep track of already used values?
                 } else {
+                    //TODO maybe use swapMoves so the isDoable option is available
                     variableDescriptor.setValue(planningEntity,
                             planningValues.get(workingRandom.nextInt(planningValues.size())));
                 }
             }
         }
+        //TODO put population in phaseScope
     }
 
     @Override

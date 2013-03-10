@@ -83,7 +83,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
             solutionSelector.selectParents(stepScope);
             crossoverOperator.performCrossover(stepScope);
             mutationOperator.performMutation(stepScope);
-            replacementStrategy.generateNewGeneration(stepScope);
+            replacementStrategy.createNewGeneration(stepScope);
 
             //TODO stepEnded just prints out the current best score, so if score improved it should already
             //have been notified to phaseScope

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package org.optaplanner.config.geneticalgorithm.replacementstrategy;
+package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
-import org.optaplanner.core.geneticalgorithm.replacementstrategy.ReplacementStrategy;
+import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
-public abstract class ReplacementStrategyConfig {
+public class KeepNewStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
+        ReplacementStrategy {
 
-    public abstract ReplacementStrategy buildReplacementStrategy();
+    @Override
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
 
+    //TODO react to lifecycle events?
 }

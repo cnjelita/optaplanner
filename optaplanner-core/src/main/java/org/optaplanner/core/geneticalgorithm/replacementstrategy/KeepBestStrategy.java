@@ -16,15 +16,69 @@
 
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.optaplanner.core.geneticalgorithm.Population;
+import org.optaplanner.core.geneticalgorithm.ScoreDirectorComparator;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.score.director.ScoreDirector;
 
 public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter
         implements ReplacementStrategy {
 
+    private Comparator<ScoreDirector> scoreDirectorComparator;
+    private int populationSize;
+
     @Override
-    public void generateNewGeneration(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+
+        stepScope.performScoreCalculation();
+
+        List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
+        List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
+
+        //TODO does this method sort from worst to best?
+        Collections.sort(intermediatePopulation, scoreDirectorComparator);
+
+        Population newGeneration = new Population(populationSize);
+
+        int intermediateListIndex = 0;
+        int generationListIndex = 0;
+
+        ScoreDirector intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+        ScoreDirector generationIndividual = currentGeneration.get(generationListIndex);
+
+        ScoreDirector bestIndividual =
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) > 0 ?
+                        intermediateIndividual : generationIndividual;
+
+        newGeneration.setBestIndividual(bestIndividual);
+
+        for (int i = 0; i < populationSize; i++) {
+            intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+            generationIndividual = currentGeneration.get(generationListIndex);
+            //TODO does this method sort from worst to best?
+            if (scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) > 0) {
+                newGeneration.addIndividual(intermediateIndividual);
+                intermediateListIndex++;
+            } else {
+                newGeneration.addIndividual(generationIndividual);
+                generationListIndex++;
+            }
+        }
+
+        stepScope.setNewGeneration(newGeneration);
+        //TODO Update workingSolution to best solution?
     }
-    //TODO override lifecycle events?
+
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        super.phaseStarted(phaseScope);
+        scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
+        populationSize = phaseScope.getPopulationSize();
+    }
 }

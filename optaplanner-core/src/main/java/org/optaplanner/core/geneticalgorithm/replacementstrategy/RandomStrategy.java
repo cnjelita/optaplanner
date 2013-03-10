@@ -16,19 +16,15 @@
 
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
-//TODO should be in operator package?
-public interface ReplacementStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListener {
+public class RandomStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements ReplacementStrategy {
 
-    /**
-     * Use individuals in current generation in phaseScope
-     * and intermediate population in stepScope to form a new
-     * generation. Scores need to be calculated before starting
-     * this process.
-     * @param stepScope
-     */
-    //TODO maybe rename this method?
-    void createNewGeneration(GeneticAlgorithmStepScope stepScope);
+    @Override
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
+
+    //TODO react to lifecycle events?
 }
