@@ -24,9 +24,10 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.collections.CollectionUtils;
 import org.optaplanner.config.EnvironmentMode;
 import org.optaplanner.config.geneticalgorithm.initializer.PopulationInitializerConfig;
-import org.optaplanner.config.geneticalgorithm.operator.SolutionSelector.SolutionSelectorConfig;
+import org.optaplanner.config.geneticalgorithm.operator.solutionselector.SolutionSelectorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.crossover.CrossoverOperatorConfig;
 import org.optaplanner.config.geneticalgorithm.operator.mutation.MutationOperatorConfig;
+import org.optaplanner.config.geneticalgorithm.replacementstrategy.ReplacementStrategyConfig;
 import org.optaplanner.config.heuristic.selector.common.SelectionOrder;
 import org.optaplanner.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
 import org.optaplanner.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
@@ -39,6 +40,8 @@ import org.optaplanner.core.geneticalgorithm.initializer.RandomPopulationInitial
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.KeepBestStrategy;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.ReplacementStrategy;
 import org.optaplanner.core.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.phase.SolverPhase;
 import org.optaplanner.core.score.definition.ScoreDefinition;
@@ -65,6 +68,9 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 
     @XStreamImplicit()
     private List<PopulationInitializerConfig> populationInitializerConfigList = null;
+
+    @XStreamImplicit()
+    private List<ReplacementStrategyConfig> replacementStrategyConfigList = null;
 
     public PopulationParametersConfig getPopulationParametersConfig() {
         return populationParametersConfig;
@@ -98,6 +104,26 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         this.mutationOperatorConfigList = mutationOperatorConfig;
     }
 
+    public List<PopulationInitializerConfig> getPopulationInitializerConfigList() {
+        return populationInitializerConfigList;
+    }
+
+    public void setPopulationInitializerConfigList(List<PopulationInitializerConfig> populationInitializerConfigList) {
+        this.populationInitializerConfigList = populationInitializerConfigList;
+    }
+
+    public List<ReplacementStrategyConfig> getReplacementStrategyConfigList() {
+        return replacementStrategyConfigList;
+    }
+
+    public void setReplacementStrategyConfigList(List<ReplacementStrategyConfig> replacementStrategyConfigList) {
+        this.replacementStrategyConfigList = replacementStrategyConfigList;
+    }
+
+    // ************************************************************************
+    // Builder methods
+    // ************************************************************************
+
     @Override
     public SolverPhase buildSolverPhase(int phaseIndex, EnvironmentMode environmentMode,
             SolutionDescriptor solutionDescriptor, ScoreDefinition scoreDefinition, Termination solverTermination) {
@@ -110,12 +136,27 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         solverPhase.setCrossoverOperator(buildCrossoverOperator(solutionDescriptor));
         solverPhase.setMutationOperator(buildMutationOperator(environmentMode, solutionDescriptor));
         solverPhase.setPopulationInitializer(buildPopulationInitializer(solutionDescriptor));
+        solverPhase.setReplacementStrategy(buildReplacementStrategy());
 
         if (environmentMode == EnvironmentMode.FAST_ASSERT || environmentMode == EnvironmentMode.FULL_ASSERT) {
             solverPhase.setAssertStepScoreIsUncorrupted(true);
         }
 
         return solverPhase;
+    }
+
+    private ReplacementStrategy buildReplacementStrategy() {
+        ReplacementStrategy replacementStrategy;
+        if (CollectionUtils.isEmpty(replacementStrategyConfigList)) {
+            //TODO set best option as default
+            replacementStrategy = new KeepBestStrategy();
+        } else if (replacementStrategyConfigList.size() == 1) {
+            replacementStrategy = replacementStrategyConfigList.get(0).buildReplacementStrategy();
+        } else {
+            throw new IllegalArgumentException("The replacementStrategyConfigList (" + replacementStrategyConfigList
+                    + ") must be a singleton or empty.");
+        }
+        return replacementStrategy;
     }
 
     private PopulationInitializer buildPopulationInitializer(SolutionDescriptor solutionDescriptor) {

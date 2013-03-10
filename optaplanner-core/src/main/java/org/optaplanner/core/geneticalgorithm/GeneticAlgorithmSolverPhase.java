@@ -21,6 +21,7 @@ import org.optaplanner.core.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.geneticalgorithm.replacementstrategy.ReplacementStrategy;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.phase.AbstractSolverPhase;
@@ -37,6 +38,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     private CrossoverOperator crossoverOperator;
     private MutationOperator mutationOperator;
     private PopulationInitializer populationInitializer;
+    private ReplacementStrategy replacementStrategy;
 
     public void setSolutionSelector(SolutionSelector solutionSelector) {
         this.solutionSelector = solutionSelector;
@@ -84,6 +86,14 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
     public PopulationInitializer getPopulationInitializer() {
         return populationInitializer;
+    }
+
+    public void setReplacementStrategy(ReplacementStrategy replacementStrategy) {
+        this.replacementStrategy = replacementStrategy;
+    }
+
+    public ReplacementStrategy getReplacementStrategy() {
+        return replacementStrategy;
     }
 
     @Override

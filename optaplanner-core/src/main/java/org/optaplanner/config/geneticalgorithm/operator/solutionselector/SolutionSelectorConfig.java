@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.optaplanner.config.geneticalgorithm.operator.SolutionSelector;
+package org.optaplanner.config.geneticalgorithm.operator.solutionselector;
 
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
