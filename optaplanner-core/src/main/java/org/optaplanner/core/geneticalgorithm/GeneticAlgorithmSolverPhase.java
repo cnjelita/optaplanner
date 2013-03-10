@@ -113,7 +113,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     @Override
     public void solvingStarted(DefaultSolverScope solverScope) {
         super.solvingStarted(solverScope);
-        //TODO implement
+        mutationOperator.solvingStarted(solverScope);
     }
 
     @Override

@@ -16,11 +16,16 @@
 
 package org.optaplanner.core.geneticalgorithm.operator.mutation;
 
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import java.util.Iterator;
+import java.util.List;
+
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.heuristic.selector.move.MoveSelector;
+import org.optaplanner.core.move.Move;
+import org.optaplanner.core.score.director.ScoreDirector;
+import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 //TODO Should this be called DefaultMutationOperator?
 public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter {
@@ -36,7 +41,35 @@ public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListen
     }
 
     public void performMutation(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+
+        List<ScoreDirector> population = stepScope.getIntermediatePopulation().getIndividuals();
+        for (ScoreDirector scoreDirector : population) {
+            //TODO make moveselectors more population friendly so there's need to do the two things below
+            stepScope.getPhaseScope().getSolverScope().setScoreDirector(scoreDirector);
+            moveSelector.stepStarted(stepScope);
+
+            Iterator<Move> moveIterator = moveSelector.iterator();
+            boolean foundDoableMove = false;
+            Move move = null;
+            while (moveIterator.hasNext() && !foundDoableMove) {
+                move = moveIterator.next();
+                foundDoableMove = move.isMoveDoable(scoreDirector);
+            }
+            if (move != null) {
+                move.doMove(scoreDirector);
+            }
+        }
     }
-    //TODO override lifecycle events?
+
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        super.phaseStarted(phaseScope);
+        moveSelector.phaseStarted(phaseScope);
+    }
+
+    @Override
+    public void solvingStarted(DefaultSolverScope solverScope) {
+        super.solvingStarted(solverScope);
+        moveSelector.solvingStarted(solverScope);
+    }
 }

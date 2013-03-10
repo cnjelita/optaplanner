@@ -18,9 +18,9 @@ package org.optaplanner.core.geneticalgorithm.event;
 
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
-import org.optaplanner.core.solver.event.SolverLifecycleListenerAdapter;
+import org.optaplanner.core.phase.event.SolverPhaseLifecycleListenerAdapter;
 
-public class GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter extends SolverLifecycleListenerAdapter
+public class GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter extends SolverPhaseLifecycleListenerAdapter
         implements GeneticAlgorithmSolverPhaseLifeCycleListener {
 
     @Override

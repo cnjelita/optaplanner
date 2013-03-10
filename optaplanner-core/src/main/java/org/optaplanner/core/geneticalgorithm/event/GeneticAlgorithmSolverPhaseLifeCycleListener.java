@@ -18,8 +18,9 @@ package org.optaplanner.core.geneticalgorithm.event;
 
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.phase.event.SolverPhaseLifecycleListener;
 
-public interface GeneticAlgorithmSolverPhaseLifeCycleListener {
+public interface GeneticAlgorithmSolverPhaseLifeCycleListener extends SolverPhaseLifecycleListener {
 
     void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope);
 

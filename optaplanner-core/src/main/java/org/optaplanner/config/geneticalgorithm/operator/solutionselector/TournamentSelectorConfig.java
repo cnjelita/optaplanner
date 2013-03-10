@@ -16,17 +16,28 @@
 
 package org.optaplanner.config.geneticalgorithm.operator.solutionselector;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamInclude;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.geneticalgorithm.operator.selector.TournamentSelector;
 
-//TODO add possible selection operators for XStream
-//TODO rename to selection operator?
-@XStreamInclude(
-        TournamentSelectorConfig.class
-)
-public abstract class SolutionSelectorConfig {
+@XStreamAlias("tournamentSelector")
+public class TournamentSelectorConfig extends SolutionSelectorConfig {
 
-    public abstract SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor);
+    private Integer tournamentSize;
+
+    public Integer getTournamentSize() {
+        return tournamentSize;
+    }
+
+    public void setTournamentSize(Integer tournamentSize) {
+        this.tournamentSize = tournamentSize;
+    }
+
+    @Override
+    public SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
+        TournamentSelector tournamentSelector = new TournamentSelector();
+        tournamentSelector.setTournamentSize(tournamentSize);
+        return tournamentSelector;
+    }
 }

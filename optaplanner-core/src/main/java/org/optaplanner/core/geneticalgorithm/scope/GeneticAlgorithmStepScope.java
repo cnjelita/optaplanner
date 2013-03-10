@@ -61,4 +61,8 @@ public class GeneticAlgorithmStepScope extends AbstractStepScope {
     public void setNewGeneration(Population newGeneration) {
         phaseScope.setNewGeneration(newGeneration);
     }
+
+    public void setIntermediatePopulation(Population intermediatePopulation) {
+        this.intermediatePopulation = intermediatePopulation;
+    }
 }
