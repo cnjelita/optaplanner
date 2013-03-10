@@ -16,12 +16,16 @@
 
 package org.optaplanner.core.geneticalgorithm.scope;
 
+import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.phase.AbstractSolverPhaseScope;
 import org.optaplanner.core.phase.step.AbstractStepScope;
 import org.optaplanner.core.score.Score;
+import org.optaplanner.core.score.director.ScoreDirector;
 import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
+
+    private Population generation;
 
     public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope) {
         //TODO make complete
@@ -39,5 +43,9 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
     @Override
     public Score calculateScore() {
         return null; //TODO return something
+    }
+
+    public Population getGeneration() {
+        return generation;
     }
 }
