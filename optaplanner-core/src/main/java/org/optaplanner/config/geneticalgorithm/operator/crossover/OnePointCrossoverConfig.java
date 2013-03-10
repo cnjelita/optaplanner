@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm;
+package org.optaplanner.config.geneticalgorithm.operator.crossover;
 
-import java.util.Comparator;
+import org.optaplanner.core.domain.solution.SolutionDescriptor;
+import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
+import org.optaplanner.core.geneticalgorithm.operator.crossover.OnePointCrossoverOperator;
 
-import org.optaplanner.core.score.director.ScoreDirector;
-
-public class ScoreDirectorComparator implements Comparator<ScoreDirector> {
+public class OnePointCrossoverConfig extends CrossoverOperatorConfig {
 
     @Override
-    public int compare(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
-        return leftScoreDirector.getWorkingSolution().getScore().compareTo(
-                rightScoreDirector.getWorkingSolution().getScore());
+    public CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor) {
+        OnePointCrossoverOperator onePointCrossoverOperator = new OnePointCrossoverOperator();
+        return onePointCrossoverOperator;
     }
 }

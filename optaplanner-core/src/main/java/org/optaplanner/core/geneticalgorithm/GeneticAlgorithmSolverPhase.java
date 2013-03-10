@@ -70,7 +70,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
     @Override
     public void solve(DefaultSolverScope solverScope) {
-        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope);
+        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope, populationSize);
         phaseStarted(phaseScope);
 
         populationInitializer.initializePopulation(phaseScope);
@@ -107,7 +107,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         } else {
             stepScope.setStepIndex(1);
         }
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        return stepScope;
     }
 
     @Override
@@ -119,7 +119,6 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     @Override
     public void solvingEnded(DefaultSolverScope solverScope) {
         super.solvingEnded(solverScope);
-        //TODO implement
     }
 
     @Override
@@ -172,6 +171,10 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         solutionSelector.stepEnded(stepScope);
         populationInitializer.stepEnded(stepScope);
         replacementStrategy.stepEnded(stepScope);
+        if (assertStepScoreIsUncorrupted) {
+            stepScope.getPhaseScope().getSolverScope().getScoreDirector()
+                    .setWorkingSolution(stepScope.createOrGetClonedSolution());
+        }
         if (logger.isDebugEnabled()) {
             GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
             long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();

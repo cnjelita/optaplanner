@@ -72,7 +72,7 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
         }
 
         stepScope.setNewGeneration(newGeneration);
-        //TODO Update workingSolution to best solution?
+
     }
 
     @Override

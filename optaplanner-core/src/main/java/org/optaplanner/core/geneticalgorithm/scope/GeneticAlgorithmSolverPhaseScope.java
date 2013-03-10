@@ -26,12 +26,11 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     private Population generation;
     private int populationSize;
-    private Population newGeneration;
 
-    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope) {
+    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize) {
         //TODO make complete
-        //TODO initialize population size on creation
         super(solverScope);
+        this.populationSize = populationSize;
     }
 
     //TODO why should this method be implemented for all phases? Useless for genetic algorithm
@@ -56,7 +55,10 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
     }
 
     public void setNewGeneration(Population newGeneration) {
-        this.newGeneration = newGeneration;
-        //TODO other stuff? Is called from replacementStrategy and solutionGenerator
+        this.generation = newGeneration;
+        //FIXME necessary because bestsolutionrecaller requires best solution to be in workingSolution
+        getScoreDirector().setWorkingSolution(generation.getBestIndividual().getWorkingSolution());
+        getScoreDirector().calculateScore();
     }
+
 }

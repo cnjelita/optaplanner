@@ -17,8 +17,8 @@
 package org.optaplanner.core.geneticalgorithm.operator.mutation;
 
 import java.util.Iterator;
-import java.util.List;
 
+import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
@@ -42,7 +42,7 @@ public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListen
 
     public void performMutation(GeneticAlgorithmStepScope stepScope) {
 
-        List<ScoreDirector> population = stepScope.getIntermediatePopulation().getIndividuals();
+        Population population = stepScope.getIntermediatePopulation();
         for (ScoreDirector scoreDirector : population) {
             //TODO make moveselectors more population friendly so there's need to do the two things below
             stepScope.getPhaseScope().getSolverScope().setScoreDirector(scoreDirector);

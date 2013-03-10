@@ -16,10 +16,13 @@
 
 package org.optaplanner.config.geneticalgorithm.operator.crossover;
 
+import com.thoughtworks.xstream.annotations.XStreamInclude;
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
 
-//TODO add possible crossover operators for XStream
+@XStreamInclude({
+        OnePointCrossoverConfig.class
+})
 public abstract class CrossoverOperatorConfig {
 
     public abstract CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor);

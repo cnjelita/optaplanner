@@ -16,15 +16,11 @@
 
 package org.optaplanner.core.geneticalgorithm;
 
-import java.util.Comparator;
+public interface Individual {
 
-import org.optaplanner.core.score.director.ScoreDirector;
+    public Object getEntityByClassAndId(Class clazz, int id);
 
-public class ScoreDirectorComparator implements Comparator<ScoreDirector> {
+    public long getEntityId(Object entity);
 
-    @Override
-    public int compare(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
-        return leftScoreDirector.getWorkingSolution().getScore().compareTo(
-                rightScoreDirector.getWorkingSolution().getScore());
-    }
+    int getEntitySize(Class<?> entityClass);
 }

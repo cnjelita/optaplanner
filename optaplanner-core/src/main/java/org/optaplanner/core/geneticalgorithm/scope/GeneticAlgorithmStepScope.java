@@ -18,11 +18,14 @@ package org.optaplanner.core.geneticalgorithm.scope;
 
 import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.phase.step.AbstractStepScope;
+import org.optaplanner.core.score.Score;
+import org.optaplanner.core.solution.Solution;
 
 public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
     private final GeneticAlgorithmSolverPhaseScope phaseScope;
     private Population intermediatePopulation;
+    private int intermediatePopulationSize;
 
     public GeneticAlgorithmStepScope(GeneticAlgorithmSolverPhaseScope phaseScope) {
         this.phaseScope = phaseScope;
@@ -64,5 +67,13 @@ public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
     public void setIntermediatePopulation(Population intermediatePopulation) {
         this.intermediatePopulation = intermediatePopulation;
+    }
+
+    public void setIntermediatePopulationSize(int intermediatePopulationSize) {
+        this.intermediatePopulationSize = intermediatePopulationSize;
+    }
+
+    public int getIntermediatePopulationSize() {
+        return intermediatePopulationSize;
     }
 }
