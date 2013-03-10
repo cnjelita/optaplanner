@@ -20,12 +20,14 @@ import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.phase.AbstractSolverPhaseScope;
 import org.optaplanner.core.phase.step.AbstractStepScope;
 import org.optaplanner.core.score.Score;
+import org.optaplanner.core.solution.Solution;
 import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     private Population generation;
     private int populationSize;
+    private GeneticAlgorithmStepScope lastCompletedStepScope;
 
     public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize) {
         //TODO make complete
@@ -37,7 +39,7 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
     //Seems like it's used to assert undoMoves.
     @Override
     public AbstractStepScope getLastCompletedStepScope() {
-        return null;
+        return lastCompletedStepScope;
     }
 
     //TODO overridden because might be used to calculate population fitness
@@ -56,9 +58,27 @@ public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
     public void setNewGeneration(Population newGeneration) {
         this.generation = newGeneration;
-        //FIXME necessary because bestsolutionrecaller requires best solution to be in workingSolution
-        getScoreDirector().setWorkingSolution(generation.getBestIndividual().getWorkingSolution());
-        getScoreDirector().calculateScore();
+//        //FIXME necessary because bestsolutionrecaller requires best solution to be in workingSolution
+//        if (generation.getBestIndividual() != null) {
+//            getScoreDirector().setWorkingSolution(generation.getBestIndividual().getWorkingSolution());
+//            getScoreDirector().calculateScore();
+//        }
     }
 
+    @Override
+    public Score getBestScore() {
+        return solverScope.getBestScore();
+    }
+
+    public Solution getBestIndividual() {
+        return generation.getBestIndividual().getWorkingSolution();
+    }
+
+    public Score getBestIndividualScore() {
+        return generation.getBestIndividual().getWorkingSolution().getScore();
+    }
+
+    public void setLastCompletedStepScope(GeneticAlgorithmStepScope lastCompletedStepScope) {
+        this.lastCompletedStepScope = lastCompletedStepScope;
+    }
 }

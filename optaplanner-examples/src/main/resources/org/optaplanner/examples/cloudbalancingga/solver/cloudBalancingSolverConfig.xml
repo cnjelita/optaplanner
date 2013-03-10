@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013 JBoss Inc
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<solver>
+  <!--<environmentMode>FAST_ASSERT</environmentMode>-->
+
+  <!-- Domain model configuration -->
+  <solutionClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</solutionClass>
+  <planningEntityClass>org.optaplanner.examples.cloudbalancingga.domain.CloudProcess</planningEntityClass>
+
+  <!-- Score configuration -->
+  <scoreDirectorFactory>
+    <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+    <simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingSimpleScoreCalculator</simpleScoreCalculatorClass>
+    <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancing.solver.score.CloudBalancingMapBasedSimpleScoreCalculator</simpleScoreCalculatorClass>-->
+    <!--<incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
+    <!--<assertionScoreDirectorFactory>-->
+    <!--<scoreDrl>/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl</scoreDrl>-->
+    <!--</assertionScoreDirectorFactory>-->
+  </scoreDirectorFactory>
+
+  <!-- Optimization algorithms configuration -->
+  <termination>
+    <maximumSecondsSpend>30</maximumSecondsSpend>
+  </termination>
+  <!--<constructionHeuristic>-->
+    <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+    <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+    <!--<acceptor>-->
+      <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
+    <!--</acceptor>-->
+    <!--<forager>-->
+      <!--<minimalAcceptedSelection>1000</minimalAcceptedSelection>-->
+    <!--</forager>-->
+  <!--</localSearch>-->
+  <geneticAlgorithm>
+    <populationParameters>
+      <populationSize>40</populationSize>
+    </populationParameters>
+
+  </geneticAlgorithm>
+</solver>

@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.geneticalgorithm;
+package org.optaplanner.examples.cloudbalancingga.persistence;
 
-import org.optaplanner.core.score.Score;
-import org.optaplanner.core.solution.Solution;
+import org.optaplanner.examples.cloudbalancing.domain.CloudBalance;
+import org.optaplanner.examples.common.persistence.XStreamSolutionDaoImpl;
 
-public interface Individual<S extends Score> extends Solution<S> {
+public class CloudBalancingDaoImpl extends XStreamSolutionDaoImpl {
 
-    public Object getEntityByClassAndId(Class clazz, Long id);
+    public CloudBalancingDaoImpl() {
+        super("cloudbalancing", CloudBalance.class);
+    }
 
-    public long getEntityId(Object entity);
-
-    int getEntitySize(Class<?> entityClass);
 }

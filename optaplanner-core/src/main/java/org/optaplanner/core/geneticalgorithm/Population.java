@@ -17,6 +17,7 @@
 package org.optaplanner.core.geneticalgorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,8 +53,14 @@ public class Population implements Iterable<ScoreDirector> {
     }
 
     public void performScoreCalculation() {
-        //TODO implement
-        //Should keep track of best, average and worst score per score level
+        for (ScoreDirector individual : individuals) {
+            individual.calculateScore();
+        }
+        Collections.sort(individuals, Collections.reverseOrder(new ScoreDirectorComparator()));
+//        for (ScoreDirector individual : individuals){
+//            System.out.println(individual.getWorkingSolution().getScore());
+//        }
+        //TODO calculate other statistics
     }
 
     public void setBestIndividual(ScoreDirector bestIndividual) {

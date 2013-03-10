@@ -64,7 +64,7 @@ public class OnePointCrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCy
             long entitySize = leftParent.getEntitySize(entityClass);
             long crossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
 
-            for (int j = 0; j < crossoverPoint; j++) {
+            for (long j = 0; j < crossoverPoint; j++) {
                 swapValues(variableDescriptors, leftParent.getEntityByClassAndId(entityClass, j),
                         leftScoreDirector,
                         rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
@@ -79,8 +79,8 @@ public class OnePointCrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCy
             leftMove.doMove(leftScoreDirector);
         }
         Move rightMove = new SwapMove(planningVariableDescriptors, rightEntity, leftEntity);
-        if (leftMove.isMoveDoable(rightScoreDirector)) {
-            leftMove.doMove(rightScoreDirector);
+        if (rightMove.isMoveDoable(rightScoreDirector)) {
+            rightMove.doMove(rightScoreDirector);
         }
     }
 
@@ -95,6 +95,7 @@ public class OnePointCrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCy
         entityClassToVariableDescriptorMap = new HashMap<Class<?>, Collection<PlanningVariableDescriptor>>();
         for (Class<?> entityClass : entityClassSet) {
             entityClassList.add(entityClass);
+            //TODO check for chaining!
             entityClassToVariableDescriptorMap.put(entityClass,
                     solutionDescriptor.getPlanningEntityDescriptor(entityClass).getPlanningVariableDescriptors());
         }

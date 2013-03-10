@@ -76,4 +76,12 @@ public class GeneticAlgorithmStepScope extends AbstractStepScope {
     public int getIntermediatePopulationSize() {
         return intermediatePopulationSize;
     }
+
+    public Score getScore() {
+        return phaseScope.getBestIndividualScore();
+    }
+
+    public Solution createOrGetClonedSolution() {
+        return phaseScope.getBestIndividual();
+    }
 }

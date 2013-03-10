@@ -41,9 +41,6 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
         List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
         List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
 
-        //TODO does this method sort from worst to best?
-        Collections.sort(intermediatePopulation, scoreDirectorComparator);
-
         Population newGeneration = new Population(populationSize);
 
         int intermediateListIndex = 0;
@@ -62,7 +59,7 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
             intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
             generationIndividual = currentGeneration.get(generationListIndex);
             //TODO does this method sort from worst to best?
-            if (scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) > 0) {
+            if (scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0) {
                 newGeneration.addIndividual(intermediateIndividual);
                 intermediateListIndex++;
             } else {

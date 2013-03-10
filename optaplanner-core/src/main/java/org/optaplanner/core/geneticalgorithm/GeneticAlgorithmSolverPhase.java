@@ -101,12 +101,15 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     //TODO do genetic algorithms really use step index, or can this method be removed?
     private GeneticAlgorithmStepScope createNextStepScope(GeneticAlgorithmSolverPhaseScope phaseScope,
             GeneticAlgorithmStepScope completedStepScope) {
-        GeneticAlgorithmStepScope stepScope = new GeneticAlgorithmStepScope(phaseScope);
         if (completedStepScope == null) {
-            stepScope.setStepIndex(0);
-        } else {
-            stepScope.setStepIndex(1);
+            completedStepScope = new GeneticAlgorithmStepScope(phaseScope);
+            completedStepScope.setScore(phaseScope.getStartingScore());
+            completedStepScope.setStepIndex(-1);
+            phaseScope.calculateScore();
         }
+        phaseScope.setLastCompletedStepScope(completedStepScope);
+        GeneticAlgorithmStepScope stepScope = new GeneticAlgorithmStepScope(phaseScope);
+        stepScope.setStepIndex(completedStepScope.getStepIndex() + 1);
         return stepScope;
     }
 

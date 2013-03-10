@@ -37,8 +37,10 @@ import org.optaplanner.core.geneticalgorithm.GeneticAlgorithmSolverPhase;
 import org.optaplanner.core.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.initializer.RandomPopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
+import org.optaplanner.core.geneticalgorithm.operator.crossover.OnePointCrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.geneticalgorithm.operator.selector.TournamentSelector;
 import org.optaplanner.core.geneticalgorithm.replacementstrategy.KeepBestStrategy;
 import org.optaplanner.core.geneticalgorithm.replacementstrategy.KeepNewStrategy;
 import org.optaplanner.core.geneticalgorithm.replacementstrategy.RandomStrategy;
@@ -190,7 +192,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
     private MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
             SolutionDescriptor solutionDescriptor) {
         //TODO implement build method for mutation operator
-        MutationOperator mutationOperator = null;
+        MutationOperator mutationOperator = new MutationOperator();
         SelectionCacheType defaultCacheType = SelectionCacheType.JUST_IN_TIME;
         SelectionOrder defaultSelectionOrder = SelectionOrder.RANDOM;
         if (CollectionUtils.isEmpty(mutationOperatorConfigList)) {
@@ -215,9 +217,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         CrossoverOperator crossoverOperator;
         if (CollectionUtils.isEmpty(crossoverOperatorConfigList)) {
             //TODO to build a default crossover operator check whether solution uses chaining...
-            //For now we're trowing an exception
-            throw new IllegalArgumentException("The crossoverOperatorConfigList (" + crossoverOperatorConfigList
-                    + ") should contain exactly one item.");
+            crossoverOperator = new OnePointCrossoverOperator();
         } else if (crossoverOperatorConfigList.size() == 1) {
             crossoverOperator = crossoverOperatorConfigList.get(0).buildCrossoverOperator(solutionDescriptor);
         } else {
@@ -231,9 +231,8 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         SolutionSelector solutionSelector;
         if (CollectionUtils.isEmpty(solutionSelectorConfigList)) {
             //TODO Choose best working solution selector as default if user didn't choose one
-            //For now we're trowing an exception
-            throw new IllegalArgumentException("The solutionSelectorConfigList (" + solutionSelectorConfigList
-                    + ") should contain exactly one item.");
+            solutionSelector = new TournamentSelector();
+            ((TournamentSelector) solutionSelector).setTournamentSize(5);
         } else if (solutionSelectorConfigList.size() == 1) {
             solutionSelector = solutionSelectorConfigList.get(0).buildSolutionSelector(solutionDescriptor);
         } else {

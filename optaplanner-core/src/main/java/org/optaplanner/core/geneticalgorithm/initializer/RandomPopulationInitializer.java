@@ -52,6 +52,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
     @Override
     public void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope) {
         Population population = new Population(populationSize);
+        //TODO import solution from previous algorithms
         for (int i = 0; i < populationSize; i++) {
             Solution clone = solutionCloner.cloneSolution(phaseScope.getWorkingSolution());
             List<Object> planningEntityList = phaseScope.getSolutionDescriptor().getPlanningEntityList(clone);
@@ -76,7 +77,10 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
             scoreDirector.setWorkingSolution(clone);
             population.addIndividual(scoreDirector);
         }
+
+        population.performScoreCalculation();
         phaseScope.setNewGeneration(population);
+
     }
 
     @Override

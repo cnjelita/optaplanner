@@ -53,6 +53,7 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
     @Override
     public void selectParents(GeneticAlgorithmStepScope stepScope) {
         List<ScoreDirector> generation = stepScope.getCurrentGeneration().getIndividuals();
+
         Population parents = new Population(populationSize);
         Set<Integer> selectedIndices = new HashSet<Integer>();
 
@@ -69,7 +70,9 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
                 } while (rightIndex == leftIndex);
                 ScoreDirector rightIndividual = generation.get(rightIndex);
                 //FIXME how does scoredirectorcomparator work?
-                if (scoreDirectorComparator.compare(leftIndividual, rightIndividual) < 0) {
+                if (scoreDirectorComparator.compare(leftIndividual, rightIndividual) > 0) {
+//                    System.out.println(rightIndividual.getWorkingSolution().getScore() + " better than" +
+//                            leftIndividual.getWorkingSolution().getScore());
                     leftIndividual = rightIndividual;
                     leftIndex = rightIndex;
                 }
