@@ -24,12 +24,12 @@ public class GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter extends SolverL
         implements GeneticAlgorithmSolverPhaseLifeCycleListener {
 
     @Override
-    public void phaseStarted(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
         // Hook method
     }
 
     @Override
-    public void phaseEnded(GeneticAlgorithmSolverPhaseScope solverPhaseScope) {
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope phaseScope) {
         // Hook method
     }
 
