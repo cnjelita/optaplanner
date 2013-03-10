@@ -127,7 +127,8 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
     @Override
     public SolverPhase buildSolverPhase(int phaseIndex, EnvironmentMode environmentMode,
             SolutionDescriptor solutionDescriptor, ScoreDefinition scoreDefinition, Termination solverTermination) {
-        //TODO do necessary checks
+        //TODO do necessary checks:
+        // *check whether score toDoubleLevels is implemented for FPSelection
         GeneticAlgorithmSolverPhase solverPhase = new GeneticAlgorithmSolverPhase();
         configureSolverPhase(solverPhase, phaseIndex, environmentMode, scoreDefinition, solverTermination);
 
