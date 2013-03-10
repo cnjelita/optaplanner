@@ -99,7 +99,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
             stepStarted(stepScope);
 
             solutionSelector.selectParents(stepScope);
-            //TODO perform crossover on parents to form children
+            crossoverOperator.performCrossover(stepScope);
             //TODO perform mutation on children
 
 
@@ -147,6 +147,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         //TODO Should something else be done when phase starts?
         super.phaseStarted(phaseScope);
         mutationOperator.phaseStarted(phaseScope);
+        //TODO crossover operator should search for variables, values and entities for problem when phase starts.
         crossoverOperator.phaseStarted(phaseScope);
         solutionSelector.phaseStarted(phaseScope);
         populationInitializer.phaseStarted(phaseScope);

@@ -17,7 +17,16 @@
 package org.optaplanner.core.geneticalgorithm.operator.crossover;
 
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
 public interface CrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCycleListener {
-    //TODO add method definitions
+
+    /**
+     * Perform crossover on individuals of intermediate population.
+     * Score of individuals need not be calculated after performing
+     * crossover.
+     * @param stepScope
+     */
+    void performCrossover(GeneticAlgorithmStepScope stepScope);
+
 }
