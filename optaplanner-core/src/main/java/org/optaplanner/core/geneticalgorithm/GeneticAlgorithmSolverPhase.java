@@ -97,8 +97,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
         while (!termination.isPhaseTerminated(phaseScope)) {
             stepStarted(stepScope);
-            //TODO assess fitness of individuals
-            //TODO use selector for parent selection
+
+            solutionSelector.selectParents(stepScope);
             //TODO perform crossover on parents to form children
             //TODO perform mutation on children
 
@@ -174,6 +174,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         super.stepStarted(stepScope);
         mutationOperator.stepStarted(stepScope);
         crossoverOperator.stepStarted(stepScope);
+        //TODO solution selector should calculate fitness of individuals in generation during stepStarted
         solutionSelector.stepStarted(stepScope);
     }
 

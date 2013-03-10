@@ -36,4 +36,5 @@ public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListen
     }
 
     //TODO define methods for mutation
+
 }

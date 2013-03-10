@@ -17,7 +17,17 @@
 package org.optaplanner.core.geneticalgorithm.operator.selector;
 
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
 public interface SolutionSelector extends GeneticAlgorithmSolverPhaseLifeCycleListener {
-    //TODO implement solution selector interface.
+
+    /**
+     * Choose solutions from current generation in phaseScope
+     * to become parents. Parents will be used to generate
+     * new solutions for the next generation. Parents should
+     * be added to intermediate population in stepScope.
+     * @param stepScope
+     */
+    void selectParents(GeneticAlgorithmStepScope stepScope);
+
 }
