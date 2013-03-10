@@ -38,5 +38,5 @@ public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListen
     public void performMutation(GeneticAlgorithmStepScope stepScope) {
         //TODO implement
     }
-
+    //TODO override lifecycle events?
 }

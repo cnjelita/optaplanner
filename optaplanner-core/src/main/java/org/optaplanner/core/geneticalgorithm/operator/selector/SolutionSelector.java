@@ -26,7 +26,8 @@ public interface SolutionSelector extends GeneticAlgorithmSolverPhaseLifeCycleLi
      * to become parents. Parents will be used to generate
      * new solutions for the next generation. Parents should
      * be added to intermediate population in stepScope. The
-     * scores of individuals need not be recalculated.
+     * scores of the individuals need to be calculated before
+     * performing selection.
      * @param stepScope
      */
     void selectParents(GeneticAlgorithmStepScope stepScope);

@@ -34,4 +34,6 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
         super.phaseStarted(solverPhaseScope);
         //TODO get solution and variable descriptors and all possible values that can be assigned
     }
+    //TODO override lifecycle events?
+
 }

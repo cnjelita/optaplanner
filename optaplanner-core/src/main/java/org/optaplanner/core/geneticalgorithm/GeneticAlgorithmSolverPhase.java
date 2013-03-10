@@ -44,56 +44,28 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         this.solutionSelector = solutionSelector;
     }
 
-    public SolutionSelector getSolutionSelector() {
-        return solutionSelector;
-    }
-
     public void setCrossoverOperator(CrossoverOperator crossoverOperator) {
         this.crossoverOperator = crossoverOperator;
-    }
-
-    public CrossoverOperator getCrossoverOperator() {
-        return crossoverOperator;
     }
 
     public void setMutationOperator(MutationOperator mutationOperator) {
         this.mutationOperator = mutationOperator;
     }
 
-    public MutationOperator getMutationOperator() {
-        return mutationOperator;
-    }
-
     public void setPopulationSize(int populationSize) {
         this.populationSize = populationSize;
-    }
-
-    public int getPopulationSize() {
-        return populationSize;
     }
 
     public void setAssertStepScoreIsUncorrupted(boolean assertStepScoreIsUncorrupted) {
         this.assertStepScoreIsUncorrupted = assertStepScoreIsUncorrupted;
     }
 
-    public boolean isAssertStepScoreIsUncorrupted() {
-        return assertStepScoreIsUncorrupted;
-    }
-
     public void setPopulationInitializer(PopulationInitializer populationInitializer) {
         this.populationInitializer = populationInitializer;
     }
 
-    public PopulationInitializer getPopulationInitializer() {
-        return populationInitializer;
-    }
-
     public void setReplacementStrategy(ReplacementStrategy replacementStrategy) {
         this.replacementStrategy = replacementStrategy;
-    }
-
-    public ReplacementStrategy getReplacementStrategy() {
-        return replacementStrategy;
     }
 
     @Override
@@ -111,12 +83,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
             solutionSelector.selectParents(stepScope);
             crossoverOperator.performCrossover(stepScope);
             mutationOperator.performMutation(stepScope);
+            replacementStrategy.generateNewGeneration(stepScope);
 
-
-            /*
-            * TODO perform replacement of individuals from new population and old one (done in stepEnded?)
-            * where to do assessment? During replacement or before? Where to do score assertion?
-            */
             //TODO stepEnded just prints out the current best score, so if score improved it should already
             //have been notified to phaseScope
             stepEnded(stepScope);
@@ -163,6 +131,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         crossoverOperator.phaseStarted(phaseScope);
         solutionSelector.phaseStarted(phaseScope);
         populationInitializer.phaseStarted(phaseScope);
+        replacementStrategy.phaseStarted(phaseScope);
     }
 
     @Override
@@ -173,6 +142,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         crossoverOperator.phaseEnded(phaseScope);
         solutionSelector.phaseEnded(phaseScope);
         populationInitializer.phaseEnded(phaseScope);
+        replacementStrategy.phaseEnded(phaseScope);
 
         logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
                 phaseIndex,
@@ -189,6 +159,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         crossoverOperator.stepStarted(stepScope);
         //TODO solution selector should calculate fitness of individuals in generation during stepStarted
         solutionSelector.stepStarted(stepScope);
+        populationInitializer.stepStarted(stepScope);
+        replacementStrategy.stepStarted(stepScope);
     }
 
     @Override
@@ -198,6 +170,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         mutationOperator.stepEnded(stepScope);
         crossoverOperator.stepEnded(stepScope);
         solutionSelector.stepEnded(stepScope);
+        populationInitializer.stepEnded(stepScope);
+        replacementStrategy.stepEnded(stepScope);
         if (logger.isDebugEnabled()) {
             GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
             long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();

@@ -17,8 +17,14 @@
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
 public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter
         implements ReplacementStrategy {
-    //TODO implement
+
+    @Override
+    public void generateNewGeneration(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
+    //TODO override lifecycle events?
 }

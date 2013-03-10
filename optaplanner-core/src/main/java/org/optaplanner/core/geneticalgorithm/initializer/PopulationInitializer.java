@@ -19,13 +19,13 @@ package org.optaplanner.core.geneticalgorithm.initializer;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 
+//TODO should be in operator package?
 public interface PopulationInitializer extends GeneticAlgorithmSolverPhaseLifeCycleListener {
 
     /**
      * Initialize a population of solutions. Solutions
-     * should be added to generation in phaseScope.
-     * Scores need to be calculated when generating an
-     * individual.
+     * should be added to generation in phaseScope. Scores
+     * need not be calculated after generating a new individual
      * @param phaseScope
      */
     void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope);
