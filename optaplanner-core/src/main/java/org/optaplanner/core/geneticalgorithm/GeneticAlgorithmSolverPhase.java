@@ -100,18 +100,20 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
             solutionSelector.selectParents(stepScope);
             crossoverOperator.performCrossover(stepScope);
-            //TODO perform mutation on children
+            mutationOperator.performMutation(stepScope);
 
 
-             /*
-             * TODO perform replacement of individuals from new population and old one (done in stepEnded?)
-             * where to do assessment? During replacement or before? Where to do score assertion?
-             * stepEnded(StepScope)
-             * if (assertStepScoreIsUncorrupted) {
-             *   phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
-             *   phaseScope.assertExpectedWorkingScore(stepScope.getScore());
-             * }
-             */
+            /*
+            * TODO perform replacement of individuals from new population and old one (done in stepEnded?)
+            * where to do assessment? During replacement or before? Where to do score assertion?
+            */
+            //TODO stepEnded just prints out the current best score, so if score improved it should already
+            //have been notified to phaseScope
+            stepEnded(stepScope);
+            if (assertStepScoreIsUncorrupted) {
+                phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
+                phaseScope.assertExpectedWorkingScore(stepScope.getScore());
+            }
             stepScope = createNextStepScope(phaseScope, stepScope);
         }
 
@@ -186,13 +188,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         mutationOperator.stepEnded(stepScope);
         crossoverOperator.stepEnded(stepScope);
         solutionSelector.stepEnded(stepScope);
-
-        GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
-        if (assertStepScoreIsUncorrupted) {
-            stepScope.getPhaseScope().getSolverScope().getScoreDirector()
-                    .setWorkingSolution(stepScope.createOrGetClonedSolution());
-        }
         if (logger.isDebugEnabled()) {
+            GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
             long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();
             logger.debug("    Step index ({}), time spend ({}), score ({}), {} best score ({})",
                     new Object[]{stepScope.getStepIndex(), timeMillisSpend,

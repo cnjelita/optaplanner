@@ -21,6 +21,13 @@ import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseSc
 
 public interface PopulationInitializer extends GeneticAlgorithmSolverPhaseLifeCycleListener {
 
+    /**
+     * Initialize a population of solutions. Solutions
+     * should be added to generation in phaseScope.
+     * Scores need to be calculated when generating an
+     * individual.
+     * @param phaseScope
+     */
     void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope);
 
 }

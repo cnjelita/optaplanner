@@ -35,6 +35,8 @@ public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListen
         return moveSelector;
     }
 
-    //TODO define methods for mutation
+    public void performMutation(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
 
 }
