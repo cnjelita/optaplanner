@@ -56,7 +56,6 @@ public class Population implements Iterable<ScoreDirector> {
         for (ScoreDirector individual : individuals) {
             individual.calculateScore();
         }
-        sort();
 //        for (ScoreDirector individual : individuals){
 //            System.out.println(individual.getWorkingSolution().getScore());
 //        }

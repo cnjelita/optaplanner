@@ -16,15 +16,59 @@
 
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import java.util.Collections;
+import java.util.List;
 
-public class RandomStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements ReplacementStrategy {
+import org.optaplanner.core.geneticalgorithm.Population;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.score.director.ScoreDirector;
+
+public class RandomStrategy extends AbstractReplacementStrategy {
 
     @Override
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+
+        Population newGeneration = new Population(populationSize);
+
+        stepScope.performScoreCalculation();
+        stepScope.getIntermediatePopulation().sort();
+        List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
+        List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
+
+        int intermediateListIndex = 0;
+        int generationListIndex = 0;
+
+        ScoreDirector intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+        ScoreDirector generationIndividual = currentGeneration.get(generationListIndex);
+
+        ScoreDirector bestIndividual =
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
+                        intermediateIndividual : generationIndividual;
+        newGeneration.setBestIndividual(bestIndividual);
+
+        for (int i = 0; i < elitistSize; i++) {
+            newGeneration.addIndividual(currentGeneration.get(generationListIndex));
+            generationListIndex++;
+        }
+
+        Collections.shuffle(intermediatePopulation, workingRandom);
+        Collections.shuffle(currentGeneration, workingRandom);
+
+        for (int i = 0; i < populationSize - elitistSize; i++) {
+            intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+            generationIndividual = currentGeneration.get(generationListIndex);
+            if (workingRandom.nextDouble() > 0.5) {
+                newGeneration.addIndividual(intermediateIndividual);
+                intermediateListIndex++;
+            } else {
+                newGeneration.addIndividual(generationIndividual);
+                generationListIndex++;
+            }
+        }
+
+        newGeneration.sort();
+
+        stepScope.setNewGeneration(newGeneration);
     }
 
-    //TODO react to lifecycle events?
 }

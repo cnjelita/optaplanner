@@ -18,6 +18,7 @@ package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 import org.optaplanner.core.geneticalgorithm.ScoreDirectorComparator;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
@@ -31,6 +32,7 @@ public abstract class AbstractReplacementStrategy extends GeneticAlgorithmSolver
     protected Comparator<ScoreDirector> scoreDirectorComparator;
     protected int populationSize;
     protected int elitistSize;
+    protected Random workingRandom;
 
     @Override
     public abstract void createNewGeneration(GeneticAlgorithmStepScope stepScope);
@@ -41,5 +43,6 @@ public abstract class AbstractReplacementStrategy extends GeneticAlgorithmSolver
         scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
         populationSize = phaseScope.getPopulationSize();
         elitistSize = phaseScope.getElitistSize();
+        workingRandom = phaseScope.getWorkingRandom();
     }
 }

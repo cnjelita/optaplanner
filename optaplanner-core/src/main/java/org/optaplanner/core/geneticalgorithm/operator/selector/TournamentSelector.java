@@ -55,8 +55,6 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
         List<ScoreDirector> generation = stepScope.getCurrentGeneration().getIndividuals();
 
         Population parents = new Population(populationSize);
-        Set<ScoreDirector> selectedIndices = new HashSet<ScoreDirector>();
-
         //if parentSize is not even we have to do strange tricks during crossover
         int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
 

@@ -31,6 +31,7 @@ public class KeepBestStrategy extends AbstractReplacementStrategy {
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
 
         stepScope.performScoreCalculation();
+        stepScope.getIntermediatePopulation().sort();
 //        System.out.println("currgen");
 //        System.out.println(stepScope.getCurrentGeneration());
 //        System.out.println("intermediate");

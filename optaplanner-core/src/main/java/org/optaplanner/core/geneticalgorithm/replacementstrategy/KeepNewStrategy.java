@@ -27,6 +27,7 @@ public class KeepNewStrategy extends AbstractReplacementStrategy {
     @Override
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
         stepScope.performScoreCalculation();
+        stepScope.getIntermediatePopulation().sort();
         List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
         List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
 
