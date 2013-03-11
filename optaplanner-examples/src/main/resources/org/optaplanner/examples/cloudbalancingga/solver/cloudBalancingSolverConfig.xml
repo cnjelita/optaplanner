@@ -37,10 +37,10 @@
   <termination>
     <maximumSecondsSpend>100</maximumSecondsSpend>
   </termination>
-  <!--<constructionHeuristic>-->
-  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
-  <!--</constructionHeuristic>-->
+  <constructionHeuristic>
+  <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
+  </constructionHeuristic>
   <!--<localSearch>-->
   <!--<acceptor>-->
   <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
@@ -51,11 +51,11 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>40</populationSize>
-      <elitistSize>0</elitistSize>
+      <populationSize>80</populationSize>
+      <elitistSize>40</elitistSize>
     </populationParameters>
-    <rouletteWheelSelector/>
-    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-    <!--<uniformCrossoverOperator/>-->
+    <stochasticUniversalSamplingSelector/>
+    <replacementStrategyType>KEEP_BEST</replacementStrategyType>
+    <uniformCrossoverOperator/>
   </geneticAlgorithm>
 </solver>

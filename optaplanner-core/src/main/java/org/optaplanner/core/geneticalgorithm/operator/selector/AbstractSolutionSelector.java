@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.score.director.ScoreDirector;
 
 public abstract class AbstractSolutionSelector extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
@@ -30,9 +29,6 @@ public abstract class AbstractSolutionSelector extends GeneticAlgorithmSolverPha
     protected Comparator<ScoreDirector> scoreDirectorComparator;
     protected int populationSize;
     protected Random workingRandom;
-
-    @Override
-    public abstract void selectParents(GeneticAlgorithmStepScope stepScope);
 
     @Override
     public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {

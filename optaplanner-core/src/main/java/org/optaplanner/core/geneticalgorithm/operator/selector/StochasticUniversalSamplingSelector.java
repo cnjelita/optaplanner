@@ -20,14 +20,16 @@ import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.util.RandomUtils;
 
-public class RouletteWheelSelector extends AbstractFitnessProportionateSelector {
+public class StochasticUniversalSamplingSelector extends AbstractFitnessProportionateSelector {
 
     @Override
     public void selectParents(GeneticAlgorithmStepScope stepScope) {
+        double offset = RandomUtils.nextDouble(workingRandom, totalProbability / populationSize);
         Population intermediatePopulation = new Population(populationSize);
+        double nextOffset = offset;
         for (int i = 0; i < populationSize; i++) {
-            double randomOffset = RandomUtils.nextDouble(workingRandom, totalProbability);
-            intermediatePopulation.addIndividual(fitnessMap.ceilingEntry(randomOffset).getValue().clone());
+            intermediatePopulation.addIndividual(fitnessMap.ceilingEntry(nextOffset).getValue().clone());
+            nextOffset += offset;
         }
         stepScope.setIntermediatePopulation(intermediatePopulation);
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.optaplanner.examples.cloudbalancingga;
+package org.optaplanner.examples.cloudbalancingga.app;
 
 import org.optaplanner.config.SolverFactory;
 import org.optaplanner.config.XmlSolverFactory;
