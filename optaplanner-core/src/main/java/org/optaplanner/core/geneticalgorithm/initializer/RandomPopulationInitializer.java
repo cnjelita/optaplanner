@@ -17,7 +17,10 @@
 package org.optaplanner.core.geneticalgorithm.initializer;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,8 @@ import org.optaplanner.core.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
+import org.optaplanner.core.heuristic.selector.move.generic.chained.ChainedChangeMove;
+import org.optaplanner.core.move.Move;
 import org.optaplanner.core.score.director.ScoreDirector;
 import org.optaplanner.core.score.director.ScoreDirectorFactory;
 import org.optaplanner.core.solution.Solution;
@@ -61,8 +66,12 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
 
         //TODO import solution from previous algorithms
         for (int i = 0; i < numberOfIndividuals; i++) {
-            Solution clone = solutionCloner.cloneSolution(phaseScope.getWorkingSolution());
+            //TODO make set of sets!
+            Set<Object> usedValues = new HashSet<Object>();
+            ScoreDirector scoreDirector = phaseScope.getScoreDirector().clone();
+            Solution clone = scoreDirector.getWorkingSolution();
             List<Object> planningEntityList = phaseScope.getSolutionDescriptor().getPlanningEntityList(clone);
+            Collections.shuffle(planningEntityList, workingRandom);
             for (Object planningEntity : planningEntityList) {
                 PlanningEntityDescriptor entityDescriptor =
                         entityClassToDescriptorMap.get(planningEntity.getClass());
@@ -73,6 +82,15 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                     if (variableDescriptor.isChained()) {
                         //TODO implement chained variable option - Use chainedChangeMove?
                         //TODO should keep track of already used values?
+                        Collection<?> values = variableDescriptor.extractPlanningValues(clone, planningEntity);
+                        for (Object value : values) {
+                            if (!usedValues.contains(value)) {
+                                Move move = new ChainedChangeMove(planningEntity, variableDescriptor, value);
+                                move.doMove(scoreDirector);
+                                usedValues.add(value);
+                                break;
+                            }
+                        }
                     } else {
                         //TODO maybe use changeMoves so the isDoable option is available?
                         variableDescriptor.setValue(planningEntity,
@@ -80,8 +98,6 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                     }
                 }
             }
-            ScoreDirector scoreDirector = scoreDirectorFactory.buildScoreDirector();
-            scoreDirector.setWorkingSolution(clone);
             population.addIndividual(scoreDirector);
         }
 
