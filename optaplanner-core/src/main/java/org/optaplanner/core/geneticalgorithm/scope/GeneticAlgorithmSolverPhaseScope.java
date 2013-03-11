@@ -25,14 +25,20 @@ import org.optaplanner.core.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
+    private final int elitistSize;
+    private final int populationSize;
     private Population generation;
-    private int populationSize;
     private GeneticAlgorithmStepScope lastCompletedStepScope;
 
-    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize) {
+    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize, int elitistSize) {
         //TODO make complete
         super(solverScope);
         this.populationSize = populationSize;
+        this.elitistSize = elitistSize;
+    }
+
+    public int getElitistSize() {
+        return elitistSize;
     }
 
     //TODO why should this method be implemented for all phases? Useless for genetic algorithm

@@ -34,7 +34,7 @@ public class CloudBalancingHelloWorldGA {
 
         // Load a problem with 400 computers and 1200 processes
         //new CloudBalancingGenerator().generate();
-        CloudBalance unsolvedCloudBalance = new CloudBalancingGenerator().createCloudBalance(200, 600);
+        CloudBalance unsolvedCloudBalance = new CloudBalancingGenerator().createCloudBalance(800, 2400);
         unsolvedCloudBalance.generateIdMaps();
         // Solve the problem
         solver.setPlanningProblem(unsolvedCloudBalance);

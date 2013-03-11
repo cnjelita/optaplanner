@@ -39,6 +39,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     private MutationOperator mutationOperator;
     private PopulationInitializer populationInitializer;
     private ReplacementStrategy replacementStrategy;
+    private int elitistSize;
 
     public void setSolutionSelector(SolutionSelector solutionSelector) {
         this.solutionSelector = solutionSelector;
@@ -70,7 +71,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
     @Override
     public void solve(DefaultSolverScope solverScope) {
-        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope, populationSize);
+        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope, populationSize,
+                elitistSize);
         phaseStarted(phaseScope);
 
         populationInitializer.initializePopulation(phaseScope);
@@ -190,4 +192,11 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         }
     }
 
+    public void setElitistSize(int elitistSize) {
+        this.elitistSize = elitistSize;
+    }
+
+    public int getElitistSize() {
+        return elitistSize;
+    }
 }

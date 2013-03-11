@@ -55,7 +55,7 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
         List<ScoreDirector> generation = stepScope.getCurrentGeneration().getIndividuals();
 
         Population parents = new Population(populationSize);
-        Set<Integer> selectedIndices = new HashSet<Integer>();
+        Set<ScoreDirector> selectedIndices = new HashSet<ScoreDirector>();
 
         //if parentSize is not even we have to do strange tricks during crossover
         int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
@@ -77,12 +77,12 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
                     leftIndex = rightIndex;
                 }
             }
-            if (selectedIndices.contains(leftIndex)) {
-                parents.addIndividual(leftIndividual.clone());
-            } else {
-                parents.addIndividual(leftIndividual);
-                selectedIndices.add(leftIndex);
-            }
+//            if (selectedIndices.contains(leftIndividual)) {
+            parents.addIndividual(leftIndividual.clone());
+//            } else {
+//                parents.addIndividual(leftIndividual);
+//                selectedIndices.add(leftIndividual);
+//            }
         }
 
         stepScope.setIntermediatePopulation(parents);

@@ -22,8 +22,15 @@ import org.optaplanner.core.geneticalgorithm.GeneticAlgorithmSolverPhase;
 public class PopulationParametersConfig {
 
     private Integer populationSize = null;
+    private Integer elitistSize = null;
 
-    //TODO other parameters as elitists and replacementStrategy should come here
+    public Integer getElitistSize() {
+        return elitistSize;
+    }
+
+    public void setElitistSize(Integer elitistSize) {
+        this.elitistSize = elitistSize;
+    }
 
     public Integer getPopulationSize() {
         return populationSize;
@@ -35,7 +42,7 @@ public class PopulationParametersConfig {
 
     public void buildPopulationParameters(GeneticAlgorithmSolverPhase solverPhase) {
         //TODO do necessary checks for populationSize > elitistSize ...
-
+        //TODO maybe make population parameters a class?
         //TODO - update exception explanation so that user knows tag name and where it went wrong
         if (populationSize == null) {
             throw new IllegalArgumentException("The size of the population was not specified");
@@ -45,5 +52,14 @@ public class PopulationParametersConfig {
             solverPhase.setPopulationSize(populationSize);
         }
 
+        if (elitistSize != null) {
+            if (elitistSize < 0) {
+                throw new IllegalArgumentException("Elitist size cannot be smaller than zero");
+            } else if (elitistSize > populationSize) {
+                throw new IllegalArgumentException("Elitist size cannot be larger than population size");
+            } else {
+                solverPhase.setElitistSize(elitistSize);
+            }
+        }
     }
 }

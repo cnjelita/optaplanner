@@ -53,8 +53,14 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
     //TODO make sure no solutions are equal
     public void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope) {
         Population population = new Population(populationSize);
+        int numberOfIndividuals = populationSize;
+        if (phaseScope.isBestSolutionInitialized()) {
+            numberOfIndividuals--;
+            population.addIndividual(phaseScope.getScoreDirector());
+        }
+
         //TODO import solution from previous algorithms
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < numberOfIndividuals; i++) {
             Solution clone = solutionCloner.cloneSolution(phaseScope.getWorkingSolution());
             List<Object> planningEntityList = phaseScope.getSolutionDescriptor().getPlanningEntityList(clone);
             for (Object planningEntity : planningEntityList) {

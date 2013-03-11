@@ -32,12 +32,16 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
 
     private Comparator<ScoreDirector> scoreDirectorComparator;
     private int populationSize;
+    private int elitistSize;
 
     @Override
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
 
         stepScope.performScoreCalculation();
-
+//        System.out.println("currgen");
+//        System.out.println(stepScope.getCurrentGeneration());
+//        System.out.println("intermediate");
+//        System.out.println(stepScope.getIntermediatePopulation());
         List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
         List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
 
@@ -50,12 +54,15 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
         ScoreDirector generationIndividual = currentGeneration.get(generationListIndex);
 
         ScoreDirector bestIndividual =
-                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) > 0 ?
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
                         intermediateIndividual : generationIndividual;
-
         newGeneration.setBestIndividual(bestIndividual);
 
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < elitistSize; i++) {
+            newGeneration.addIndividual(currentGeneration.get(generationListIndex));
+            generationListIndex++;
+        }
+        for (int i = 0; i < populationSize - elitistSize; i++) {
             intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
             generationIndividual = currentGeneration.get(generationListIndex);
             //TODO does this method sort from worst to best?
@@ -68,6 +75,11 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
             }
         }
 
+        if (elitistSize > 0) {
+            newGeneration.sort();
+        }
+//        System.out.println("new");
+//        System.out.println(newGeneration);
         stepScope.setNewGeneration(newGeneration);
 
     }
@@ -77,5 +89,6 @@ public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListen
         super.phaseStarted(phaseScope);
         scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
         populationSize = phaseScope.getPopulationSize();
+        elitistSize = phaseScope.getElitistSize();
     }
 }

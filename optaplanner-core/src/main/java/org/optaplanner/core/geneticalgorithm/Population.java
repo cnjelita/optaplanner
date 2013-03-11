@@ -56,7 +56,7 @@ public class Population implements Iterable<ScoreDirector> {
         for (ScoreDirector individual : individuals) {
             individual.calculateScore();
         }
-        Collections.sort(individuals, Collections.reverseOrder(new ScoreDirectorComparator()));
+        sort();
 //        for (ScoreDirector individual : individuals){
 //            System.out.println(individual.getWorkingSolution().getScore());
 //        }
@@ -69,5 +69,18 @@ public class Population implements Iterable<ScoreDirector> {
 
     public ScoreDirector getBestIndividual() {
         return bestIndividual;
+    }
+
+    public void sort() {
+        Collections.sort(individuals, Collections.reverseOrder(new ScoreDirectorComparator()));
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < populationSize; i++) {
+            buffer.append(individuals.get(i).getWorkingSolution().getScore()).append("\n");
+        }
+        return buffer.toString();
     }
 }
