@@ -16,16 +16,37 @@
 
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import java.util.List;
 
-public class KeepNewStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-        ReplacementStrategy {
+import org.optaplanner.core.geneticalgorithm.Population;
+import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.score.director.ScoreDirector;
+
+public class KeepNewStrategy extends AbstractReplacementStrategy {
 
     @Override
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
-        //TODO implement
+        stepScope.performScoreCalculation();
+        List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
+        List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
+
+        Population newGeneration = new Population(populationSize);
+        ScoreDirector intermediateIndividual = intermediatePopulation.get(0);
+        ScoreDirector generationIndividual = currentGeneration.get(0);
+
+        ScoreDirector bestIndividual =
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
+                        intermediateIndividual : generationIndividual;
+        newGeneration.setBestIndividual(bestIndividual);
+
+        for (int i = 0; i < elitistSize; i++) {
+            newGeneration.addIndividual(currentGeneration.get(i));
+        }
+        for (int i = 0; i < populationSize - elitistSize; i++) {
+            newGeneration.addIndividual(intermediatePopulation.get(i));
+        }
+        newGeneration.sort();
+        stepScope.setNewGeneration(newGeneration);
     }
 
-    //TODO react to lifecycle events?
 }

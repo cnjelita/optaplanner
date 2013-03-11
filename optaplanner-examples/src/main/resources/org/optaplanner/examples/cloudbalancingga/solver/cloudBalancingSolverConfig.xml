@@ -38,8 +38,8 @@
     <maximumSecondsSpend>100</maximumSecondsSpend>
   </termination>
   <!--<constructionHeuristic>-->
-    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-    <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
   <!--</constructionHeuristic>-->
   <!--<localSearch>-->
   <!--<acceptor>-->
@@ -51,9 +51,10 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>30</populationSize>
-      <elitistSize>1</elitistSize>
+      <populationSize>50</populationSize>
+      <elitistSize>0</elitistSize>
     </populationParameters>
-    <uniformCrossoverOperator/>
+    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+    <!--<uniformCrossoverOperator/>-->
   </geneticAlgorithm>
 </solver>

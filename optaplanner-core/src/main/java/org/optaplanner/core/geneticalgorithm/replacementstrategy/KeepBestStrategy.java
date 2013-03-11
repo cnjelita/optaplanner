@@ -17,22 +17,15 @@
 package org.optaplanner.core.geneticalgorithm.replacementstrategy;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.ScoreDirectorComparator;
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.score.director.ScoreDirector;
 
-public class KeepBestStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter
-        implements ReplacementStrategy {
-
-    private Comparator<ScoreDirector> scoreDirectorComparator;
-    private int populationSize;
-    private int elitistSize;
+public class KeepBestStrategy extends AbstractReplacementStrategy {
 
     @Override
     public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
