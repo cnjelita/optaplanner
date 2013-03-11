@@ -37,6 +37,7 @@ import org.optaplanner.core.geneticalgorithm.GeneticAlgorithmSolverPhase;
 import org.optaplanner.core.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.initializer.RandomPopulationInitializer;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.CrossoverOperator;
+import org.optaplanner.core.geneticalgorithm.operator.crossover.NoOpCrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.crossover.OnePointCrossoverOperator;
 import org.optaplanner.core.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
@@ -217,7 +218,8 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
         CrossoverOperator crossoverOperator;
         if (CollectionUtils.isEmpty(crossoverOperatorConfigList)) {
             //TODO to build a default crossover operator check whether solution uses chaining...
-            crossoverOperator = new OnePointCrossoverOperator();
+            //TODO or keep using no crossover as default?
+            crossoverOperator = new NoOpCrossoverOperator();
         } else if (crossoverOperatorConfigList.size() == 1) {
             crossoverOperator = crossoverOperatorConfigList.get(0).buildCrossoverOperator(solutionDescriptor);
         } else {

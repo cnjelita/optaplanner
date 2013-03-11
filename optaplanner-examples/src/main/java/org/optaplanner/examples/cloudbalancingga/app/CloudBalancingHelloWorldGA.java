@@ -44,8 +44,8 @@ public class CloudBalancingHelloWorldGA {
 //        System.out.println(solvedCloudBalance.getScore());
 //        System.out.println(sc.calculateScore(solvedCloudBalance));
         // Display the result
-        System.out.println("\nSolved cloudBalance with 400 computers and 1200 processes:\n"
-                + toDisplayString(solvedCloudBalance));
+//        System.out.println("\nSolved cloudBalance with 400 computers and 1200 processes:\n"
+//                + toDisplayString(solvedCloudBalance));
     }
 
     public static String toDisplayString(CloudBalance cloudBalance) {
