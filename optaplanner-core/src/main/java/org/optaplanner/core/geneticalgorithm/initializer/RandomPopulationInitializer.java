@@ -50,6 +50,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
     private ScoreDirectorFactory scoreDirectorFactory;
 
     @Override
+    //TODO make sure no solutions are equal
     public void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope) {
         Population population = new Population(populationSize);
         //TODO import solution from previous algorithms
