@@ -67,7 +67,8 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
         //TODO import solution from previous algorithms
         for (int i = 0; i < numberOfIndividuals; i++) {
             //TODO make set of sets!
-            Set<Object> usedValues = new HashSet<Object>();
+            Map<PlanningVariableDescriptor, Set<Object>> chainedPlanningVariableToUsedValuesMap =
+                    new HashMap<PlanningVariableDescriptor, Set<Object>>();
             ScoreDirector scoreDirector = phaseScope.getScoreDirector().clone();
             Solution clone = scoreDirector.getWorkingSolution();
             List<Object> planningEntityList = phaseScope.getSolutionDescriptor().getPlanningEntityList(clone);
@@ -80,8 +81,10 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                 for (PlanningVariableDescriptor variableDescriptor : variableDescriptors) {
                     List<Object> planningValues = variableDescriptorToValuesMap.get(variableDescriptor);
                     if (variableDescriptor.isChained()) {
-                        //TODO implement chained variable option - Use chainedChangeMove?
-                        //TODO should keep track of already used values?
+                        Set<Object> usedValues = chainedPlanningVariableToUsedValuesMap.get(variableDescriptor);
+                        if (usedValues == null) {
+                            usedValues = new HashSet<Object>();
+                        }
                         Collection<?> values = variableDescriptor.extractPlanningValues(clone, planningEntity);
                         for (Object value : values) {
                             if (!usedValues.contains(value)) {
