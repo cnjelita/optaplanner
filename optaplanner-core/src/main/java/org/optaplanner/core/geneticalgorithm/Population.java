@@ -82,4 +82,37 @@ public class Population implements Iterable<ScoreDirector> {
         }
         return buffer.toString();
     }
+
+    //TODO this only works for maximization problems
+    public double[][] calculatePopulationParameters() {
+        double[] worstScorePerLevel = null;
+        double[] bestScorePerLevel = null;
+        for (ScoreDirector individual : individuals) {
+            double[] scoreDoubleLevels = individual.getWorkingSolution().getScore().toDoubleLevels();
+            if (bestScorePerLevel == null) {
+                bestScorePerLevel = new double[scoreDoubleLevels.length];
+                for (int i = 0; i < bestScorePerLevel.length; i++) {
+                    bestScorePerLevel[i] = -Double.MAX_VALUE;
+                }
+            }
+            if (worstScorePerLevel == null) {
+                worstScorePerLevel = new double[scoreDoubleLevels.length];
+            }
+            for (int i = 0; i < scoreDoubleLevels.length; i++) {
+                if (worstScorePerLevel[i] > scoreDoubleLevels[i]) {
+                    worstScorePerLevel[i] = scoreDoubleLevels[i];
+                }
+                if (bestScorePerLevel[i] < scoreDoubleLevels[i]) {
+                    bestScorePerLevel[i] = scoreDoubleLevels[i];
+                }
+            }
+        }
+        double[] weightPerScoreLevel = new double[worstScorePerLevel.length];
+        weightPerScoreLevel[0] = 1;
+        for (int i = 1; i < worstScorePerLevel.length; i++) {
+            weightPerScoreLevel[i] =
+                    (bestScorePerLevel[i - 1] - worstScorePerLevel[i - 1]) * weightPerScoreLevel[i - 1] + 1;
+        }
+        return new double[][]{weightPerScoreLevel, worstScorePerLevel};
+    }
 }

@@ -16,17 +16,17 @@
 
 package org.optaplanner.config.geneticalgorithm.operator.solutionselector;
 
-import com.thoughtworks.xstream.annotations.XStreamInclude;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.optaplanner.core.domain.solution.SolutionDescriptor;
+import org.optaplanner.core.geneticalgorithm.operator.selector.RouletteWheelSelector;
 import org.optaplanner.core.geneticalgorithm.operator.selector.SolutionSelector;
 
-//TODO add possible selection operators for XStream
-//TODO rename to selection operator?
-@XStreamInclude({
-        TournamentSelectorConfig.class,
-        RouletteWheelSelectorConfig.class
-})
-public abstract class SolutionSelectorConfig {
+@XStreamAlias("rouletteWheelSelector")
+public class RouletteWheelSelectorConfig extends SolutionSelectorConfig {
 
-    public abstract SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor);
+    @Override
+    public SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
+        RouletteWheelSelector rouletteWheelSelector = new RouletteWheelSelector();
+        return rouletteWheelSelector;
+    }
 }

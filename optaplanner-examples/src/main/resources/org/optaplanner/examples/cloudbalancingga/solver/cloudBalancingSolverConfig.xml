@@ -51,10 +51,11 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>30</populationSize>
+      <populationSize>40</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
-    <replacementStrategyType>RANDOM</replacementStrategyType>
+    <rouletteWheelSelector/>
+    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
     <!--<uniformCrossoverOperator/>-->
   </geneticAlgorithm>
 </solver>

@@ -17,26 +17,16 @@
 package org.optaplanner.core.geneticalgorithm.operator.selector;
 
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import org.optaplanner.core.geneticalgorithm.Population;
 import org.optaplanner.core.geneticalgorithm.ScoreDirectorComparator;
-import org.optaplanner.core.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
-import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.score.director.ScoreDirector;
 
-public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-        SolutionSelector {
+public class TournamentSelector extends AbstractSolutionSelector {
 
     private int tournamentSize;
-    private Comparator<ScoreDirector> scoreDirectorComparator;
-    private int populationSize;
-    private Random workingRandom;
 
     public TournamentSelector() {
         scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
@@ -87,10 +77,4 @@ public class TournamentSelector extends GeneticAlgorithmSolverPhaseLifeCycleList
         stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
     }
 
-    @Override
-    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-        super.phaseStarted(phaseScope);
-        populationSize = phaseScope.getPopulationSize();
-        workingRandom = phaseScope.getWorkingRandom();
-    }
 }
