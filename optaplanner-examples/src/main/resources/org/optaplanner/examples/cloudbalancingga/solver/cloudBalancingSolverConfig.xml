@@ -39,7 +39,7 @@
   </termination>
   <constructionHeuristic>
     <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-    <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+    <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
   </constructionHeuristic>
   <!--<localSearch>-->
   <!--<acceptor>-->
@@ -51,8 +51,9 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>40</populationSize>
-      <elitistSize>5</elitistSize>
+      <populationSize>30</populationSize>
+      <elitistSize>1</elitistSize>
     </populationParameters>
+    <twoPointCrossover/>
   </geneticAlgorithm>
 </solver>

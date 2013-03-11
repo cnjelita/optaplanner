@@ -26,7 +26,7 @@ import org.optaplanner.core.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.score.director.ScoreDirector;
 import org.optaplanner.core.util.RandomUtils;
 
-public class OnePointCrossoverOperator extends AbstractCrossoverOperator {
+public class TwoPointCrossoverOperator extends AbstractCrossoverOperator {
 
     @Override
     public void performCrossover(GeneticAlgorithmStepScope stepScope) {
@@ -46,14 +46,18 @@ public class OnePointCrossoverOperator extends AbstractCrossoverOperator {
                     entityClass);
 
             long entitySize = leftParent.getEntitySize(entityClass);
-            long crossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
 
-            for (long j = 0; j < crossoverPoint; j++) {
+            long leftCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+            long rightCrossoverPoint;
+            do {
+                rightCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+            } while (leftCrossoverPoint == rightCrossoverPoint);
+
+            for (long j = leftCrossoverPoint; j < rightCrossoverPoint; j++) {
                 swapValues(variableDescriptors, leftParent.getEntityByClassAndId(entityClass, j),
                         leftScoreDirector,
                         rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
             }
         }
     }
-
 }
