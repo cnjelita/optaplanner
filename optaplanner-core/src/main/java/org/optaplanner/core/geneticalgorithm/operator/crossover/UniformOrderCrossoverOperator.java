@@ -33,7 +33,7 @@ import org.optaplanner.core.heuristic.selector.move.generic.chained.ChainedSwapM
 import org.optaplanner.core.move.Move;
 import org.optaplanner.core.score.director.ScoreDirector;
 
-public class UniformOrderCrossover extends AbstractCrossoverOperator {
+public class UniformOrderCrossoverOperator extends AbstractChainingCrossoverOperator {
 
     @Override
     public void performCrossover(GeneticAlgorithmStepScope stepScope) {
@@ -152,19 +152,5 @@ public class UniformOrderCrossover extends AbstractCrossoverOperator {
 
     }
 
-    private List<Object> getOrderedList(Object planningEntity, ScoreDirector scoreDirector,
-            PlanningVariableDescriptor chainedVariableDescriptor) {
-        List<Object> orderedList = new ArrayList<Object>();
-        PlanningEntityDescriptor entityDescriptor = chainedVariableDescriptor.getPlanningEntityDescriptor();
-        while (scoreDirector.getTrailingEntity(chainedVariableDescriptor, planningEntity) != null) {
-            planningEntity = scoreDirector.getTrailingEntity(chainedVariableDescriptor, planningEntity);
-        }
-        while (planningEntity != null && entityDescriptor.appliesToPlanningEntity(planningEntity)) {
-            orderedList.add(planningEntity);
-//            System.out.println(planningEntity);
-            planningEntity = chainedVariableDescriptor.getValue(planningEntity);
-        }
-        Collections.reverse(orderedList);
-        return orderedList;
-    }
+
 }

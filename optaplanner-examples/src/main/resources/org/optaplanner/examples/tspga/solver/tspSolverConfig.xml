@@ -65,11 +65,11 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>50</populationSize>
-      <elitistSize>10</elitistSize>
+      <populationSize>10</populationSize>
+      <elitistSize>2</elitistSize>
     </populationParameters>
     <!--<stochasticUniversalSamplingSelector/>-->
-    <!--<uniformOrderCrossover/>-->
-    <replacementStrategyType>RANDOM</replacementStrategyType>
+    <cycleCrossoverOperator/>
+    <replacementStrategyType>KEEP_BEST</replacementStrategyType>
   </geneticAlgorithm>
 </solver>
