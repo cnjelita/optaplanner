@@ -31,7 +31,7 @@
   </scoreDirectorFactory>
 
   <termination>
-    <maximumSecondsSpend>50</maximumSecondsSpend>
+    <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
   <!--<constructionHeuristic>-->
   <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
@@ -65,12 +65,11 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>80</populationSize>
+      <populationSize>50</populationSize>
+      <elitistSize>10</elitistSize>
     </populationParameters>
     <!--<stochasticUniversalSamplingSelector/>-->
-    <tournamentSelector>
-      <tournamentSize>40</tournamentSize>
-    </tournamentSelector>
-    <replacementStrategyType>KEEP_BEST</replacementStrategyType>
+    <!--<uniformOrderCrossover/>-->
+    <replacementStrategyType>RANDOM</replacementStrategyType>
   </geneticAlgorithm>
 </solver>

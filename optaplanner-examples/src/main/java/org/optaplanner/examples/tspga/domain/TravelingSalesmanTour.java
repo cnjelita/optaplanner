@@ -18,6 +18,7 @@ package org.optaplanner.examples.tspga.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,15 +27,15 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.optaplanner.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.api.domain.solution.PlanningSolution;
+import org.optaplanner.core.geneticalgorithm.Individual;
 import org.optaplanner.core.score.buildin.simple.SimpleScore;
 import org.optaplanner.core.score.buildin.simple.SimpleScoreDefinition;
-import org.optaplanner.core.solution.Solution;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 import org.optaplanner.persistence.xstream.XStreamScoreConverter;
 
-@PlanningSolution
+@PlanningSolution(solutionCloner = TravelingSalesmanTourCloner.class)
 @XStreamAlias("TravelingSalesmanTour")
-public class TravelingSalesmanTour extends AbstractPersistable implements Solution<SimpleScore> {
+public class TravelingSalesmanTour extends AbstractPersistable implements Individual<SimpleScore> {
 
     private String name;
     private List<City> cityList;
@@ -44,6 +45,9 @@ public class TravelingSalesmanTour extends AbstractPersistable implements Soluti
 
     @XStreamConverter(value = XStreamScoreConverter.class, types = {SimpleScoreDefinition.class})
     private SimpleScore score;
+    private HashMap<Visit, Long> visitToIdMap;
+    private HashMap<Long, Visit> idToVisitMap;
+    private int entitySize;
 
     public String getName() {
         return name;
@@ -109,7 +113,7 @@ public class TravelingSalesmanTour extends AbstractPersistable implements Soluti
             if (visitList.size() != other.visitList.size()) {
                 return false;
             }
-            for (Iterator<Visit> it = visitList.iterator(), otherIt = other.visitList.iterator(); it.hasNext();) {
+            for (Iterator<Visit> it = visitList.iterator(), otherIt = other.visitList.iterator(); it.hasNext(); ) {
                 Visit visit = it.next();
                 Visit otherVisit = otherIt.next();
                 // Notice: we don't use equals()
@@ -130,4 +134,28 @@ public class TravelingSalesmanTour extends AbstractPersistable implements Soluti
         return hashCodeBuilder.toHashCode();
     }
 
+    @Override
+    public Object getEntityByClassAndId(Class clazz, Long id) {
+        return idToVisitMap.get(id);
+    }
+
+    @Override
+    public long getEntityId(Object entity) {
+        return visitToIdMap.get(entity);
+    }
+
+    @Override
+    public int getEntitySize(Class<?> entityClass) {
+        return entitySize;
+    }
+
+    public void generateIdMaps() {
+        visitToIdMap = new HashMap<Visit, Long>(visitList.size());
+        idToVisitMap = new HashMap<Long, Visit>(visitList.size());
+        for (Visit visit : visitList) {
+            visitToIdMap.put(visit, visit.getId());
+            idToVisitMap.put(visit.getId(), visit);
+        }
+        this.entitySize = visitList.size();
+    }
 }

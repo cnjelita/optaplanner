@@ -25,12 +25,15 @@ public class StochasticUniversalSamplingSelector extends AbstractFitnessProporti
     @Override
     public void selectParents(GeneticAlgorithmStepScope stepScope) {
         double offset = RandomUtils.nextDouble(workingRandom, totalProbability / populationSize);
-        Population intermediatePopulation = new Population(populationSize);
+        int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
+        Population intermediatePopulation = new Population(intermediatePopulationSize);
         double nextOffset = offset;
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < intermediatePopulationSize; i++) {
             intermediatePopulation.addIndividual(fitnessMap.ceilingEntry(nextOffset).getValue().clone());
             nextOffset += offset;
         }
         stepScope.setIntermediatePopulation(intermediatePopulation);
+        stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
+
     }
 }

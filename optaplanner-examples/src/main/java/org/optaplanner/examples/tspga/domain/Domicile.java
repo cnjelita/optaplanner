@@ -41,4 +41,10 @@ public class Domicile extends AbstractPersistable implements Appearance {
         return city.toString();
     }
 
+    protected Domicile cloneDomicile() {
+        Domicile clone = new Domicile();
+        clone.setCity(city);
+        clone.setId(id);
+        return clone;
+    }
 }

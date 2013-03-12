@@ -24,11 +24,14 @@ public class RouletteWheelSelector extends AbstractFitnessProportionateSelector 
 
     @Override
     public void selectParents(GeneticAlgorithmStepScope stepScope) {
-        Population intermediatePopulation = new Population(populationSize);
-        for (int i = 0; i < populationSize; i++) {
+        int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
+        Population intermediatePopulation = new Population(intermediatePopulationSize);
+        for (int i = 0; i < intermediatePopulationSize; i++) {
             double randomOffset = RandomUtils.nextDouble(workingRandom, totalProbability);
             intermediatePopulation.addIndividual(fitnessMap.ceilingEntry(randomOffset).getValue().clone());
         }
         stepScope.setIntermediatePopulation(intermediatePopulation);
+        stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
+
     }
 }

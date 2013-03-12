@@ -40,6 +40,7 @@ public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPh
     protected List<Class<?>> entityClassList;
     protected Map<Class<?>, Collection<PlanningVariableDescriptor>> entityClassToVariableDescriptorMap;
     protected int entityListClassSize;
+    protected SolutionDescriptor solutionDescriptor;
 
     @Override
     public abstract void performCrossover(GeneticAlgorithmStepScope stepScope);
@@ -48,7 +49,7 @@ public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPh
     public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
         super.phaseStarted(phaseScope);
         workingRandom = phaseScope.getWorkingRandom();
-        SolutionDescriptor solutionDescriptor = phaseScope.getSolutionDescriptor();
+        solutionDescriptor = phaseScope.getSolutionDescriptor();
         entityClassList = new ArrayList<Class<?>>();
         Set<Class<?>> entityClassSet = solutionDescriptor.getPlanningEntityClassSet();
         entityListClassSize = entityClassSet.size();

@@ -66,7 +66,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
 
         //TODO import solution from previous algorithms
         for (int i = 0; i < numberOfIndividuals; i++) {
-            //TODO make set of sets!
+
             Map<PlanningVariableDescriptor, Set<Object>> chainedPlanningVariableToUsedValuesMap =
                     new HashMap<PlanningVariableDescriptor, Set<Object>>();
             ScoreDirector scoreDirector = phaseScope.getScoreDirector().clone();
@@ -84,6 +84,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                         Set<Object> usedValues = chainedPlanningVariableToUsedValuesMap.get(variableDescriptor);
                         if (usedValues == null) {
                             usedValues = new HashSet<Object>();
+                            chainedPlanningVariableToUsedValuesMap.put(variableDescriptor, usedValues);
                         }
                         Collection<?> values = variableDescriptor.extractPlanningValues(clone, planningEntity);
                         for (Object value : values) {
@@ -94,12 +95,14 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
                                 break;
                             }
                         }
+
                     } else {
                         //TODO maybe use changeMoves so the isDoable option is available?
                         variableDescriptor.setValue(planningEntity,
                                 planningValues.get(workingRandom.nextInt(planningValues.size())));
                     }
                 }
+
             }
             population.addIndividual(scoreDirector);
         }

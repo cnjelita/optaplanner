@@ -110,4 +110,10 @@ public class Visit extends AbstractPersistable implements Appearance {
         return city + "(after " + (previousAppearance == null ? "null" : previousAppearance.getCity()) + ")";
     }
 
+    public Visit cloneVisit() {
+        Visit clone = new Visit();
+        clone.setId(id);
+        clone.setCity(city);
+        return clone;
+    }
 }
