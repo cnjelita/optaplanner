@@ -16,8 +16,8 @@
 
 package org.optaplanner.examples.cloudbalancingga.app;
 
-import org.optaplanner.config.XmlSolverFactory;
-import org.optaplanner.core.Solver;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.config.solver.XmlSolverFactory;
 import org.optaplanner.examples.cloudbalancingga.persistence.CloudBalancingDaoImpl;
 import org.optaplanner.examples.cloudbalancingga.swingui.CloudBalancingPanel;
 import org.optaplanner.examples.common.app.CommonApp;
@@ -26,29 +26,29 @@ import org.optaplanner.examples.common.swingui.SolutionPanel;
 
 public class CloudBalancingApp extends CommonApp {
 
-    public static final String SOLVER_CONFIG
-            = "/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingSolverConfig.xml";
+	public static final String SOLVER_CONFIG
+			= "/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingSolverConfig.xml";
 
-    public static void main(String[] args) {
-        fixateLookAndFeel();
-        new CloudBalancingApp().init();
-    }
+	public static void main(String[] args) {
+		fixateLookAndFeel();
+		new CloudBalancingApp().init();
+	}
 
-    @Override
-    protected Solver createSolver() {
-        XmlSolverFactory solverFactory = new XmlSolverFactory();
-        solverFactory.configure(SOLVER_CONFIG);
-        return solverFactory.buildSolver();
-    }
+	@Override
+	protected Solver createSolver() {
+		XmlSolverFactory solverFactory = new XmlSolverFactory();
+		solverFactory.configure(SOLVER_CONFIG);
+		return solverFactory.buildSolver();
+	}
 
-    @Override
-    protected SolutionPanel createSolutionPanel() {
-        return new CloudBalancingPanel();
-    }
+	@Override
+	protected SolutionPanel createSolutionPanel() {
+		return new CloudBalancingPanel();
+	}
 
-    @Override
-    protected SolutionDao createSolutionDao() {
-        return new CloudBalancingDaoImpl();
-    }
+	@Override
+	protected SolutionDao createSolutionDao() {
+		return new CloudBalancingDaoImpl();
+	}
 
 }

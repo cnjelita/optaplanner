@@ -18,11 +18,12 @@ package org.optaplanner.core.config.phase;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamInclude;
-import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.bruteforce.BruteForceSolverPhaseConfig;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicSolverPhaseConfig;
+import org.optaplanner.core.config.geneticalgorithm.GeneticAlgorithmSolverPhaseConfig;
 import org.optaplanner.core.config.localsearch.LocalSearchSolverPhaseConfig;
 import org.optaplanner.core.config.phase.custom.CustomSolverPhaseConfig;
+import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.termination.TerminationConfig;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.phase.AbstractSolverPhase;
@@ -32,51 +33,51 @@ import org.optaplanner.core.impl.termination.PhaseToSolverTerminationBridge;
 import org.optaplanner.core.impl.termination.Termination;
 
 @XStreamInclude({
-        CustomSolverPhaseConfig.class,
-        BruteForceSolverPhaseConfig.class,
-        ConstructionHeuristicSolverPhaseConfig.class,
-        LocalSearchSolverPhaseConfig.class,
-        GeneticAlgorithmSolverPhaseConfig.class
+		CustomSolverPhaseConfig.class,
+		BruteForceSolverPhaseConfig.class,
+		ConstructionHeuristicSolverPhaseConfig.class,
+		LocalSearchSolverPhaseConfig.class,
+		GeneticAlgorithmSolverPhaseConfig.class
 })
 public abstract class SolverPhaseConfig {
 
-    // Warning: all fields are null (and not defaulted) because they can be inherited
-    // and also because the input config file should match the output config file
+	// Warning: all fields are null (and not defaulted) because they can be inherited
+	// and also because the input config file should match the output config file
 
-    @XStreamAlias("termination")
-    private TerminationConfig terminationConfig = null;
+	@XStreamAlias("termination")
+	private TerminationConfig terminationConfig = null;
 
-    public TerminationConfig getTerminationConfig() {
-        return terminationConfig;
-    }
+	public TerminationConfig getTerminationConfig() {
+		return terminationConfig;
+	}
 
-    public void setTerminationConfig(TerminationConfig terminationConfig) {
-        this.terminationConfig = terminationConfig;
-    }
+	public void setTerminationConfig(TerminationConfig terminationConfig) {
+		this.terminationConfig = terminationConfig;
+	}
 
-    // ************************************************************************
-    // Builder methods
-    // ************************************************************************
+	// ************************************************************************
+	// Builder methods
+	// ************************************************************************
 
-    public abstract SolverPhase buildSolverPhase(int phaseIndex,
-            EnvironmentMode environmentMode, SolutionDescriptor solutionDescriptor,
-            ScoreDefinition scoreDefinition, Termination solverTermination);
+	public abstract SolverPhase buildSolverPhase(int phaseIndex,
+			EnvironmentMode environmentMode, SolutionDescriptor solutionDescriptor,
+			ScoreDefinition scoreDefinition, Termination solverTermination);
 
-    protected void configureSolverPhase(AbstractSolverPhase solverPhase, int phaseIndex,
-            EnvironmentMode environmentMode, ScoreDefinition scoreDefinition, Termination solverTermination) {
-        solverPhase.setPhaseIndex(phaseIndex);
-        TerminationConfig terminationConfig_ = terminationConfig == null ? new TerminationConfig()
-                : terminationConfig;
-        solverPhase.setTermination(terminationConfig_.buildTermination(scoreDefinition,
-                new PhaseToSolverTerminationBridge(solverTermination)));
-    }
+	protected void configureSolverPhase(AbstractSolverPhase solverPhase, int phaseIndex,
+			EnvironmentMode environmentMode, ScoreDefinition scoreDefinition, Termination solverTermination) {
+		solverPhase.setPhaseIndex(phaseIndex);
+		TerminationConfig terminationConfig_ = terminationConfig == null ? new TerminationConfig()
+				: terminationConfig;
+		solverPhase.setTermination(terminationConfig_.buildTermination(scoreDefinition,
+				new PhaseToSolverTerminationBridge(solverTermination)));
+	}
 
-    public void inherit(SolverPhaseConfig inheritedConfig) {
-        if (terminationConfig == null) {
-            terminationConfig = inheritedConfig.getTerminationConfig();
-        } else if (inheritedConfig.getTerminationConfig() != null) {
-            terminationConfig.inherit(inheritedConfig.getTerminationConfig());
-        }
-    }
+	public void inherit(SolverPhaseConfig inheritedConfig) {
+		if (terminationConfig == null) {
+			terminationConfig = inheritedConfig.getTerminationConfig();
+		} else if (inheritedConfig.getTerminationConfig() != null) {
+			terminationConfig.inherit(inheritedConfig.getTerminationConfig());
+		}
+	}
 
 }

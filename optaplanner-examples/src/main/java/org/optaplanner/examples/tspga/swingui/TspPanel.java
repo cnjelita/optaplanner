@@ -20,10 +20,10 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.score.director.ScoreDirector;
-import org.optaplanner.core.solution.Solution;
-import org.optaplanner.core.solver.ProblemFactChange;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
+import org.optaplanner.core.impl.solution.Solution;
+import org.optaplanner.core.impl.solver.ProblemFactChange;
 import org.optaplanner.examples.common.swingui.SolutionPanel;
 import org.optaplanner.examples.common.swingui.SolverAndPersistenceFrame;
 import org.optaplanner.examples.tspga.domain.City;
@@ -35,93 +35,93 @@ import org.optaplanner.examples.tspga.domain.Visit;
  */
 public class TspPanel extends SolutionPanel {
 
-    public static final String LOGO_PATH = "/org/optaplanner/examples/tsp/swingui/tspLogo.png";
+	public static final String LOGO_PATH = "/org/optaplanner/examples/tsp/swingui/tspLogo.png";
 
-    private TspWorldPanel tspWorldPanel;
-    private TspListPanel tspListPanel;
+	private TspWorldPanel tspWorldPanel;
+	private TspListPanel tspListPanel;
 
-    private Long nextCityId = null;
+	private Long nextCityId = null;
 
-    public TspPanel() {
-        setLayout(new BorderLayout());
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tspWorldPanel = new TspWorldPanel(this);
-        tspWorldPanel.setPreferredSize(PREFERRED_SCROLLABLE_VIEWPORT_SIZE);
-        tabbedPane.add("World", tspWorldPanel);
-        tspListPanel = new TspListPanel(this);
-        JScrollPane tspListScrollPane = new JScrollPane(tspListPanel);
-        tabbedPane.add("List", tspListScrollPane);
-        add(tabbedPane, BorderLayout.CENTER);
-    }
+	public TspPanel() {
+		setLayout(new BorderLayout());
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tspWorldPanel = new TspWorldPanel(this);
+		tspWorldPanel.setPreferredSize(PREFERRED_SCROLLABLE_VIEWPORT_SIZE);
+		tabbedPane.add("World", tspWorldPanel);
+		tspListPanel = new TspListPanel(this);
+		JScrollPane tspListScrollPane = new JScrollPane(tspListPanel);
+		tabbedPane.add("List", tspListScrollPane);
+		add(tabbedPane, BorderLayout.CENTER);
+	}
 
-    @Override
-    public boolean isWrapInScrollPane() {
-        return false;
-    }
+	@Override
+	public boolean isWrapInScrollPane() {
+		return false;
+	}
 
-    @Override
-    public boolean isRefreshScreenDuringSolving() {
-        return true;
-    }
+	@Override
+	public boolean isRefreshScreenDuringSolving() {
+		return true;
+	}
 
-    public TravelingSalesmanTour getTravelingSalesmanTour() {
-        return (TravelingSalesmanTour) solutionBusiness.getSolution();
-    }
+	public TravelingSalesmanTour getTravelingSalesmanTour() {
+		return (TravelingSalesmanTour) solutionBusiness.getSolution();
+	}
 
-    public void resetPanel(Solution solution) {
-        TravelingSalesmanTour travelingSalesmanTour = (TravelingSalesmanTour) solution;
-        tspWorldPanel.resetPanel(travelingSalesmanTour);
-        tspListPanel.resetPanel(travelingSalesmanTour);
-        resetNextCityId();
-    }
+	public void resetPanel(Solution solution) {
+		TravelingSalesmanTour travelingSalesmanTour = (TravelingSalesmanTour) solution;
+		tspWorldPanel.resetPanel(travelingSalesmanTour);
+		tspListPanel.resetPanel(travelingSalesmanTour);
+		resetNextCityId();
+	}
 
-    private void resetNextCityId() {
-        long highestCityId = 0L;
-        for (City city : getTravelingSalesmanTour().getCityList()) {
-            if (highestCityId < city.getId().longValue()) {
-                highestCityId = city.getId();
-            }
-        }
-        nextCityId = highestCityId + 1L;
-    }
+	private void resetNextCityId() {
+		long highestCityId = 0L;
+		for (City city : getTravelingSalesmanTour().getCityList()) {
+			if (highestCityId < city.getId().longValue()) {
+				highestCityId = city.getId();
+			}
+		}
+		nextCityId = highestCityId + 1L;
+	}
 
-    @Override
-    public void updatePanel(Solution solution) {
-        TravelingSalesmanTour travelingSalesmanTour = (TravelingSalesmanTour) solution;
-        tspWorldPanel.updatePanel(travelingSalesmanTour);
-        tspListPanel.updatePanel(travelingSalesmanTour);
-    }
+	@Override
+	public void updatePanel(Solution solution) {
+		TravelingSalesmanTour travelingSalesmanTour = (TravelingSalesmanTour) solution;
+		tspWorldPanel.updatePanel(travelingSalesmanTour);
+		tspListPanel.updatePanel(travelingSalesmanTour);
+	}
 
-    public void doMove(Move move) {
-        solutionBusiness.doMove(move);
-    }
+	public void doMove(Move move) {
+		solutionBusiness.doMove(move);
+	}
 
-    public SolverAndPersistenceFrame getWorkflowFrame() {
-        return solverAndPersistenceFrame;
-    }
+	public SolverAndPersistenceFrame getWorkflowFrame() {
+		return solverAndPersistenceFrame;
+	}
 
-    public void insertCityAndVisit(double longitude, double latitude) {
-        final City newCity = new City();
-        newCity.setId(nextCityId);
-        nextCityId++;
-        newCity.setLongitude(longitude);
-        newCity.setLatitude(latitude);
-        logger.info("Scheduling insertion of newCity ({}).", newCity);
-        solutionBusiness.doProblemFactChange(new ProblemFactChange() {
-            public void doChange(ScoreDirector scoreDirector) {
-                TravelingSalesmanTour solution = (TravelingSalesmanTour) scoreDirector.getWorkingSolution();
-                scoreDirector.beforeProblemFactAdded(newCity);
-                solution.getCityList().add(newCity);
-                scoreDirector.afterProblemFactAdded(newCity);
-                Visit newVisit = new Visit();
-                newVisit.setId(newCity.getId());
-                newVisit.setCity(newCity);
-                scoreDirector.beforeEntityAdded(newVisit);
-                solution.getVisitList().add(newVisit);
-                scoreDirector.afterEntityAdded(newVisit);
-            }
-        });
-        updatePanel(solutionBusiness.getSolution());
-    }
+	public void insertCityAndVisit(double longitude, double latitude) {
+		final City newCity = new City();
+		newCity.setId(nextCityId);
+		nextCityId++;
+		newCity.setLongitude(longitude);
+		newCity.setLatitude(latitude);
+		logger.info("Scheduling insertion of newCity ({}).", newCity);
+		solutionBusiness.doProblemFactChange(new ProblemFactChange() {
+			public void doChange(ScoreDirector scoreDirector) {
+				TravelingSalesmanTour solution = (TravelingSalesmanTour) scoreDirector.getWorkingSolution();
+				scoreDirector.beforeProblemFactAdded(newCity);
+				solution.getCityList().add(newCity);
+				scoreDirector.afterProblemFactAdded(newCity);
+				Visit newVisit = new Visit();
+				newVisit.setId(newCity.getId());
+				newVisit.setCity(newCity);
+				scoreDirector.beforeEntityAdded(newVisit);
+				solution.getVisitList().add(newVisit);
+				scoreDirector.afterEntityAdded(newVisit);
+			}
+		});
+		updatePanel(solutionBusiness.getSolution());
+	}
 
 }

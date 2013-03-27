@@ -22,53 +22,53 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @XStreamAlias("CloudComputer")
 public class CloudComputer extends AbstractPersistable {
 
-    private int cpuPower; // in gigahertz
-    private int memory; // in gigabyte RAM
-    private int networkBandwidth; // in gigabyte per hour
-    private int cost; // in euro per month
+	private int cpuPower; // in gigahertz
+	private int memory; // in gigabyte RAM
+	private int networkBandwidth; // in gigabyte per hour
+	private int cost; // in euro per month
 
-    public int getCpuPower() {
-        return cpuPower;
-    }
+	public int getCpuPower() {
+		return cpuPower;
+	}
 
-    public void setCpuPower(int cpuPower) {
-        this.cpuPower = cpuPower;
-    }
+	public void setCpuPower(int cpuPower) {
+		this.cpuPower = cpuPower;
+	}
 
-    public int getMemory() {
-        return memory;
-    }
+	public int getMemory() {
+		return memory;
+	}
 
-    public void setMemory(int memory) {
-        this.memory = memory;
-    }
+	public void setMemory(int memory) {
+		this.memory = memory;
+	}
 
-    public int getNetworkBandwidth() {
-        return networkBandwidth;
-    }
+	public int getNetworkBandwidth() {
+		return networkBandwidth;
+	}
 
-    public void setNetworkBandwidth(int networkBandwidth) {
-        this.networkBandwidth = networkBandwidth;
-    }
+	public void setNetworkBandwidth(int networkBandwidth) {
+		this.networkBandwidth = networkBandwidth;
+	}
 
-    public int getCost() {
-        return cost;
-    }
+	public int getCost() {
+		return cost;
+	}
 
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+	// ************************************************************************
+	// Complex methods
+	// ************************************************************************
 
-    public int getMultiplicand() {
-        return cpuPower * memory * networkBandwidth;
-    }
+	public int getMultiplicand() {
+		return cpuPower * memory * networkBandwidth;
+	}
 
-    public String getLabel() {
-        return "Computer " + id;
-    }
+	public String getLabel() {
+		return "Computer " + id;
+	}
 
 }

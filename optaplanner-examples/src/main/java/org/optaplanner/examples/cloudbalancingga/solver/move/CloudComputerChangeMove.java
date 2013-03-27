@@ -22,64 +22,64 @@ import java.util.Collections;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.score.director.ScoreDirector;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
 public class CloudComputerChangeMove implements Move {
 
-    private CloudProcess cloudProcess;
-    private CloudComputer toCloudComputer;
+	private CloudProcess cloudProcess;
+	private CloudComputer toCloudComputer;
 
-    public CloudComputerChangeMove(CloudProcess cloudProcess, CloudComputer toCloudComputer) {
-        this.cloudProcess = cloudProcess;
-        this.toCloudComputer = toCloudComputer;
-    }
+	public CloudComputerChangeMove(CloudProcess cloudProcess, CloudComputer toCloudComputer) {
+		this.cloudProcess = cloudProcess;
+		this.toCloudComputer = toCloudComputer;
+	}
 
-    public boolean isMoveDoable(ScoreDirector scoreDirector) {
-        return !ObjectUtils.equals(cloudProcess.getComputer(), toCloudComputer);
-    }
+	public boolean isMoveDoable(ScoreDirector scoreDirector) {
+		return !ObjectUtils.equals(cloudProcess.getComputer(), toCloudComputer);
+	}
 
-    public Move createUndoMove(ScoreDirector scoreDirector) {
-        return new CloudComputerChangeMove(cloudProcess, cloudProcess.getComputer());
-    }
+	public Move createUndoMove(ScoreDirector scoreDirector) {
+		return new CloudComputerChangeMove(cloudProcess, cloudProcess.getComputer());
+	}
 
-    public void doMove(ScoreDirector scoreDirector) {
-        CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, cloudProcess, toCloudComputer);
-    }
+	public void doMove(ScoreDirector scoreDirector) {
+		CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, cloudProcess, toCloudComputer);
+	}
 
-    public Collection<? extends Object> getPlanningEntities() {
-        return Collections.singletonList(cloudProcess);
-    }
+	public Collection<? extends Object> getPlanningEntities() {
+		return Collections.singletonList(cloudProcess);
+	}
 
-    public Collection<? extends Object> getPlanningValues() {
-        return Collections.singletonList(toCloudComputer);
-    }
+	public Collection<? extends Object> getPlanningValues() {
+		return Collections.singletonList(toCloudComputer);
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o instanceof CloudComputerChangeMove) {
-            CloudComputerChangeMove other = (CloudComputerChangeMove) o;
-            return new EqualsBuilder()
-                    .append(cloudProcess, other.cloudProcess)
-                    .append(toCloudComputer, other.toCloudComputer)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		} else if (o instanceof CloudComputerChangeMove) {
+			CloudComputerChangeMove other = (CloudComputerChangeMove) o;
+			return new EqualsBuilder()
+					.append(cloudProcess, other.cloudProcess)
+					.append(toCloudComputer, other.toCloudComputer)
+					.isEquals();
+		} else {
+			return false;
+		}
+	}
 
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(cloudProcess)
-                .append(toCloudComputer)
-                .toHashCode();
-    }
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(cloudProcess)
+				.append(toCloudComputer)
+				.toHashCode();
+	}
 
-    public String toString() {
-        return cloudProcess + " => " + toCloudComputer;
-    }
+	public String toString() {
+		return cloudProcess + " => " + toCloudComputer;
+	}
 
 }

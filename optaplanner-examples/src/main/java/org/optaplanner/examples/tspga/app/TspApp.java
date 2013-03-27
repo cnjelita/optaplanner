@@ -16,8 +16,8 @@
 
 package org.optaplanner.examples.tspga.app;
 
-import org.optaplanner.config.XmlSolverFactory;
-import org.optaplanner.core.Solver;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.config.solver.XmlSolverFactory;
 import org.optaplanner.examples.common.app.CommonApp;
 import org.optaplanner.examples.common.persistence.AbstractSolutionImporter;
 import org.optaplanner.examples.common.persistence.SolutionDao;
@@ -28,34 +28,34 @@ import org.optaplanner.examples.tspga.swingui.TspPanel;
 
 public class TspApp extends CommonApp {
 
-    public static final String SOLVER_CONFIG
-            = "/org/optaplanner/examples/tsp/solver/tspSolverConfig.xml";
+	public static final String SOLVER_CONFIG
+			= "/org/optaplanner/examples/tsp/solver/tspSolverConfig.xml";
 
-    public static void main(String[] args) {
-        fixateLookAndFeel();
-        new TspApp().init();
-    }
+	public static void main(String[] args) {
+		fixateLookAndFeel();
+		new TspApp().init();
+	}
 
-    @Override
-    protected Solver createSolver() {
-        XmlSolverFactory solverFactory = new XmlSolverFactory();
-        solverFactory.configure(SOLVER_CONFIG);
-        return solverFactory.buildSolver();
-    }
+	@Override
+	protected Solver createSolver() {
+		XmlSolverFactory solverFactory = new XmlSolverFactory();
+		solverFactory.configure(SOLVER_CONFIG);
+		return solverFactory.buildSolver();
+	}
 
-    @Override
-    protected SolutionPanel createSolutionPanel() {
-        return new TspPanel();
-    }
+	@Override
+	protected SolutionPanel createSolutionPanel() {
+		return new TspPanel();
+	}
 
-    @Override
-    protected SolutionDao createSolutionDao() {
-        return new TspDaoImpl();
-    }
+	@Override
+	protected SolutionDao createSolutionDao() {
+		return new TspDaoImpl();
+	}
 
-    @Override
-    protected AbstractSolutionImporter createSolutionImporter() {
-        return new TspSolutionImporter();
-    }
+	@Override
+	protected AbstractSolutionImporter createSolutionImporter() {
+		return new TspSolutionImporter();
+	}
 
 }

@@ -16,9 +16,9 @@
 
 package org.optaplanner.examples.cloudbalancingga.app;
 
-import org.optaplanner.config.SolverFactory;
-import org.optaplanner.config.XmlSolverFactory;
-import org.optaplanner.core.Solver;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.api.solver.SolverFactory;
+import org.optaplanner.core.config.solver.XmlSolverFactory;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
@@ -26,36 +26,36 @@ import org.optaplanner.examples.cloudbalancingga.persistence.CloudBalancingGener
 
 public class CloudBalancingHelloWorldGA {
 
-    public static void main(String[] args) {
-        // Build the Solver
-        SolverFactory solverFactory = new XmlSolverFactory(
-                "/org/optaplanner/examples/cloudbalancingga/solver/cloudBalancingSolverConfig.xml");
-        Solver solver = solverFactory.buildSolver();
+	public static void main(String[] args) {
+		// Build the Solver
+		SolverFactory solverFactory = new XmlSolverFactory(
+				"/org/optaplanner/examples/cloudbalancingga/solver/cloudBalancingSolverConfig.xml");
+		Solver solver = solverFactory.buildSolver();
 
-        // Load a problem with 400 computers and 1200 processes
-        //new CloudBalancingGenerator().generate();
-        CloudBalance unsolvedCloudBalance = new CloudBalancingGenerator().createCloudBalance(800, 2400);
-        unsolvedCloudBalance.generateIdMaps();
-        // Solve the problem
-        solver.setPlanningProblem(unsolvedCloudBalance);
-        solver.solve();
-        CloudBalance solvedCloudBalance = (CloudBalance) solver.getBestSolution();
+		// Load a problem with 400 computers and 1200 processes
+		//new CloudBalancingGenerator().generate();
+		CloudBalance unsolvedCloudBalance = new CloudBalancingGenerator().createCloudBalance(800, 2400);
+		unsolvedCloudBalance.generateIdMaps();
+		// Solve the problem
+		solver.setPlanningProblem(unsolvedCloudBalance);
+		solver.solve();
+		CloudBalance solvedCloudBalance = (CloudBalance) solver.getBestSolution();
 //        CloudBalancingSimpleScoreCalculator sc = new CloudBalancingSimpleScoreCalculator();
 //        System.out.println(solvedCloudBalance.getScore());
 //        System.out.println(sc.calculateScore(solvedCloudBalance));
-        // Display the result
+		// Display the result
 //        System.out.println("\nSolved cloudBalance with 400 computers and 1200 processes:\n"
 //                + toDisplayString(solvedCloudBalance));
-    }
+	}
 
-    public static String toDisplayString(CloudBalance cloudBalance) {
-        StringBuilder displayString = new StringBuilder();
-        for (CloudProcess process : cloudBalance.getProcessList()) {
-            CloudComputer computer = process.getComputer();
-            displayString.append("  ").append(process.getLabel()).append(" -> ")
-                    .append(computer == null ? null : computer.getLabel()).append("\n");
-        }
-        return displayString.toString();
-    }
+	public static String toDisplayString(CloudBalance cloudBalance) {
+		StringBuilder displayString = new StringBuilder();
+		for (CloudProcess process : cloudBalance.getProcessList()) {
+			CloudComputer computer = process.getComputer();
+			displayString.append("  ").append(process.getLabel()).append(" -> ")
+					.append(computer == null ? null : computer.getLabel()).append("\n");
+		}
+		return displayString.toString();
+	}
 
 }

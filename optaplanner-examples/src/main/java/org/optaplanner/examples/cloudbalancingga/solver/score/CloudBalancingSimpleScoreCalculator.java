@@ -16,57 +16,57 @@
 
 package org.optaplanner.examples.cloudbalancingga.solver.score;
 
-import org.optaplanner.core.score.buildin.hardsoft.HardSoftScore;
-import org.optaplanner.core.score.director.simple.SimpleScoreCalculator;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+import org.optaplanner.core.impl.score.director.simple.SimpleScoreCalculator;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
 public class CloudBalancingSimpleScoreCalculator implements SimpleScoreCalculator<CloudBalance> {
 
-    /**
-     * A very simple implementation. The double loop can easily be removed by using Maps as shown in
-     * {@link CloudBalancingMapBasedSimpleScoreCalculator#calculateScore(CloudBalance)}.
-     */
-    public HardSoftScore calculateScore(CloudBalance cloudBalance) {
-        int hardScore = 0;
-        int softScore = 0;
-        for (CloudComputer computer : cloudBalance.getComputerList()) {
-            int cpuPowerUsage = 0;
-            int memoryUsage = 0;
-            int networkBandwidthUsage = 0;
-            boolean used = false;
+	/**
+	 * A very simple implementation. The double loop can easily be removed by using Maps as shown in
+	 * {@link CloudBalancingMapBasedSimpleScoreCalculator#calculateScore(CloudBalance)}.
+	 */
+	public HardSoftScore calculateScore(CloudBalance cloudBalance) {
+		int hardScore = 0;
+		int softScore = 0;
+		for (CloudComputer computer : cloudBalance.getComputerList()) {
+			int cpuPowerUsage = 0;
+			int memoryUsage = 0;
+			int networkBandwidthUsage = 0;
+			boolean used = false;
 
-            // Calculate usage
-            for (CloudProcess process : cloudBalance.getProcessList()) {
-                if (computer.equals(process.getComputer())) {
-                    cpuPowerUsage += process.getRequiredCpuPower();
-                    memoryUsage += process.getRequiredMemory();
-                    networkBandwidthUsage += process.getRequiredNetworkBandwidth();
-                    used = true;
-                }
-            }
+			// Calculate usage
+			for (CloudProcess process : cloudBalance.getProcessList()) {
+				if (computer.equals(process.getComputer())) {
+					cpuPowerUsage += process.getRequiredCpuPower();
+					memoryUsage += process.getRequiredMemory();
+					networkBandwidthUsage += process.getRequiredNetworkBandwidth();
+					used = true;
+				}
+			}
 
-            // Hard constraints
-            int cpuPowerAvailable = computer.getCpuPower() - cpuPowerUsage;
-            if (cpuPowerAvailable < 0) {
-                hardScore += cpuPowerAvailable;
-            }
-            int memoryAvailable = computer.getMemory() - memoryUsage;
-            if (memoryAvailable < 0) {
-                hardScore += memoryAvailable;
-            }
-            int networkBandwidthAvailable = computer.getNetworkBandwidth() - networkBandwidthUsage;
-            if (networkBandwidthAvailable < 0) {
-                hardScore += networkBandwidthAvailable;
-            }
+			// Hard constraints
+			int cpuPowerAvailable = computer.getCpuPower() - cpuPowerUsage;
+			if (cpuPowerAvailable < 0) {
+				hardScore += cpuPowerAvailable;
+			}
+			int memoryAvailable = computer.getMemory() - memoryUsage;
+			if (memoryAvailable < 0) {
+				hardScore += memoryAvailable;
+			}
+			int networkBandwidthAvailable = computer.getNetworkBandwidth() - networkBandwidthUsage;
+			if (networkBandwidthAvailable < 0) {
+				hardScore += networkBandwidthAvailable;
+			}
 
-            // Soft constraints
-            if (used) {
-                softScore -= computer.getCost();
-            }
-        }
-        return HardSoftScore.valueOf(hardScore, softScore);
-    }
+			// Soft constraints
+			if (used) {
+				softScore -= computer.getCost();
+			}
+		}
+		return HardSoftScore.valueOf(hardScore, softScore);
+	}
 
 }

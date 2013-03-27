@@ -21,8 +21,8 @@ import org.optaplanner.examples.common.persistence.XStreamSolutionDaoImpl;
 
 public class CloudBalancingDaoImpl extends XStreamSolutionDaoImpl {
 
-    public CloudBalancingDaoImpl() {
-        super("cloudbalancing", CloudBalance.class);
-    }
+	public CloudBalancingDaoImpl() {
+		super("cloudbalancing", CloudBalance.class);
+	}
 
 }

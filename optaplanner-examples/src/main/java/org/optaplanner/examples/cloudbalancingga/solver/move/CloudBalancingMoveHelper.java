@@ -16,20 +16,20 @@
 
 package org.optaplanner.examples.cloudbalancingga.solver.move;
 
-import org.optaplanner.core.score.director.ScoreDirector;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
 public class CloudBalancingMoveHelper {
 
-    public static void moveCloudComputer(ScoreDirector scoreDirector, CloudProcess cloudProcess,
-            CloudComputer toCloudComputer) {
-        scoreDirector.beforeVariableChanged(cloudProcess, "computer");
-        cloudProcess.setComputer(toCloudComputer);
-        scoreDirector.afterVariableChanged(cloudProcess, "computer");
-    }
+	public static void moveCloudComputer(ScoreDirector scoreDirector, CloudProcess cloudProcess,
+			CloudComputer toCloudComputer) {
+		scoreDirector.beforeVariableChanged(cloudProcess, "computer");
+		cloudProcess.setComputer(toCloudComputer);
+		scoreDirector.afterVariableChanged(cloudProcess, "computer");
+	}
 
-    private CloudBalancingMoveHelper() {
-    }
+	private CloudBalancingMoveHelper() {
+	}
 
 }

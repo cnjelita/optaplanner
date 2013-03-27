@@ -19,9 +19,9 @@ package org.optaplanner.examples.cloudbalancingga.solver.move.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.optaplanner.core.heuristic.selector.move.factory.MoveListFactory;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.solution.Solution;
+import org.optaplanner.core.impl.heuristic.selector.move.factory.MoveListFactory;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.solution.Solution;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
@@ -29,16 +29,16 @@ import org.optaplanner.examples.cloudbalancingga.solver.move.CloudComputerChange
 
 public class CloudComputerChangeMoveFactory implements MoveListFactory {
 
-    public List<Move> createMoveList(Solution solution) {
-        CloudBalance cloudBalance = (CloudBalance) solution;
-        List<Move> moveList = new ArrayList<Move>();
-        List<CloudComputer> cloudComputerList = cloudBalance.getComputerList();
-        for (CloudProcess cloudProcess : cloudBalance.getProcessList()) {
-            for (CloudComputer cloudComputer : cloudComputerList) {
-                moveList.add(new CloudComputerChangeMove(cloudProcess, cloudComputer));
-            }
-        }
-        return moveList;
-    }
+	public List<Move> createMoveList(Solution solution) {
+		CloudBalance cloudBalance = (CloudBalance) solution;
+		List<Move> moveList = new ArrayList<Move>();
+		List<CloudComputer> cloudComputerList = cloudBalance.getComputerList();
+		for (CloudProcess cloudProcess : cloudBalance.getProcessList()) {
+			for (CloudComputer cloudComputer : cloudComputerList) {
+				moveList.add(new CloudComputerChangeMove(cloudProcess, cloudComputer));
+			}
+		}
+		return moveList;
+	}
 
 }

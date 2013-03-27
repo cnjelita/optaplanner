@@ -22,23 +22,23 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @XStreamAlias("Domicile")
 public class Domicile extends AbstractPersistable implements Appearance {
 
-    private City city;
+	private City city;
 
-    public City getCity() {
-        return city;
-    }
+	public City getCity() {
+		return city;
+	}
 
-    public void setCity(City city) {
-        this.city = city;
-    }
+	public void setCity(City city) {
+		this.city = city;
+	}
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+	// ************************************************************************
+	// Complex methods
+	// ************************************************************************
 
-    @Override
-    public String toString() {
-        return city.toString();
-    }
+	@Override
+	public String toString() {
+		return city.toString();
+	}
 
 }

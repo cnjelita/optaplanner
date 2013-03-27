@@ -65,12 +65,14 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>80</populationSize>
+      <populationSize>40</populationSize>
+      <elitistSize>2</elitistSize>
     </populationParameters>
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <tournamentSelector>
-      <tournamentSize>40</tournamentSize>
-    </tournamentSelector>
-    <replacementStrategyType>KEEP_BEST</replacementStrategyType>
+    <stochasticUniversalSamplingSelector/>
+    <!--<tournamentSelector>-->
+    <!--<tournamentSize>40</tournamentSize>-->
+    <!--</tournamentSelector>-->
+    <partiallyMappedCrossoverOperator/>
+    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
   </geneticAlgorithm>
 </solver>

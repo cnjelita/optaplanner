@@ -18,9 +18,9 @@ package org.optaplanner.examples.tspga.domain;
 
 public interface Appearance {
 
-    /**
-     * @return never null
-     */
-    City getCity();
+	/**
+	 * @return never null
+	 */
+	City getCity();
 
 }
