@@ -27,7 +27,7 @@
 
       <para>The benchmarker is in a separate artifact called <literal>optaplanner-benchmark</literal>.</para>
 
-      <para>If you use maven, add a dependency in your <filename>pom.xml</filename> file:</para>
+      <para>If you use Maven, add a dependency in your <filename>pom.xml</filename> file:</para>
 
       <programlisting language="xml">    &lt;dependency&gt;
       &lt;groupId&gt;org.optaplanner&lt;/groupId&gt;
@@ -35,7 +35,7 @@
       &lt;version&gt;...&lt;/version&gt;
     &lt;/dependency&gt;</programlisting>
 
-      <para>This is similar for gradle, ivy and buildr. The version must be exactly the same as the
+      <para>This is similar for Gradle, Ivy and Buildr. The version must be exactly the same as the
       <literal>optaplanner-core</literal> version used.</para>
 
       <para>If you use ANT, you've probably already copied the required jars from the download zip's
@@ -48,10 +48,10 @@
       <para>You can build a <literal>PlannerBenchmark</literal> instance with the
       <literal>XmlPlannerBenchmarkFactory</literal>. Configure it with a benchmark configuration xml file:</para>
 
-      <programlisting language="java">    XmlPlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory();
-    plannerBenchmarkFactory.configure("/org/optaplanner/examples/nqueens/benchmark/nqueensBenchmarkConfig.xml");
-    PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark();
-    plannerBenchmark.benchmark();</programlisting>
+      <programlisting language="java">        PlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory(
+                "/org/optaplanner/examples/nqueens/benchmark/nqueensBenchmarkConfig.xml");
+        PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark();
+        plannerBenchmark.benchmark();</programlisting>
 
       <para>A basic benchmark configuration file looks something like this:</para>
 
@@ -576,9 +576,9 @@
 
       <para>And configure it with the method <literal>configureFromTemplate</literal>:</para>
 
-      <programlisting language="java">    XmlPlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory();
-    plannerBenchmarkFactory.configureFromTemplate("/org/optaplanner/examples/cloudbalancing/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl");
-    PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark();</programlisting>
+      <programlisting language="java">        PlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory()
+                .configureFromTemplate("/org/optaplanner/examples/cloudbalancing/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl");
+        PlannerBenchmark plannerBenchmark = benchmarkFactory.buildPlannerBenchmark();</programlisting>
     </section>
   </section>
 </chapter>

@@ -20,26 +20,26 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.SwingUtilities;
 
-import org.drools.ClassObjectFilter;
-import org.drools.WorkingMemory;
-import org.optaplanner.core.Solver;
-import org.optaplanner.core.event.BestSolutionChangedEvent;
-import org.optaplanner.core.event.SolverEventListener;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.score.Score;
-import org.optaplanner.core.score.constraint.ConstraintOccurrence;
-import org.optaplanner.core.score.director.ScoreDirector;
-import org.optaplanner.core.score.director.ScoreDirectorFactory;
-import org.optaplanner.core.score.director.drools.DroolsScoreDirector;
-import org.optaplanner.core.solution.Solution;
-import org.optaplanner.core.solver.ProblemFactChange;
+import org.kie.api.runtime.ClassObjectFilter;
+import org.kie.api.runtime.KieSession;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.impl.event.BestSolutionChangedEvent;
+import org.optaplanner.core.impl.event.SolverEventListener;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.api.score.Score;
+import org.optaplanner.core.impl.score.constraint.ConstraintOccurrence;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
+import org.optaplanner.core.impl.score.director.ScoreDirectorFactory;
+import org.optaplanner.core.impl.score.director.drools.DroolsScoreDirector;
+import org.optaplanner.core.impl.solution.Solution;
+import org.optaplanner.core.impl.solver.ProblemFactChange;
 import org.optaplanner.examples.common.persistence.AbstractSolutionExporter;
 import org.optaplanner.examples.common.persistence.AbstractSolutionImporter;
 import org.optaplanner.examples.common.persistence.SolutionDao;
@@ -213,14 +213,13 @@ public class SolutionBusiness {
             return null;
         }
         Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
-        WorkingMemory workingMemory = ((DroolsScoreDirector) guiScoreDirector).getWorkingMemory();
-        if (workingMemory == null) {
+        KieSession kieSession = ((DroolsScoreDirector) guiScoreDirector).getKieSession();
+        if (kieSession == null) {
             return Collections.emptyList();
         }
-        Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
-                new ClassObjectFilter(ConstraintOccurrence.class));
-        while (it.hasNext()) {
-            ConstraintOccurrence constraintOccurrence = it.next();
+        Collection<ConstraintOccurrence> constraintOccurrences = (Collection<ConstraintOccurrence>)
+                kieSession.getObjects(new ClassObjectFilter(ConstraintOccurrence.class));
+        for (ConstraintOccurrence constraintOccurrence : constraintOccurrences) {
             ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
             if (scoreDetail == null) {
                 scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());

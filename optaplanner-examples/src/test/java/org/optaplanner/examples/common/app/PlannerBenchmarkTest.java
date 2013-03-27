@@ -22,11 +22,12 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.optaplanner.benchmark.api.PlannerBenchmark;
+import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
 import org.optaplanner.benchmark.config.PlannerBenchmarkConfig;
 import org.optaplanner.benchmark.config.ProblemBenchmarksConfig;
 import org.optaplanner.benchmark.config.SolverBenchmarkConfig;
 import org.optaplanner.benchmark.config.XmlPlannerBenchmarkFactory;
-import org.optaplanner.config.termination.TerminationConfig;
+import org.optaplanner.core.config.termination.TerminationConfig;
 
 /**
  * Runs an example solver.
@@ -48,15 +49,14 @@ public abstract class PlannerBenchmarkTest extends LoggingTest {
     protected abstract String createBenchmarkConfigResource();
 
     protected void runBenchmarkTest(File unsolvedDataFile) {
-        XmlPlannerBenchmarkFactory plannerBenchmarkFactory = buildPlannerBenchmarkFactory(unsolvedDataFile);
+        PlannerBenchmarkFactory plannerBenchmarkFactory = buildPlannerBenchmarkFactory(unsolvedDataFile);
         PlannerBenchmark plannerBenchmark = plannerBenchmarkFactory.buildPlannerBenchmark();
         plannerBenchmark.benchmark();
     }
     
-    private XmlPlannerBenchmarkFactory buildPlannerBenchmarkFactory(File unsolvedDataFile) {
-        XmlPlannerBenchmarkFactory benchmarkFactory = new XmlPlannerBenchmarkFactory();
+    private PlannerBenchmarkFactory buildPlannerBenchmarkFactory(File unsolvedDataFile) {
         String benchmarkConfigResource = createBenchmarkConfigResource();
-        benchmarkFactory.configure(benchmarkConfigResource);
+        PlannerBenchmarkFactory benchmarkFactory = new XmlPlannerBenchmarkFactory(benchmarkConfigResource);
         PlannerBenchmarkConfig plannerBenchmarkConfig = benchmarkFactory.getPlannerBenchmarkConfig();
         plannerBenchmarkConfig.setBenchmarkDirectory(new File("target/test/data/nqueens"));
         plannerBenchmarkConfig.setWarmUpHoursSpend(0L);

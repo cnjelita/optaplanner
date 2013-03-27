@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
-import org.optaplanner.core.heuristic.selector.move.factory.MoveListFactory;
-import org.optaplanner.core.move.CompositeMove;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.solution.Solution;
+import org.optaplanner.core.impl.heuristic.selector.move.factory.MoveListFactory;
+import org.optaplanner.core.impl.move.CompositeMove;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.solution.Solution;
 import org.optaplanner.examples.pas.domain.Bed;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;

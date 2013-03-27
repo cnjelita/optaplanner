@@ -2301,15 +2301,15 @@ After in *BenchmarkConfig.xml:
 From 5.5.0.Final to 6.0.0.Alpha7
 --------------------------------
 
-[README] Starting from 6.1.0.Final, planner will have a backwards compatible API.
+[README] Starting from 6.1.0.Final for 6.2, .6.3, ..., planner will have a backwards compatible API.
 As preparation for that, every part of the API is being reviewed.
 
 [RECOMMENDED] Don't directly upgrade the jars to 6.0.0.Final.
-In 6.0.0.Beta1, Drools Planner has been renamed to OptaPlanner.
+In 6.0.0.Beta1, Drools Planner has been renamed to OptaPlanner and the java package structure has been changed severely.
 Instead, upgrade the jars to 6.0.0.Alpha9 first.
 Once that compiles, immediately upgrade the jars to your desired version and continue following the upgrade recipe.
 The 6.0.0.Alpha9 jars are available in the maven repository and in this zip:
-  https://repository.jboss.org/nexus/content/groups/public/org/drools/planner/drools-planner-distribution/6.0.0.Alpha9/drools-planner-distribution-6.0.0.Alpha9.zip
+  http://download.jboss.org/drools/release/6.0.0.Alpha9/drools-planner-distribution-6.0.0.Alpha9.zip
 
 [README] ValueRangeType.FROM_PLANNING_ENTITY_PROPERTY now works. The regression in 5.5 from 5.4 has been fixed.
 
@@ -2847,6 +2847,20 @@ After in pom.xml:
 And resync your IDE (IntelliJ, Eclipse, NetBeans) from the pom.xml files.
 If you're still using ANT, replace drools-planner-*.jar with optaplanner-*.jar
 and adjust your ANT script and your IDE's classpath accordingly.
+Note: because of package name changes (see below), you 'll get a lot of compile errors at this point.
+
+[MAJOR] The logging category org.drools.planner has been renamed to org.optaplanner
+Before in logback*.xml:
+  <logger name="org.drools.planner" level="debug"/>
+After in logback*.xml:
+  <logger name="org.optaplanner" level="debug"/>
+Similar for log4j files.
+
+[MINOR] The github repository has been renamed.
+Before:
+  https://github.com/droolsjbpm/drools-planner
+After:
+  https://github.com/droolsjbpm/optaplanner
 
 [MAJOR] The package org.drools.planner has been renamed to org.optaplanner
 Before in *.java, *.drl:
@@ -2861,16 +2875,159 @@ Before in *.xml:
     <...>org.drools.planner...</...>
 After in *.xml:
     <...>org.optaplanner...</...>
+Note: because of other package name changes (see below), you 'll get a lot of compile errors after these changes.
 
-[MAJOR] The logging category org.drools.planner has been renamed to org.optaplanner
-Before in logback*.xml:
-  <logger name="org.drools.planner" level="debug"/>
-After in logback*.xml:
-  <logger name="org.optaplanner" level="debug"/>
-Similar for log4j files.
+[README] The packages now make a clear distinction between api, config and implementation classes.
+Starting from 6.1 for future versions (6.2, 6.3, ...):
+  The api namespaced classes will be backwards compatible.
+  The config namespaced classes will be backwards compatible on an XML level only.
+  The impl namespaced classes will NOT be backwards compatible.
+Also, each artifact now has a unique package namespace. For example:
+optaplanner-core*.jar:
+  org.optaplanner.core: this package contains all classes from this jar
+    .api
+    .config
+    .impl
+optaplanner-benchmark*.jar:
+  org.optaplanner.benchmark: this package contains all classes from this jar
+    .api
+    .config
+    .impl
 
-[MINOR] The github repository has been renamed.
-Before:
-  https://github.com/droolsjbpm/drools-planner
-After:
-  https://github.com/droolsjbpm/optaplanner
+[MAJOR] The package org.optaplanner.core has been renamed to org.optaplanner.core.impl
+Before in *.java, *.drl:
+    import org.optaplanner.core...
+After in *.java, *.drl:
+    import org.optaplanner.core.impl...
+Before in *.java:
+    "/org/optaplanner/core/..."
+After in *.java:
+    "/org/optaplanner/core/impl/..."
+Before in *.xml:
+    <...>org.optaplanner.core...</...>
+After in *.xml:
+    <...>org.optaplanner.core.impl...</...>
+
+[MAJOR] The package org.optaplanner.api has been renamed to org.optaplanner.core.api
+Before in *.java, *.drl:
+    import org.optaplanner.api...
+After in *.java, *.drl:
+    import org.optaplanner.core.api...
+Before in *.java:
+    "/org/optaplanner/api/..."
+After in *.java:
+    "/org/optaplanner/core/api/..."
+Before in *.xml:
+    <...>org.optaplanner.api...</...>
+After in *.xml:
+    <...>org.optaplanner.core.api...</...>
+
+[MAJOR] The package org.optaplanner.config has been renamed to org.optaplanner.core.config
+Before in *.java, *.drl:
+    import org.optaplanner.config...
+After in *.java, *.drl:
+    import org.optaplanner.core.config...
+Before in *.java:
+    "/org/optaplanner/config/..."
+After in *.java:
+    "/org/optaplanner/core/config/..."
+Before in *.xml:
+    <...>org.optaplanner.config...</...>
+After in *.xml:
+    <...>org.optaplanner.core.config...</...>
+
+[MINOR] The package org.optaplanner.benchmark.core has been renamed to org.optaplanner.benchmark.impl
+Before in *.java, *.drl:
+    import org.optaplanner.benchmark.core...
+After in *.java, *.drl:
+    import org.optaplanner.benchmark.impl...
+
+[MAJOR] The interface Solver has been moved from the package ...core.impl to ...core.api.solver
+Before in *.java:
+    import org.optaplanner.core.impl.Solver;
+After in *.java:
+    import org.optaplanner.core.api.solver.Solver;
+
+[MAJOR] The interface SolverFactory has been moved from the package ...core.config to ...core.api.solver
+Before in *.java:
+    import org.optaplanner.core.config.SolverFactory;
+After in *.java:
+    import org.optaplanner.core.api.solver.SolverFactory;
+
+[MAJOR] The classes EnvironmentMode and XmlSolverFactory has been moved from the package ...core.config to ...core.config.solver
+Before in *.java:
+    import org.optaplanner.core.config.EnvironmentMode;
+    import org.optaplanner.core.config.XmlSolverFactory;
+After in *.java:
+    import org.optaplanner.core.config.solver.EnvironmentMode;
+    import org.optaplanner.core.config.solver.XmlSolverFactory;
+
+[RECOMMENDED] Use the interface PlannerBenchmarkFactory in favor of XmlPlannerBenchmarkFactory
+Before in *.java:
+    XmlPlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory("...BenchmarkConfig.xml");
+After in *.java:
+    PlannerBenchmarkFactory plannerBenchmarkFactory = new XmlPlannerBenchmarkFactory("...BenchmarkConfig.xml");
+
+[MAJOR] The interfaces Score and ScoreHolder and their subclasses have been promoted from the impl to the api package.
+Before in *.java and *.drl:
+    import org.optaplanner.core.impl.score...Score;
+    import org.optaplanner.core.impl.score...SimpleScore;
+    import org.optaplanner.core.impl.score...HardAndSoftScore;
+    ...
+After in *.java and *.drl:
+    import org.optaplanner.core.api.score...Score;
+    import org.optaplanner.core.api.score...SimpleScore;
+    import org.optaplanner.core.api.score...HardAndSoftScore;
+    ...
+Before in *.java and *.drl:
+    import org.optaplanner.core.impl.score...ScoreHolder;
+    import org.optaplanner.core.impl.score...SimpleScoreHolder;
+    import org.optaplanner.core.impl.score...HardAndSoftScoreHolder;
+    ...
+After in *.java and *.drl:
+    import org.optaplanner.core.api.score...ScoreHolder;
+    import org.optaplanner.core.api.score...SimpleScoreHolder;
+    import org.optaplanner.core.api.score...HardAndSoftScoreHolder;
+    ...
+Note: ScoreDefinition has not been promoted (yet), even though you might use that in @XStreamConverter.
+Note: ConstraintOccurrence hasn't been promoted yet, even though you use it in the drl files.
+
+[README] Planner has upgraded from the drools 4 RuleBase API to the drools 6 KieBase API.
+It has skipped the Drools 5 KnowledgeBase API.
+
+[MAJOR] ScoreDirectorFactoryConfig's method setRuleBase() has been replaced by setKieBase()
+Before in *.java:
+    RuleBase ruleBase = ...;
+    solverFactory.getSolverConfig().getScoreDirectorFactoryConfig.setRuleBase(ruleBase);
+After in *.java:
+    KieBase kieBase = ...;
+    solverFactory.getSolverConfig().getScoreDirectorFactoryConfig.setKieBase(kieBase);
+
+[MINOR] If you used the hack from the examples to extract the ConstraintOccurrences from the guiScoreDirectory.
+Before in *.java:
+    import org.drools.core.ClassObjectFilter;
+    import org.drools.core.WorkingMemory;
+    ...
+            WorkingMemory workingMemory = ((DroolsScoreDirector) guiScoreDirector).getWorkingMemory();
+            if (workingMemory == null) {
+                return Collections.emptyList();
+            }
+            Iterator<ConstraintOccurrence> it = (Iterator<ConstraintOccurrence>) workingMemory.iterateObjects(
+                    new ClassObjectFilter(ConstraintOccurrence.class));
+            while (it.hasNext()) {
+                ConstraintOccurrence constraintOccurrence = it.next();
+                ...
+            }
+After in *.java:
+    import org.kie.api.runtime.ClassObjectFilter;
+    import org.kie.api.runtime.KieSession;
+    ...
+            KieSession kieSession = ((DroolsScoreDirector) guiScoreDirector).getKieSession();
+            if (kieSession == null) {
+                return Collections.emptyList();
+            }
+            Collection<ConstraintOccurrence> constraintOccurrences = (Collection<ConstraintOccurrence>)
+                    kieSession.getObjects(new ClassObjectFilter(ConstraintOccurrence.class));
+            for (ConstraintOccurrence constraintOccurrence : constraintOccurrences) {
+                ...
+            }
