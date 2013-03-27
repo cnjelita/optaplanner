@@ -33,9 +33,9 @@
   <termination>
     <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
-  <!--<constructionHeuristic>-->
-  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-  <!--</constructionHeuristic>-->
+  <constructionHeuristic>
+    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  </constructionHeuristic>
   <!--<localSearch>-->
   <!--<unionMoveSelector>-->
   <!--<changeMoveSelector>-->

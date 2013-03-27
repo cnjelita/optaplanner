@@ -24,12 +24,12 @@ import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 
 public class CloudComputerStrengthComparator implements Comparator<CloudComputer>, Serializable {
 
-    public int compare(CloudComputer a, CloudComputer b) {
-        return new CompareToBuilder()
-                .append(a.getMultiplicand(), b.getMultiplicand())
-                .append(b.getCost(), a.getCost()) // Descending (but this is debatable)
-                .append(a.getId(), b.getId())
-                .toComparison();
-    }
+	public int compare(CloudComputer a, CloudComputer b) {
+		return new CompareToBuilder()
+				.append(a.getMultiplicand(), b.getMultiplicand())
+				.append(b.getCost(), a.getCost()) // Descending (but this is debatable)
+				.append(a.getId(), b.getId())
+				.toComparison();
+	}
 
 }

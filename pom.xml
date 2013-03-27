@@ -23,6 +23,8 @@
 
     This module is just the multiproject parent. The planning engine itself is in optaplanner-core.
   </description>
+  <url>http://www.optaplanner.org</url>
+  <inceptionYear>2006</inceptionYear>
 
   <repositories>
     <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
@@ -47,6 +49,10 @@
     <developerConnection>scm:git:git@github.com:droolsjbpm/optaplanner.git</developerConnection>
     <url>https://github.com/droolsjbpm/optaplanner</url>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>https://issues.jboss.org/browse/PLANNER</url>
+  </issueManagement>
 
   <modules>
     <module>optaplanner-core</module>

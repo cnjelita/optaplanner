@@ -24,13 +24,13 @@ import org.optaplanner.examples.tspga.domain.Visit;
 
 public class LongitudeVisitDifficultyComparator implements Comparator<Visit>, Serializable {
 
-    public int compare(Visit a, Visit b) {
-        return new CompareToBuilder()
-                // TODO experiment with (aLongitude - bLongitude) % 10
-                .append(a.getCity().getLongitude(), b.getCity().getLongitude())
-                .append(a.getCity().getLatitude(), b.getCity().getLatitude())
-                .append(a.getId(), b.getId())
-                .toComparison();
-    }
+	public int compare(Visit a, Visit b) {
+		return new CompareToBuilder()
+				// TODO experiment with (aLongitude - bLongitude) % 10
+				.append(a.getCity().getLongitude(), b.getCity().getLongitude())
+				.append(a.getCity().getLatitude(), b.getCity().getLatitude())
+				.append(a.getId(), b.getId())
+				.toComparison();
+	}
 
 }

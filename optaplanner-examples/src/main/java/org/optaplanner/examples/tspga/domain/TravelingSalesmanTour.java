@@ -25,11 +25,11 @@ import java.util.List;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.optaplanner.api.domain.solution.PlanningEntityCollectionProperty;
-import org.optaplanner.api.domain.solution.PlanningSolution;
-import org.optaplanner.core.geneticalgorithm.Individual;
-import org.optaplanner.core.score.buildin.simple.SimpleScore;
-import org.optaplanner.core.score.buildin.simple.SimpleScoreDefinition;
+import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
+import org.optaplanner.core.api.domain.solution.PlanningSolution;
+import org.optaplanner.core.api.score.buildin.simple.SimpleScore;
+import org.optaplanner.core.impl.geneticalgorithm.Individual;
+import org.optaplanner.core.impl.score.buildin.simple.SimpleScoreDefinition;
 import org.optaplanner.examples.common.domain.AbstractPersistable;
 import org.optaplanner.persistence.xstream.XStreamScoreConverter;
 
@@ -37,125 +37,125 @@ import org.optaplanner.persistence.xstream.XStreamScoreConverter;
 @XStreamAlias("TravelingSalesmanTour")
 public class TravelingSalesmanTour extends AbstractPersistable implements Individual<SimpleScore> {
 
-    private String name;
-    private List<City> cityList;
-    private List<Domicile> domicileList;
+	private String name;
+	private List<City> cityList;
+	private List<Domicile> domicileList;
 
-    private List<Visit> visitList;
+	private List<Visit> visitList;
 
-    @XStreamConverter(value = XStreamScoreConverter.class, types = {SimpleScoreDefinition.class})
-    private SimpleScore score;
-    private HashMap<Visit, Long> visitToIdMap;
-    private HashMap<Long, Visit> idToVisitMap;
-    private int entitySize;
+	@XStreamConverter(value = XStreamScoreConverter.class, types = {SimpleScoreDefinition.class})
+	private SimpleScore score;
+	private HashMap<Visit, Long> visitToIdMap;
+	private HashMap<Long, Visit> idToVisitMap;
+	private int entitySize;
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public List<City> getCityList() {
-        return cityList;
-    }
+	public List<City> getCityList() {
+		return cityList;
+	}
 
-    public void setCityList(List<City> cityList) {
-        this.cityList = cityList;
-    }
+	public void setCityList(List<City> cityList) {
+		this.cityList = cityList;
+	}
 
-    public List<Domicile> getDomicileList() {
-        return domicileList;
-    }
+	public List<Domicile> getDomicileList() {
+		return domicileList;
+	}
 
-    public void setDomicileList(List<Domicile> domicileList) {
-        this.domicileList = domicileList;
-    }
+	public void setDomicileList(List<Domicile> domicileList) {
+		this.domicileList = domicileList;
+	}
 
-    @PlanningEntityCollectionProperty
-    public List<Visit> getVisitList() {
-        return visitList;
-    }
+	@PlanningEntityCollectionProperty
+	public List<Visit> getVisitList() {
+		return visitList;
+	}
 
-    public void setVisitList(List<Visit> visitList) {
-        this.visitList = visitList;
-    }
+	public void setVisitList(List<Visit> visitList) {
+		this.visitList = visitList;
+	}
 
-    public SimpleScore getScore() {
-        return score;
-    }
+	public SimpleScore getScore() {
+		return score;
+	}
 
-    public void setScore(SimpleScore score) {
-        this.score = score;
-    }
+	public void setScore(SimpleScore score) {
+		this.score = score;
+	}
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+	// ************************************************************************
+	// Complex methods
+	// ************************************************************************
 
-    public Collection<? extends Object> getProblemFacts() {
-        List<Object> facts = new ArrayList<Object>();
-        facts.addAll(cityList);
-        facts.addAll(domicileList);
-        // Do not add the planning entity's (visitList) because that will be done automatically
-        return facts;
-    }
+	public Collection<? extends Object> getProblemFacts() {
+		List<Object> facts = new ArrayList<Object>();
+		facts.addAll(cityList);
+		facts.addAll(domicileList);
+		// Do not add the planning entity's (visitList) because that will be done automatically
+		return facts;
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (id == null || !(o instanceof TravelingSalesmanTour)) {
-            return false;
-        } else {
-            TravelingSalesmanTour other = (TravelingSalesmanTour) o;
-            if (visitList.size() != other.visitList.size()) {
-                return false;
-            }
-            for (Iterator<Visit> it = visitList.iterator(), otherIt = other.visitList.iterator(); it.hasNext(); ) {
-                Visit visit = it.next();
-                Visit otherVisit = otherIt.next();
-                // Notice: we don't use equals()
-                if (!visit.solutionEquals(otherVisit)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (id == null || !(o instanceof TravelingSalesmanTour)) {
+			return false;
+		} else {
+			TravelingSalesmanTour other = (TravelingSalesmanTour) o;
+			if (visitList.size() != other.visitList.size()) {
+				return false;
+			}
+			for (Iterator<Visit> it = visitList.iterator(), otherIt = other.visitList.iterator(); it.hasNext(); ) {
+				Visit visit = it.next();
+				Visit otherVisit = otherIt.next();
+				// Notice: we don't use equals()
+				if (!visit.solutionEquals(otherVisit)) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
 
-    public int hashCode() {
-        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        for (Visit visit : visitList) {
-            // Notice: we don't use hashCode()
-            hashCodeBuilder.append(visit.solutionHashCode());
-        }
-        return hashCodeBuilder.toHashCode();
-    }
+	public int hashCode() {
+		HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+		for (Visit visit : visitList) {
+			// Notice: we don't use hashCode()
+			hashCodeBuilder.append(visit.solutionHashCode());
+		}
+		return hashCodeBuilder.toHashCode();
+	}
 
-    @Override
-    public Object getEntityByClassAndId(Class clazz, Long id) {
-        return idToVisitMap.get(id);
-    }
+	@Override
+	public Object getEntityByClassAndId(Class clazz, Long id) {
+		return idToVisitMap.get(id);
+	}
 
-    @Override
-    public long getEntityId(Object entity) {
-        return visitToIdMap.get(entity);
-    }
+	@Override
+	public long getEntityId(Object entity) {
+		return visitToIdMap.get(entity);
+	}
 
-    @Override
-    public int getEntitySize(Class<?> entityClass) {
-        return entitySize;
-    }
+	@Override
+	public int getEntitySize(Class<?> entityClass) {
+		return entitySize;
+	}
 
-    public void generateIdMaps() {
-        visitToIdMap = new HashMap<Visit, Long>(visitList.size());
-        idToVisitMap = new HashMap<Long, Visit>(visitList.size());
-        for (Visit visit : visitList) {
-            visitToIdMap.put(visit, visit.getId());
-            idToVisitMap.put(visit.getId(), visit);
-        }
-        this.entitySize = visitList.size();
-    }
+	public void generateIdMaps() {
+		visitToIdMap = new HashMap<Visit, Long>(visitList.size());
+		idToVisitMap = new HashMap<Long, Visit>(visitList.size());
+		for (Visit visit : visitList) {
+			visitToIdMap.put(visit, visit.getId());
+			idToVisitMap.put(visit.getId(), visit);
+		}
+		this.entitySize = visitList.size();
+	}
 }

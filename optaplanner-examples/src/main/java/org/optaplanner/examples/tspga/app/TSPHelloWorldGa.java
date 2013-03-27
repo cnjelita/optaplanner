@@ -18,35 +18,35 @@ package org.optaplanner.examples.tspga.app;
 
 import java.io.File;
 
-import org.optaplanner.config.XmlSolverFactory;
-import org.optaplanner.core.Solver;
+import org.optaplanner.core.api.solver.Solver;
+import org.optaplanner.core.config.solver.XmlSolverFactory;
 import org.optaplanner.examples.tspga.domain.TravelingSalesmanTour;
 import org.optaplanner.examples.tspga.persistence.TspSolutionImporter;
 import org.optaplanner.examples.tspga.score.TspIncrementalScoreCalculator;
 
 public class TSPHelloWorldGa {
 
-    public static final String SOLVER_CONFIG
-            = "/org/optaplanner/examples/tspga/solver/tspSolverConfig.xml";
+	public static final String SOLVER_CONFIG
+			= "/org/optaplanner/examples/tspga/solver/tspSolverConfig.xml";
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        // Build the Solver
-        XmlSolverFactory solverFactory = new XmlSolverFactory();
-        Solver solver = solverFactory.configure(SOLVER_CONFIG).buildSolver();
-        File f = new File("optaplanner-examples/data/tsp/input/lu980.tsp");
-        System.out.println(f.getAbsolutePath());
-        TravelingSalesmanTour tour = (TravelingSalesmanTour) new TspSolutionImporter().readSolution(f);
+		// Build the Solver
+		XmlSolverFactory solverFactory = new XmlSolverFactory();
+		Solver solver = solverFactory.configure(SOLVER_CONFIG).buildSolver();
+		File f = new File("optaplanner-examples/data/tsp/input/lu980.tsp");
+		System.out.println(f.getAbsolutePath());
+		TravelingSalesmanTour tour = (TravelingSalesmanTour) new TspSolutionImporter().readSolution(f);
 
-        solver.setPlanningProblem(tour);
+		solver.setPlanningProblem(tour);
 
-        solver.solve();
+		solver.solve();
 
-        tour = (TravelingSalesmanTour) solver.getBestSolution();
+		tour = (TravelingSalesmanTour) solver.getBestSolution();
 
-        TspIncrementalScoreCalculator scoreCalculator = new TspIncrementalScoreCalculator();
-        scoreCalculator.resetWorkingSolution(tour);
-        System.out.println(scoreCalculator.calculateScore());
+		TspIncrementalScoreCalculator scoreCalculator = new TspIncrementalScoreCalculator();
+		scoreCalculator.resetWorkingSolution(tour);
+//		System.out.println(scoreCalculator.calculateScore());
 
 //        // Load a problem with 400 computers and 1200 processes
 //        //new CloudBalancingGenerator().generate();
@@ -62,5 +62,5 @@ public class TSPHelloWorldGa {
 //        // Display the result
 ////        System.out.println("\nSolved cloudBalance with 400 computers and 1200 processes:\n"
 ////                + toDisplayString(solvedCloudBalance));
-    }
+	}
 }

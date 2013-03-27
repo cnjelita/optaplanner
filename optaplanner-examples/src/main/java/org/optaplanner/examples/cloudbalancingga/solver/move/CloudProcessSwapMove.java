@@ -22,67 +22,67 @@ import java.util.Collection;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.score.director.ScoreDirector;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
 public class CloudProcessSwapMove implements Move {
 
-    private CloudProcess leftCloudProcess;
-    private CloudProcess rightCloudProcess;
+	private CloudProcess leftCloudProcess;
+	private CloudProcess rightCloudProcess;
 
-    public CloudProcessSwapMove(CloudProcess leftCloudProcess, CloudProcess rightCloudProcess) {
-        this.leftCloudProcess = leftCloudProcess;
-        this.rightCloudProcess = rightCloudProcess;
-    }
+	public CloudProcessSwapMove(CloudProcess leftCloudProcess, CloudProcess rightCloudProcess) {
+		this.leftCloudProcess = leftCloudProcess;
+		this.rightCloudProcess = rightCloudProcess;
+	}
 
-    public boolean isMoveDoable(ScoreDirector scoreDirector) {
-        return !ObjectUtils.equals(leftCloudProcess.getComputer(), rightCloudProcess.getComputer());
-    }
+	public boolean isMoveDoable(ScoreDirector scoreDirector) {
+		return !ObjectUtils.equals(leftCloudProcess.getComputer(), rightCloudProcess.getComputer());
+	}
 
-    public Move createUndoMove(ScoreDirector scoreDirector) {
-        return new CloudProcessSwapMove(rightCloudProcess, leftCloudProcess);
-    }
+	public Move createUndoMove(ScoreDirector scoreDirector) {
+		return new CloudProcessSwapMove(rightCloudProcess, leftCloudProcess);
+	}
 
-    public void doMove(ScoreDirector scoreDirector) {
-        CloudComputer oldLeftCloudComputer = leftCloudProcess.getComputer();
-        CloudComputer oldRightCloudComputer = rightCloudProcess.getComputer();
-        CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, leftCloudProcess, oldRightCloudComputer);
-        CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, rightCloudProcess, oldLeftCloudComputer);
-    }
+	public void doMove(ScoreDirector scoreDirector) {
+		CloudComputer oldLeftCloudComputer = leftCloudProcess.getComputer();
+		CloudComputer oldRightCloudComputer = rightCloudProcess.getComputer();
+		CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, leftCloudProcess, oldRightCloudComputer);
+		CloudBalancingMoveHelper.moveCloudComputer(scoreDirector, rightCloudProcess, oldLeftCloudComputer);
+	}
 
-    public Collection<? extends Object> getPlanningEntities() {
-        return Arrays.asList(leftCloudProcess, rightCloudProcess);
-    }
+	public Collection<? extends Object> getPlanningEntities() {
+		return Arrays.asList(leftCloudProcess, rightCloudProcess);
+	}
 
-    public Collection<? extends Object> getPlanningValues() {
-        return Arrays.asList(leftCloudProcess.getComputer(), rightCloudProcess.getComputer());
-    }
+	public Collection<? extends Object> getPlanningValues() {
+		return Arrays.asList(leftCloudProcess.getComputer(), rightCloudProcess.getComputer());
+	}
 
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        } else if (o instanceof CloudProcessSwapMove) {
-            CloudProcessSwapMove other = (CloudProcessSwapMove) o;
-            return new EqualsBuilder()
-                    .append(leftCloudProcess, other.leftCloudProcess)
-                    .append(rightCloudProcess, other.rightCloudProcess)
-                    .isEquals();
-        } else {
-            return false;
-        }
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		} else if (o instanceof CloudProcessSwapMove) {
+			CloudProcessSwapMove other = (CloudProcessSwapMove) o;
+			return new EqualsBuilder()
+					.append(leftCloudProcess, other.leftCloudProcess)
+					.append(rightCloudProcess, other.rightCloudProcess)
+					.isEquals();
+		} else {
+			return false;
+		}
+	}
 
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(leftCloudProcess)
-                .append(rightCloudProcess)
-                .toHashCode();
-    }
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(leftCloudProcess)
+				.append(rightCloudProcess)
+				.toHashCode();
+	}
 
-    public String toString() {
-        return leftCloudProcess + " <=> " + rightCloudProcess;
-    }
+	public String toString() {
+		return leftCloudProcess + " <=> " + rightCloudProcess;
+	}
 
 }

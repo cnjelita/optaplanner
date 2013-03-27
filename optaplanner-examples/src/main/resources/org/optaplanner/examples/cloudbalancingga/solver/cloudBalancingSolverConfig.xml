@@ -54,9 +54,9 @@
       <populationSize>30</populationSize>
       <!--<elitistSize>40</elitistSize>-->
     </populationParameters>
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <!--<replacementStrategyType>KEEP_BEST</replacementStrategyType>-->
-    <!--<uniformCrossoverOperator/>-->
-    <onePointCrossoverOperator/>
+    <stochasticUniversalSamplingSelector/>
+    <replacementStrategyType>KEEP_BEST</replacementStrategyType>
+    <uniformCrossoverOperator/>
+    <!--<onePointCrossoverOperator/>-->
   </geneticAlgorithm>
 </solver>

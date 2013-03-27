@@ -22,66 +22,66 @@ import org.optaplanner.examples.common.domain.AbstractPersistable;
 @XStreamAlias("City")
 public class City extends AbstractPersistable {
 
-    private String name = null;
-    private double latitude;
-    private double longitude;
+	private String name = null;
+	private double latitude;
+	private double longitude;
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public double getLatitude() {
-        return latitude;
-    }
+	public double getLatitude() {
+		return latitude;
+	}
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
 
-    public double getLongitude() {
-        return longitude;
-    }
+	public double getLongitude() {
+		return longitude;
+	}
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+	// ************************************************************************
+	// Complex methods
+	// ************************************************************************
 
-    /**
-     * The distance is not in miles or km, but in the TSPLIB's unit of measurement.
-     * @param city never null
-     * @return a positive number
-     */
-    public int getDistance(City city) {
-        // Implementation specified by TSPLIB http://www2.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/
-        // Euclidean distance (Pythagorean theorem) - not correct when the surface is a sphere
-        double latitudeDifference = city.latitude - latitude;
-        double longitudeDifference = city.longitude - longitude;
-        double distance = Math.sqrt(
-                (latitudeDifference * latitudeDifference) + (longitudeDifference * longitudeDifference));
-        return (int) (distance + 0.5);
-    }
+	/**
+	 * The distance is not in miles or km, but in the TSPLIB's unit of measurement.
+	 * @param city never null
+	 * @return a positive number
+	 */
+	public int getDistance(City city) {
+		// Implementation specified by TSPLIB http://www2.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/
+		// Euclidean distance (Pythagorean theorem) - not correct when the surface is a sphere
+		double latitudeDifference = city.latitude - latitude;
+		double longitudeDifference = city.longitude - longitude;
+		double distance = Math.sqrt(
+				(latitudeDifference * latitudeDifference) + (longitudeDifference * longitudeDifference));
+		return (int) (distance + 0.5);
+	}
 
-    @Override
-    public String toString() {
-        if (name == null) {
-            return id.toString();
-        }
-        return id.toString() + "-" + name;
-    }
+	@Override
+	public String toString() {
+		if (name == null) {
+			return id.toString();
+		}
+		return id.toString() + "-" + name;
+	}
 
-    public String getSafeName() {
-        if (name == null) {
-            return id.toString();
-        }
-        return name;
-    }
+	public String getSafeName() {
+		if (name == null) {
+			return id.toString();
+		}
+		return name;
+	}
 
 }

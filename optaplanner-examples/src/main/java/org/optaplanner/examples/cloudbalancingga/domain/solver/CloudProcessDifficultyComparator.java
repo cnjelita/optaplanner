@@ -24,11 +24,11 @@ import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
 public class CloudProcessDifficultyComparator implements Comparator<CloudProcess>, Serializable {
 
-    public int compare(CloudProcess a, CloudProcess b) {
-        return new CompareToBuilder()
-                .append(a.getRequiredMultiplicand(), b.getRequiredMultiplicand())
-                .append(a.getId(), b.getId())
-                .toComparison();
-    }
+	public int compare(CloudProcess a, CloudProcess b) {
+		return new CompareToBuilder()
+				.append(a.getRequiredMultiplicand(), b.getRequiredMultiplicand())
+				.append(a.getId(), b.getId())
+				.toComparison();
+	}
 
 }

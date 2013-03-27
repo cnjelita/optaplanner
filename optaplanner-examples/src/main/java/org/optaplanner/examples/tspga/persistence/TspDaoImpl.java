@@ -21,8 +21,8 @@ import org.optaplanner.examples.tspga.domain.TravelingSalesmanTour;
 
 public class TspDaoImpl extends XStreamSolutionDaoImpl {
 
-    public TspDaoImpl() {
-        super("tsp", TravelingSalesmanTour.class);
-    }
+	public TspDaoImpl() {
+		super("tsp", TravelingSalesmanTour.class);
+	}
 
 }

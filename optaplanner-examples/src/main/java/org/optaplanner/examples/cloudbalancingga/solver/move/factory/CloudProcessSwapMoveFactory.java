@@ -20,27 +20,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.optaplanner.core.heuristic.selector.move.factory.MoveListFactory;
-import org.optaplanner.core.move.Move;
-import org.optaplanner.core.solution.Solution;
+import org.optaplanner.core.impl.heuristic.selector.move.factory.MoveListFactory;
+import org.optaplanner.core.impl.move.Move;
+import org.optaplanner.core.impl.solution.Solution;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 import org.optaplanner.examples.cloudbalancingga.solver.move.CloudProcessSwapMove;
 
 public class CloudProcessSwapMoveFactory implements MoveListFactory {
 
-    public List<Move> createMoveList(Solution solution) {
-        CloudBalance cloudBalance = (CloudBalance) solution;
-        List<CloudProcess> cloudProcessList = cloudBalance.getProcessList();
-        List<Move> moveList = new ArrayList<Move>();
-        for (ListIterator<CloudProcess> leftIt = cloudProcessList.listIterator(); leftIt.hasNext();) {
-            CloudProcess leftCloudProcess = leftIt.next();
-            for (ListIterator<CloudProcess> rightIt = cloudProcessList.listIterator(leftIt.nextIndex()); rightIt.hasNext();) {
-                CloudProcess rightCloudProcess = rightIt.next();
-                moveList.add(new CloudProcessSwapMove(leftCloudProcess, rightCloudProcess));
-            }
-        }
-        return moveList;
-    }
+	public List<Move> createMoveList(Solution solution) {
+		CloudBalance cloudBalance = (CloudBalance) solution;
+		List<CloudProcess> cloudProcessList = cloudBalance.getProcessList();
+		List<Move> moveList = new ArrayList<Move>();
+		for (ListIterator<CloudProcess> leftIt = cloudProcessList.listIterator(); leftIt.hasNext(); ) {
+			CloudProcess leftCloudProcess = leftIt.next();
+			for (ListIterator<CloudProcess> rightIt = cloudProcessList.listIterator(
+					leftIt.nextIndex()); rightIt.hasNext(); ) {
+				CloudProcess rightCloudProcess = rightIt.next();
+				moveList.add(new CloudProcessSwapMove(leftCloudProcess, rightCloudProcess));
+			}
+		}
+		return moveList;
+	}
 
 }

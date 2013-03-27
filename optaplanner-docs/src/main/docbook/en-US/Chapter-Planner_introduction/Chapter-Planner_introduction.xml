@@ -64,20 +64,21 @@
       </imageobject>
     </mediaobject>
 
-    <para>Every organization faces planning problems: provide products and services with a limited set of
-    <emphasis>constrained</emphasis> resources (employees, assets, time and money). This is known as
-    <emphasis>Constraint Satisfaction Programming</emphasis> (which is part of the discipline <emphasis>Operations
-    Research</emphasis>).</para>
+    <para>Every organization faces planning problems: provide products or services with a limited set of
+    <emphasis>constrained</emphasis> resources (employees, assets, time and money). OptaPlanner optimizes such planning
+    to do more business with less resources. This is known as <emphasis>Constraint Satisfaction Programming</emphasis>
+    (which is part of the discipline <emphasis>Operations Research</emphasis>).</para>
 
-    <para>OptaPlanner helps normal Java<superscript>TM</superscript> programmers solve planning problems efficiently.
-    Under the hood, it combines optimization heuristics and metaheuristics with very efficient score calculation.</para>
+    <para>OptaPlanner helps normal Java<superscript>TM</superscript> programmers solve constraint satisfaction problems
+    efficiently. Under the hood, it combines optimization heuristics and metaheuristics with very efficient score
+    calculation.</para>
 
     <para>OptaPlanner is <emphasis>open source</emphasis> software, released under <link
     xlink:href="http://www.apache.org/licenses/LICENSE-2.0.html">the Apache Software License 2.0</link>. This license is
     very liberal and allows reuse for commercial purposes. Read <link
     xlink:href="http://www.apache.org/foundation/licence-FAQ.html#WhatDoesItMEAN">the layman's explanation</link>.
-    OptaPlanner is 100% pure Java<superscript>TM</superscript> and runs on <link xlink:href="compatibility">any
-    JVM</link>.</para>
+    OptaPlanner is 100% pure Java<superscript>TM</superscript>, runs on <link xlink:href="compatibility">any JVM</link>
+    and is available in <link linkend="useWithMavenGradleEtc">the Maven Central Repository</link> too.</para>
   </section>
 
   <section>
@@ -152,7 +153,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>Some toy problems (such as N Queens) only have hard constraints. Some problems have 3 or more levels of
+      <para>Some basic problems (such as N Queens) only have hard constraints. Some problems have 3 or more levels of
       constraints, for example hard, medium and soft constraints.</para>
 
       <para>These constraints define the <emphasis>score calculation</emphasis> (AKA <emphasis>fitness
@@ -300,14 +301,14 @@ $ runExamples.bat</programlisting>
     </section>
 
     <section xml:id="useWithMavenGradleEtc">
-      <title>Use OptaPlanner with maven, gradle, ivy, buildr or ANT</title>
+      <title>Use OptaPlanner with Maven, Gradle, Ivy, Buildr or ANT</title>
 
-      <para>The OptaPlanner jars are available in <link
+      <para>The OptaPlanner jars are also available in <link
       xlink:href="http://search.maven.org/#search|ga|1|org.optaplanner">the central maven repository</link> (and also in
       <link xlink:href="https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.optaplanner~~~~">the JBoss
       maven repository</link>).</para>
 
-      <para>If you use maven, just add a dependency to <literal>optaplanner-core</literal> in your project's
+      <para>If you use Maven, just add a dependency to <literal>optaplanner-core</literal> in your project's
       <filename>pom.xml</filename>:</para>
 
       <programlisting language="xml">    &lt;dependency&gt;
@@ -316,10 +317,10 @@ $ runExamples.bat</programlisting>
       &lt;version&gt;...&lt;/version&gt;
     &lt;/dependency&gt;</programlisting>
 
-      <para>This is similar for gradle, ivy and buildr. To identify the latest version, check <link
+      <para>This is similar for Gradle, Ivy and Buildr. To identify the latest version, check <link
       xlink:href="http://search.maven.org/#search|ga|1|org.optaplanner">the central maven repository</link>.</para>
 
-      <para>If you're still using ant (without ivy), copy all the jars from the download zip's
+      <para>If you're still using ANT (without Ivy), copy all the jars from the download zip's
       <filename>binaries</filename> directory and manually verify that your classpath doesn't contain duplicate
       jars.</para>
 
