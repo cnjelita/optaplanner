@@ -21,7 +21,7 @@ import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.TwoPointCrossoverOperator;
 
-@XStreamAlias("twoPointCrossover")
+@XStreamAlias("twoPointCrossoverOperator")
 public class TwoPointCrossoverConfig extends CrossoverOperatorConfig {
 
 	@Override

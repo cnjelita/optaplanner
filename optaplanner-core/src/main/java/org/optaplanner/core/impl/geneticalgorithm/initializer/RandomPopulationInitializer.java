@@ -34,6 +34,7 @@ import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.Population;
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
+import org.optaplanner.core.impl.heuristic.selector.move.generic.ChangeMove;
 import org.optaplanner.core.impl.heuristic.selector.move.generic.chained.ChainedChangeMove;
 import org.optaplanner.core.impl.move.Move;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
@@ -96,8 +97,9 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
 						}
 					} else {
 						//TODO maybe use changeMoves so the isDoable option is available?
-						variableDescriptor.setValue(planningEntity,
+						Move move = new ChangeMove(planningEntity, variableDescriptor,
 								planningValues.get(workingRandom.nextInt(planningValues.size())));
+						move.doMove(scoreDirector);
 					}
 				}
 			}

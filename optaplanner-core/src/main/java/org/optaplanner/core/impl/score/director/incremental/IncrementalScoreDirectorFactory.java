@@ -27,24 +27,28 @@ import org.optaplanner.core.impl.score.director.ScoreDirectorFactory;
  */
 public class IncrementalScoreDirectorFactory extends AbstractScoreDirectorFactory {
 
-    private Class<? extends IncrementalScoreCalculator> incrementalScoreCalculatorClass;
+	private Class<? extends IncrementalScoreCalculator> incrementalScoreCalculatorClass;
 
-    public IncrementalScoreDirectorFactory(Class<? extends IncrementalScoreCalculator> incrementalScoreCalculatorClass) {
-        this.incrementalScoreCalculatorClass = incrementalScoreCalculatorClass;
-    }
+	public IncrementalScoreDirectorFactory(
+			Class<? extends IncrementalScoreCalculator> incrementalScoreCalculatorClass) {
+		this.incrementalScoreCalculatorClass = incrementalScoreCalculatorClass;
+	}
 
-    public Class<? extends IncrementalScoreCalculator> getIncrementalScoreCalculatorClass() {
-        return incrementalScoreCalculatorClass;
-    }
+	public Class<? extends IncrementalScoreCalculator> getIncrementalScoreCalculatorClass() {
+		return incrementalScoreCalculatorClass;
+	}
 
-    // ************************************************************************
-    // Complex methods
-    // ************************************************************************
+	// ************************************************************************
+	// Complex methods
+	// ************************************************************************
 
-    public IncrementalScoreDirector buildScoreDirector() {
-        IncrementalScoreCalculator incrementalScoreCalculator = ConfigUtils.newInstance(this,
-                "incrementalScoreCalculatorClass", incrementalScoreCalculatorClass);
-        return new IncrementalScoreDirector(this, incrementalScoreCalculator);
-    }
+	public IncrementalScoreDirector buildScoreDirector() {
+		IncrementalScoreCalculator incrementalScoreCalculator = ConfigUtils.newInstance(this,
+				"incrementalScoreCalculatorClass", incrementalScoreCalculatorClass);
+		return new IncrementalScoreDirector(this, incrementalScoreCalculator);
+	}
 
+	public IncrementalScoreDirector buildScoreDirector(IncrementalScoreDirector incrementalScoreDirector) {
+		return new IncrementalScoreDirector(this, incrementalScoreDirector.getIncrementalScoreCalculator().clone());
+	}
 }

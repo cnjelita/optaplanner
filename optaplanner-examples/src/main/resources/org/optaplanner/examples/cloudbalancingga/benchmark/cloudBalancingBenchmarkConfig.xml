@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013 JBoss Inc
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<plannerBenchmark>
+  <benchmarkDirectory>local/data/cloudbalancing</benchmarkDirectory>
+  <parallelBenchmarkCount>AUTO</parallelBenchmarkCount>
+  <!--<warmUpSecondsSpend>30</warmUpSecondsSpend>-->
+
+  <inheritedSolverBenchmark>
+    <problemBenchmarks>
+      <xstreamAnnotatedClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</xstreamAnnotatedClass>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0002comp-0006proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0003comp-0009proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0004comp-0012proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>-->
+      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>
+      <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
+    </problemBenchmarks>
+
+    <solver>
+      <solutionClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</solutionClass>
+      <planningEntityClass>org.optaplanner.examples.cloudbalancingga.domain.CloudProcess</planningEntityClass>
+      <scoreDirectorFactory>
+        <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+        <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>
+      </scoreDirectorFactory>
+      <termination>
+        <maximumMinutesSpend>5</maximumMinutesSpend>
+      </termination>
+    </solver>
+  </inheritedSolverBenchmark>
+
+  <!--<solverBenchmark>-->
+  <!--<name>bruteForce</name>-->
+  <!--<solver>-->
+  <!--<bruteForce>-->
+  <!--</bruteForce>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
+
+  <solverBenchmark>
+    <name>Genetic algorithm</name>
+    <solver>
+      <geneticAlgorithm>
+        <populationParameters>
+          <populationSize>40</populationSize>
+          <!--<elitistSize>2</elitistSize>-->
+        </populationParameters>
+        <stochasticUniversalSamplingSelector/>
+        <!--<tournamentSelector>-->
+        <!--<tournamentSize>20</tournamentSize>-->
+        <!--</tournamentSelector>-->
+        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+        <!--<uniformCrossoverOperator/>-->
+        <mutationOperator>
+          <unionMoveSelector>
+            <swapMoveSelector/>
+            <changeMoveSelector/>
+          </unionMoveSelector>
+        </mutationOperator>
+        <uniformCrossoverOperator/>
+      </geneticAlgorithm>
+    </solver>
+  </solverBenchmark>
+  <!--<solverBenchmark>-->
+  <!--<name>First Fit</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
+  <!--<solverBenchmark>-->
+  <!--<name>First Fit Decreasing</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
+
+  <!--<solverBenchmark>-->
+  <!--<name>Tabu Search</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+  <!--<unionMoveSelector>-->
+  <!--<changeMoveSelector/>-->
+  <!--<swapMoveSelector/>-->
+  <!--</unionMoveSelector>-->
+  <!--<acceptor>-->
+  <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
+  <!--</acceptor>-->
+  <!--<forager>-->
+  <!--<minimalAcceptedSelection>1000</minimalAcceptedSelection>-->
+  <!--</forager>-->
+  <!--</localSearch>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
+  <!--<solverBenchmark>-->
+  <!--<name>Simulated Annealing</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+  <!--<unionMoveSelector>-->
+  <!--<changeMoveSelector/>-->
+  <!--<swapMoveSelector/>-->
+  <!--</unionMoveSelector>-->
+  <!--<acceptor>-->
+  <!--<simulatedAnnealingStartingTemperature>0hard/400soft</simulatedAnnealingStartingTemperature>-->
+  <!--</acceptor>-->
+  <!--<forager>-->
+  <!--<minimalAcceptedSelection>4</minimalAcceptedSelection>-->
+  <!--</forager>-->
+  <!--</localSearch>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
+</plannerBenchmark>

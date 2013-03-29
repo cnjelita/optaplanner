@@ -21,11 +21,11 @@ import org.optaplanner.examples.common.app.CommonBenchmarkApp;
 public class CloudBalancingBenchmarkApp extends CommonBenchmarkApp {
 
 	public static final String DEFAULT_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/cloudbalancing/benchmark/cloudBalancingBenchmarkConfig.xml";
+			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfig.xml";
 	public static final String SCORE_DIRECTOR_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/cloudbalancing/benchmark/cloudBalancingScoreDirectorBenchmarkConfig.xml";
+			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingScoreDirectorBenchmarkConfig.xml";
 	public static final String TEMPLATE_BENCHMARK_CONFIG_TEMPLATE
-			= "/org/optaplanner/examples/cloudbalancing/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl";
+			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl";
 
 	public static void main(String[] args) {
 		String benchmarkConfig;

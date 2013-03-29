@@ -18,7 +18,6 @@ package org.optaplanner.examples.cloudbalancingga.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -121,28 +120,29 @@ public class CloudBalance extends AbstractPersistable implements Individual<Hard
 
 	@Override
 	public Object getEntityByClassAndId(Class clazz, Long id) {
-		return idToProcessMap.get(id);
+		return processList.get((int) id.longValue());
 	}
 
 	@Override
 	public long getEntityId(Object entity) {
-		return processToIdMap.get(entity);
+		return ((CloudBalance) entity).getId();
 	}
 
-	//TODO Solution should be cloned in GA before anything happens, otherwise there are no id maps
+	//
+//	//TODO Solution should be cloned in GA before anything happens, otherwise there are no id maps
 	public void generateIdMaps() {
-		processToIdMap = new HashMap<CloudProcess, Long>(processList.size());
-		idToProcessMap = new HashMap<Long, CloudProcess>(processList.size());
-		for (CloudProcess process : processList) {
-			processToIdMap.put(process, process.getId());
-			idToProcessMap.put(process.getId(), process);
-		}
-		this.entitySize = processToIdMap.size();
+//		processToIdMap = new HashMap<CloudProcess, Long>();
+//		idToProcessMap = new HashMap<Long, CloudProcess>();
+//		for (CloudProcess process : processList) {
+//			processToIdMap.put(process, process.getId());
+//			idToProcessMap.put(process.getId(), process);
+//		}
+//		this.entitySize = processToIdMap.size();
 	}
 
 	@Override
 	public int getEntitySize(Class<?> entityClass) {
-		return entitySize;
+		return processList.size();
 	}
 
 	@Override

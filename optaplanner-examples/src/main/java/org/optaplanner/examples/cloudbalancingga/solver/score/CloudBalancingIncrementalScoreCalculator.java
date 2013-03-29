@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator;
-import org.optaplanner.core.impl.score.director.incremental.IncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
@@ -165,7 +164,12 @@ public class CloudBalancingIncrementalScoreCalculator extends AbstractIncrementa
 		return HardSoftScore.valueOf(hardScore, softScore);
 	}
 
-	public IncrementalScoreCalculator clone() {
+	@Override
+	public boolean isCloneable() {
+		return true;
+	}
+
+	public CloudBalancingIncrementalScoreCalculator clone() {
 		CloudBalancingIncrementalScoreCalculator clone = new CloudBalancingIncrementalScoreCalculator();
 		clone.softScore = softScore;
 		clone.hardScore = hardScore;

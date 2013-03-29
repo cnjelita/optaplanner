@@ -67,9 +67,10 @@ public class MutationOperatorConfig {
 			moveSelector = moveSelectorConfigList.get(0).buildMoveSelector(
 					environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
 			//  TODO FAIL FAST if cacheType is something other than jit? Can be updated?
-			if (moveSelector.getCacheType() != null ||
+//			System.out.println(moveSelector.getCacheType());
+			if (moveSelector.getCacheType() != null &&
 					moveSelector.getCacheType() != defaultCacheType) {
-				throw new IllegalArgumentException("Only JIT move selectors are allowed for mutation operator in" +
+				throw new IllegalArgumentException("Only JIT move selectors are allowed for mutation operator in " +
 						"genetic algorithms.");
 			}
 		} else {

@@ -22,10 +22,18 @@ import org.optaplanner.core.impl.solution.Solution;
  * Abstract superclass for {@link IncrementalScoreCalculator}.
  * @see IncrementalScoreCalculator
  */
-public abstract class AbstractIncrementalScoreCalculator<Sol extends Solution> implements IncrementalScoreCalculator<Sol> {
+public abstract class AbstractIncrementalScoreCalculator<Sol extends Solution> implements
+		IncrementalScoreCalculator<Sol>, Cloneable {
 
-    public String buildScoreCorruptionAnalysis(IncrementalScoreCalculator uncorruptedIncrementalScoreCalculator) {
-        return null;
-    }
+	public String buildScoreCorruptionAnalysis(IncrementalScoreCalculator uncorruptedIncrementalScoreCalculator) {
+		return null;
+	}
 
+	public boolean isCloneable() {
+		return false;
+	}
+
+	public AbstractIncrementalScoreCalculator clone() {
+		return null; //TODO by default not cloneable
+	}
 }

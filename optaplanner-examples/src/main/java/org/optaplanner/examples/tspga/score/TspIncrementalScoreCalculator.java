@@ -18,7 +18,6 @@ package org.optaplanner.examples.tspga.score;
 
 import org.optaplanner.core.api.score.buildin.simple.SimpleScore;
 import org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator;
-import org.optaplanner.core.impl.score.director.incremental.IncrementalScoreCalculator;
 import org.optaplanner.examples.tspga.domain.Appearance;
 import org.optaplanner.examples.tspga.domain.Domicile;
 import org.optaplanner.examples.tspga.domain.TravelingSalesmanTour;
@@ -98,7 +97,7 @@ public class TspIncrementalScoreCalculator extends AbstractIncrementalScoreCalcu
 		return SimpleScore.valueOf(score);
 	}
 
-	public IncrementalScoreCalculator clone() {
+	public TspIncrementalScoreCalculator clone() {
 		TspIncrementalScoreCalculator clone = new TspIncrementalScoreCalculator();
 		clone.score = score;
 		return clone;

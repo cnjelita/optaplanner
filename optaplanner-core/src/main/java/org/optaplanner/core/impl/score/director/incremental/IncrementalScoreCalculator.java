@@ -28,35 +28,38 @@ import org.optaplanner.core.impl.solution.Solution;
  * @param <Sol>
  * @see IncrementalScoreDirector
  */
-public interface IncrementalScoreCalculator<Sol extends Solution> {
+public interface IncrementalScoreCalculator<Sol extends Solution> extends Cloneable {
 
-    void resetWorkingSolution(Sol workingSolution);
+	void resetWorkingSolution(Sol workingSolution);
 
-    void beforeEntityAdded(Object entity);
+	void beforeEntityAdded(Object entity);
 
-    void afterEntityAdded(Object entity);
+	void afterEntityAdded(Object entity);
 
-    void beforeAllVariablesChanged(Object entity);
+	void beforeAllVariablesChanged(Object entity);
 
-    void afterAllVariablesChanged(Object entity);
+	void afterAllVariablesChanged(Object entity);
 
-    void beforeVariableChanged(Object entity, String variableName);
+	void beforeVariableChanged(Object entity, String variableName);
 
-    void afterVariableChanged(Object entity, String variableName);
+	void afterVariableChanged(Object entity, String variableName);
 
-    void beforeEntityRemoved(Object entity);
+	void beforeEntityRemoved(Object entity);
 
-    void afterEntityRemoved(Object entity);
+	void afterEntityRemoved(Object entity);
 
-    /**
-     * @return never null
-     */
-    Score calculateScore();
+	/**
+	 * @return never null
+	 */
+	Score calculateScore();
 
-    /**
-     * @param uncorruptedIncrementalScoreCalculator never null
-     * @return null if this {@link IncrementalScoreCalculator} implementation does not support this.
-     */
-    String buildScoreCorruptionAnalysis(IncrementalScoreCalculator uncorruptedIncrementalScoreCalculator);
+	/**
+	 * @param uncorruptedIncrementalScoreCalculator never null
+	 * @return null if this {@link IncrementalScoreCalculator} implementation does not support this.
+	 */
+	String buildScoreCorruptionAnalysis(IncrementalScoreCalculator uncorruptedIncrementalScoreCalculator);
 
+	boolean isCloneable();
+
+	IncrementalScoreCalculator clone();
 }
