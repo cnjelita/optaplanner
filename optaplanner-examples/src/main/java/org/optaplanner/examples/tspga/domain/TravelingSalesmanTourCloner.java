@@ -26,6 +26,7 @@ import org.optaplanner.core.api.domain.solution.cloner.SolutionCloner;
 public class TravelingSalesmanTourCloner implements SolutionCloner<TravelingSalesmanTour> {
 
 	public TravelingSalesmanTour cloneSolution(TravelingSalesmanTour original) {
+//		System.out.println("clone");
 		TravelingSalesmanTour clone = new TravelingSalesmanTour();
 
 		List<Domicile> clonedDomicileList = new ArrayList<Domicile>();
@@ -55,7 +56,8 @@ public class TravelingSalesmanTourCloner implements SolutionCloner<TravelingSale
 		clone.setDomicileList(clonedDomicileList);
 		clone.setVisitList(clonedVisitList);
 		clone.setScore(original.getScore());
-		clone.generateIdMaps();
+//		clone.generateIdMaps();
+//		System.out.println(clonedVisitList.size());
 		return clone;
 	}
 }

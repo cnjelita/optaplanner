@@ -136,26 +136,26 @@ public class TravelingSalesmanTour extends AbstractPersistable implements Indivi
 
 	@Override
 	public Object getEntityByClassAndId(Class clazz, Long id) {
-		return idToVisitMap.get(id);
+		return visitList.get((int) id.longValue() - 2);
 	}
 
 	@Override
 	public long getEntityId(Object entity) {
-		return visitToIdMap.get(entity);
+		return ((Visit) entity).getId();
 	}
 
 	@Override
 	public int getEntitySize(Class<?> entityClass) {
-		return entitySize;
+		return visitList.size();
 	}
 
-	public void generateIdMaps() {
-		visitToIdMap = new HashMap<Visit, Long>(visitList.size());
-		idToVisitMap = new HashMap<Long, Visit>(visitList.size());
-		for (Visit visit : visitList) {
-			visitToIdMap.put(visit, visit.getId());
-			idToVisitMap.put(visit.getId(), visit);
-		}
-		this.entitySize = visitList.size();
-	}
+//	public void generateIdMaps() {
+//		visitToIdMap = new HashMap<Visit, Long>(visitList.size());
+//		idToVisitMap = new HashMap<Long, Visit>(visitList.size());
+//		for (Visit visit : visitList) {
+//			visitToIdMap.put(visit, visit.getId());
+//			idToVisitMap.put(visit.getId(), visit);
+//		}
+//		this.entitySize = visitList.size();
+//	}
 }

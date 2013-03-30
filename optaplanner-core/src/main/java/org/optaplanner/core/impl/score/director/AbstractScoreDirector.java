@@ -101,7 +101,7 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
         return getSolutionDescriptor().getSolutionCloner().cloneSolution(workingSolution);
     }
 
-    private void resetTrailingEntityMap() {
+    protected void resetTrailingEntityMap() {
         if (hasChainedVariables) {
             List<Object> entityList = getSolutionDescriptor().getPlanningEntityList(workingSolution);
             for (Map.Entry<PlanningVariableDescriptor, Map<Object, Set<Object>>> entry

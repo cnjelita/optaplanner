@@ -100,7 +100,12 @@ public class TspIncrementalScoreCalculator extends AbstractIncrementalScoreCalcu
 	public TspIncrementalScoreCalculator clone() {
 		TspIncrementalScoreCalculator clone = new TspIncrementalScoreCalculator();
 		clone.score = score;
+		clone.domicile = domicile;
 		return clone;
 	}
 
+	@Override
+	public boolean isCloneable() {
+		return true;
+	}
 }

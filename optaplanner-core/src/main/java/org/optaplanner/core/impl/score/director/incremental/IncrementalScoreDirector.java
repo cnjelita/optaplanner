@@ -142,6 +142,7 @@ public class IncrementalScoreDirector extends AbstractScoreDirector<IncrementalS
 	public AbstractScoreDirector clone() {
 		IncrementalScoreDirector clone = scoreDirectorFactory.buildScoreDirector(this);
 		clone.workingSolution = cloneWorkingSolution();
+		clone.resetTrailingEntityMap();
 		return clone;
 	}
 
