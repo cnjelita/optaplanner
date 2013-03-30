@@ -87,6 +87,7 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
 							usedValues = new HashSet<Object>();
 						}
 						Collection<?> values = variableDescriptor.extractPlanningValues(clone, planningEntity);
+						//TODO Problem here: if excludeUninitialized... is disabled this does not work!
 						for (Object value : values) {
 							if (!usedValues.contains(value)) {
 								Move move = new ChainedChangeMove(planningEntity, variableDescriptor, value);

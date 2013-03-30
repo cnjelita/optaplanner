@@ -66,4 +66,5 @@ public abstract class AbstractPersistable implements Serializable, Comparable<Ab
         return "[" + getClass().getName().replaceAll(".*\\.", "") + "-" + id + "]";
     }
 
+
 }

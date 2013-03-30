@@ -18,7 +18,6 @@ package org.optaplanner.examples.tspga.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,9 +44,6 @@ public class TravelingSalesmanTour extends AbstractPersistable implements Indivi
 
 	@XStreamConverter(value = XStreamScoreConverter.class, types = {SimpleScoreDefinition.class})
 	private SimpleScore score;
-	private HashMap<Visit, Long> visitToIdMap;
-	private HashMap<Long, Visit> idToVisitMap;
-	private int entitySize;
 
 	public String getName() {
 		return name;

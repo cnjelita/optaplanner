@@ -16,7 +16,7 @@
   -->
 
 <solver>
-  <environmentMode>FULL_ASSERT</environmentMode>
+  <environmentMode>PRODUCTION</environmentMode>
   <!--<environmentMode>FULL_ASSERT</environmentMode>-->
   <solutionClass>org.optaplanner.examples.tspga.domain.TravelingSalesmanTour</solutionClass>
   <planningEntityClass>org.optaplanner.examples.tspga.domain.Visit</planningEntityClass>
@@ -33,46 +33,49 @@
   <termination>
     <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
-  <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-  </constructionHeuristic>
-  <localSearch>
-  <unionMoveSelector>
-  <changeMoveSelector>
-  <cacheType>PHASE</cacheType>
-  <selectionOrder>SHUFFLED</selectionOrder>
-  </changeMoveSelector>
-  <!--<swapMoveSelector>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+  <!--<unionMoveSelector>-->
+  <!--<changeMoveSelector>-->
   <!--<cacheType>PHASE</cacheType>-->
   <!--<selectionOrder>SHUFFLED</selectionOrder>-->
-  <!--</swapMoveSelector>-->
-  <subChainChangeMoveSelector>
-  <subChainSelector>
-  <maximumSubChainSize>40</maximumSubChainSize>
-  </subChainSelector>
-  <selectReversingMoveToo>true</selectReversingMoveToo>
-  </subChainChangeMoveSelector>
-  <!--<subChainSwapMoveSelector>-->
-  <!--<selectReversingMoveToo>false</selectReversingMoveToo>-->
-  <!--</subChainSwapMoveSelector>-->
-  </unionMoveSelector>
-  <acceptor>
-  <planningEntityTabuSize>5</planningEntityTabuSize>
-  </acceptor>
-  <forager>
-  <minimalAcceptedSelection>5000</minimalAcceptedSelection>
-  </forager>
-  </localSearch>
+  <!--</changeMoveSelector>-->
+  <!--&lt;!&ndash;<swapMoveSelector>&ndash;&gt;-->
+  <!--&lt;!&ndash;<cacheType>PHASE</cacheType>&ndash;&gt;-->
+  <!--&lt;!&ndash;<selectionOrder>SHUFFLED</selectionOrder>&ndash;&gt;-->
+  <!--&lt;!&ndash;</swapMoveSelector>&ndash;&gt;-->
+  <!--<subChainChangeMoveSelector>-->
+  <!--<subChainSelector>-->
+  <!--<maximumSubChainSize>40</maximumSubChainSize>-->
+  <!--</subChainSelector>-->
+  <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+  <!--</subChainChangeMoveSelector>-->
+  <!--&lt;!&ndash;<subChainSwapMoveSelector>&ndash;&gt;-->
+  <!--&lt;!&ndash;<selectReversingMoveToo>false</selectReversingMoveToo>&ndash;&gt;-->
+  <!--&lt;!&ndash;</subChainSwapMoveSelector>&ndash;&gt;-->
+  <!--</unionMoveSelector>-->
+  <!--<acceptor>-->
+  <!--<planningEntityTabuSize>5</planningEntityTabuSize>-->
+  <!--</acceptor>-->
+  <!--<forager>-->
+  <!--<minimalAcceptedSelection>5000</minimalAcceptedSelection>-->
+  <!--</forager>-->
+  <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>20</populationSize>
-      <elitistSize>1</elitistSize>
+      <populationSize>1500</populationSize>
+      <elitistSize>0</elitistSize>
     </populationParameters>
     <stochasticUniversalSamplingSelector/>
     <cycleCrossoverOperator/>
-    <!--<mutationOperator>-->
-    <!--<swapMoveSelector/>-->
-    <!--</mutationOperator>-->
+    <mutationOperator>
+      <unionMoveSelector>
+        <swapMoveSelector/>
+        <changeMoveSelector/>
+      </unionMoveSelector>
+    </mutationOperator>
     <replacementStrategyType>KEEP_NEW</replacementStrategyType>
   </geneticAlgorithm>
 </solver>
