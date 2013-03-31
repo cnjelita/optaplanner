@@ -175,7 +175,7 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 		} else if (crossoverOperatorConfigList.size() == 1) {
 			List<CrossoverOperator> crossoverOperators = crossoverOperatorConfigList.get(0).buildCrossoverOperator(
 					null, solutionDescriptor);
-			if (crossoverOperators.size() > 0) {
+			if (crossoverOperators.size() > 1) {
 				UnionCrossoverOperator unionCrossoverOperator = new UnionCrossoverOperator();
 				for (CrossoverOperator co : crossoverOperators) {
 					unionCrossoverOperator.addCrossoverOperator(co);

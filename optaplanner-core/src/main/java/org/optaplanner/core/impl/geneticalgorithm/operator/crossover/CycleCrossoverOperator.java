@@ -32,11 +32,14 @@ public class CycleCrossoverOperator extends AbstractChainingCrossoverOperator {
 			originalRightIds.add(rightParent.getEntityId(rightEntityList.get(j)));
 		}
 
+//		System.out.println("Original left id's \t \t" + originalLeftIds);
+//		System.out.println("Original right id's \t" + originalRightIds);
+
 		//TODO this only works if all planning values are used!
-		Set<Long> unchangedIndicesSet = new HashSet<Long>();
+		Set<Integer> unchangedIndicesSet = new HashSet<Integer>();
 		int currentIndex = workingRandom.nextInt(entitySize);
+		unchangedIndicesSet.add(currentIndex);
 		long firstId = originalLeftIds.get(currentIndex);
-		unchangedIndicesSet.add(firstId);
 
 		boolean cycle = false;
 		while (!cycle) {
@@ -44,7 +47,7 @@ public class CycleCrossoverOperator extends AbstractChainingCrossoverOperator {
 			if (nextLeftElementId == firstId) {
 				cycle = true;
 			} else {
-				unchangedIndicesSet.add(nextLeftElementId);
+				unchangedIndicesSet.add(currentIndex);
 				boolean nextLeftElementFound = false;
 				while (!nextLeftElementFound) {
 					currentIndex += 1;
@@ -55,17 +58,46 @@ public class CycleCrossoverOperator extends AbstractChainingCrossoverOperator {
 				}
 			}
 		}
+
+		List<Long> newLeftIds = new ArrayList<Long>(originalLeftIds);
+		List<Long> newRightIds = new ArrayList<Long>(originalRightIds);
+
 		for (int j = 0; j < entitySize; j++) {
 			//TODO workaround because id's (not pseudo) can be anything and don't have to correspond to indices
-			if (!unchangedIndicesSet.contains(leftEntityList.get(j))) {
-				Object fromLeftObject = leftEntityList.get(j);
-				Object toLeftObject = leftParent.getEntityByClassAndId(entityClass, originalRightIds.get(j));
+			if (!unchangedIndicesSet.contains(j)) {
+				long leftId = newLeftIds.get(j);
+				long originalRightId = originalRightIds.get(j);
+				long rightId = newRightIds.get(j);
+				long originalLeftId = originalLeftIds.get(j);
 
-				Object fromRightEntity = rightEntityList.get(j);
-				Object toRightEntity = rightParent.getEntityByClassAndId(entityClass, originalLeftIds.get(j));
+				Object oldLeftEntity = leftEntityList.get(j);
+				Object oldRightEntity = rightEntityList.get(j);
 
-				performMove(leftScoreDirector, fromLeftObject, toLeftObject);
-				performMove(rightScoreDirector, fromRightEntity, toRightEntity);
+				Object newLeftEntity = null;
+				for (int i = 0; i < entitySize; i++) {
+					if (newLeftIds.get(i) == originalRightId) {
+						newLeftEntity = leftEntityList.get(i);
+						leftEntityList.set(i, oldLeftEntity);
+						newLeftIds.set(i, leftId);
+					}
+				}
+				leftEntityList.set(j, newLeftEntity);
+				newLeftIds.set(j, rightId);
+
+				Object newRightEntity = null;
+				for (int i = 0; i < entitySize; i++) {
+					if (newRightIds.get(i) == originalLeftId) {
+						newRightEntity = rightEntityList.get(i);
+						rightEntityList.set(i, oldRightEntity);
+						newRightIds.set(i, rightId);
+					}
+				}
+				rightEntityList.set(j, newRightEntity);
+				newRightIds.set(j, leftId);
+
+				swapChainedValues(oldLeftEntity, newLeftEntity, leftScoreDirector);
+				swapChainedValues(oldRightEntity, newRightEntity, rightScoreDirector);
+
 			}
 		}
 	}

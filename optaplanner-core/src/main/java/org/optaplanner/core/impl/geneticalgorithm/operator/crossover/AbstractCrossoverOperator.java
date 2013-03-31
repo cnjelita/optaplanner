@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.optaplanner.core.impl.domain.entity.PlanningEntityDescriptor;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
@@ -37,6 +38,7 @@ public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPh
 	protected List<PlanningVariableDescriptor> planningVariableDescriptors;
 	protected Random workingRandom;
 	protected SolutionDescriptor solutionDescriptor;
+	protected PlanningEntityDescriptor entityDescriptor;
 
 	@Override
 	public final void performCrossover(GeneticAlgorithmStepScope stepScope) {
@@ -57,6 +59,7 @@ public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPh
 		super.phaseStarted(phaseScope);
 		workingRandom = phaseScope.getWorkingRandom();
 		solutionDescriptor = phaseScope.getSolutionDescriptor();
+		entityDescriptor = solutionDescriptor.getPlanningEntityDescriptor(entityClass);
 	}
 
 	protected void swapValues(Object leftEntity, ScoreDirector leftScoreDirector, Object rightEntity,

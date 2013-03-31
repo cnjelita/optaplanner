@@ -1,19 +1,3 @@
-/*
- * Copyright 2013 JBoss Inc
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
 import java.util.ArrayList;
@@ -24,7 +8,7 @@ import java.util.Set;
 import org.optaplanner.core.impl.geneticalgorithm.Individual;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 
-public class UniformOrderCrossoverOperator extends AbstractChainingCrossoverOperator {
+public class OrderBasedCrossover extends AbstractChainingCrossoverOperator {
 
 	@Override
 	protected void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
@@ -49,17 +33,25 @@ public class UniformOrderCrossoverOperator extends AbstractChainingCrossoverOper
 			originalRightIds.add(rightParent.getEntityId(rightEntityList.get(j)));
 		}
 
+		int leftCrossoverPoint = workingRandom.nextInt(entitySize);
+		int rightCrossoverPoint;
+		do {
+			rightCrossoverPoint = workingRandom.nextInt(entitySize);
+		} while (leftCrossoverPoint == rightCrossoverPoint);
+
+		int temp = Math.max(leftCrossoverPoint, rightCrossoverPoint);
+		leftCrossoverPoint = Math.min(leftCrossoverPoint, rightCrossoverPoint);
+		rightCrossoverPoint = temp;
+
 		Set<Long> usedLeftIds = new HashSet<Long>();
 		Set<Long> usedRightIds = new HashSet<Long>();
-		for (int i = 0; i < entitySize; i++) {
-			if (workingRandom.nextDouble() < 0.5) {
-				usedLeftIds.add(originalLeftIds.get(i));
-				usedRightIds.add(originalRightIds.get(i));
-			}
+		for (int i = leftCrossoverPoint; i < rightCrossoverPoint; i++) {
+			usedLeftIds.add(originalLeftIds.get(i));
+			usedRightIds.add(originalRightIds.get(i));
 		}
 
-		int currentLeftIndex = 0;
-		int currentRightIndex = 0;
+		int currentLeftIndex = rightCrossoverPoint;
+		int currentRightIndex = rightCrossoverPoint;
 
 		List<Long> newLeftIds = new ArrayList<Long>(originalLeftIds);
 		List<Long> newRightIds = new ArrayList<Long>(originalRightIds);
@@ -103,5 +95,4 @@ public class UniformOrderCrossoverOperator extends AbstractChainingCrossoverOper
 			}
 		}
 	}
-
 }

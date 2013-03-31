@@ -39,4 +39,9 @@ public abstract class AbstractChainingCrossoverOperator extends
 		Move move = new ChainedSwapMove(planningVariableDescriptors, fromObject, toObject);
 		move.doMove(leftScoreDirector);
 	}
+
+	protected void swapChainedValues(Object oldEntity, Object newEntity, ScoreDirector scoreDirector) {
+		ChainedSwapMove move = new ChainedSwapMove(planningVariableDescriptors, oldEntity, newEntity);
+		move.doMove(scoreDirector);
+	}
 }

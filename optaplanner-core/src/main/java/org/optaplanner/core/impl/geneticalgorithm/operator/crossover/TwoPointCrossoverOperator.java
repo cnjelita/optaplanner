@@ -18,7 +18,6 @@ package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
 import org.optaplanner.core.impl.geneticalgorithm.Individual;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
-import org.optaplanner.core.impl.util.RandomUtils;
 
 public class TwoPointCrossoverOperator extends AbstractCrossoverOperator {
 
@@ -26,17 +25,21 @@ public class TwoPointCrossoverOperator extends AbstractCrossoverOperator {
 	protected void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
 		Individual leftParent = (Individual) leftScoreDirector.getWorkingSolution();
 		Individual rightParent = (Individual) rightScoreDirector.getWorkingSolution();
-		long entitySize = leftParent.getEntitySize(entityClass);
+		int entitySize = leftParent.getEntitySize(entityClass);
 
-		long leftCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
-		long rightCrossoverPoint;
+		int leftCrossoverPoint = workingRandom.nextInt(entitySize);
+		int rightCrossoverPoint;
 		do {
-			rightCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+			rightCrossoverPoint = workingRandom.nextInt(entitySize);
 		} while (leftCrossoverPoint == rightCrossoverPoint);
 
-		for (long j = leftCrossoverPoint; j < rightCrossoverPoint; j++) {
-			swapValues(leftParent.getEntityByClassAndId(entityClass, j), leftScoreDirector,
-					rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
+		int temp = Math.max(leftCrossoverPoint, rightCrossoverPoint);
+		leftCrossoverPoint = Math.min(leftCrossoverPoint, rightCrossoverPoint);
+		rightCrossoverPoint = temp;
+
+		for (int j = leftCrossoverPoint; j < rightCrossoverPoint; j++) {
+			swapValues(leftParent.getEntityByClassAndId(entityClass, Long.valueOf(j)), leftScoreDirector,
+					rightParent.getEntityByClassAndId(entityClass, Long.valueOf(j)), rightScoreDirector);
 		}
 	}
 }

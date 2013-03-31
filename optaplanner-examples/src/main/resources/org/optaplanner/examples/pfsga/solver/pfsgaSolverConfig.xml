@@ -16,7 +16,7 @@
   -->
 
 <solver>
-  <environmentMode>FAST_ASSERT</environmentMode>
+  <environmentMode>PRODUCTION</environmentMode>
   <!--<environmentMode>FULL_ASSERT</environmentMode>-->
   <solutionClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</solutionClass>
   <planningEntityClass>org.optaplanner.examples.pfsga.model.Job</planningEntityClass>
@@ -29,13 +29,13 @@
   <termination>
     <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
-  <constructionHeuristic>
-  <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-  </constructionHeuristic>
-  <localSearch>
-    <termination>
-      <maximumSecondsSpend>30</maximumSecondsSpend>
-    </termination>
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+  <!--<termination>-->
+  <!--<maximumSecondsSpend>30</maximumSecondsSpend>-->
+  <!--</termination>-->
   <!--<unionMoveSelector>-->
   <!--<changeMoveSelector>-->
   <!--<cacheType>PHASE</cacheType>-->
@@ -55,22 +55,23 @@
   <!--&lt;!&ndash;<selectReversingMoveToo>false</selectReversingMoveToo>&ndash;&gt;-->
   <!--&lt;!&ndash;</subChainSwapMoveSelector>&ndash;&gt;-->
   <!--</unionMoveSelector>-->
-  <acceptor>
-  <planningEntityTabuSize>17</planningEntityTabuSize>
-  </acceptor>
-  <forager>
-  <minimalAcceptedSelection>500</minimalAcceptedSelection>
-  </forager>
-  </localSearch>
+  <!--<acceptor>-->
+  <!--<planningEntityTabuSize>17</planningEntityTabuSize>-->
+  <!--</acceptor>-->
+  <!--<forager>-->
+  <!--<minimalAcceptedSelection>500</minimalAcceptedSelection>-->
+  <!--</forager>-->
+  <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>550</populationSize>
+      <populationSize>80</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
     <stochasticUniversalSamplingSelector/>
-    <cycleCrossoverOperator>
-      <crossoverRate>1</crossoverRate>
-    </cycleCrossoverOperator>
+    <uniformOrderCrossoverOperator/>
+    <!--<tournamentSelector>-->
+    <!--<tournamentSize>20s</tournamentSize>-->
+    <!--</tournamentSelector>-->
     <!--<mutationOperator>-->
     <!--<unionMoveSelector>-->
     <!--&lt;!&ndash;<swapMoveSelector/>&ndash;&gt;-->

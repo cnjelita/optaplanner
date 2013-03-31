@@ -33,7 +33,9 @@ import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.CrossoverOp
 		UniformCrossoverConfig.class,
 		UniformOrderCrossoverConfig.class,
 		CycleCrossoverConfig.class,
-		PartiallyMatchedCrossoverConfig.class
+		PartiallyMatchedCrossoverConfig.class,
+		UnionCrossoverOperatorConfig.class,
+		OrderBasedCrossoverConfig.class
 })
 public abstract class CrossoverOperatorConfig {
 
