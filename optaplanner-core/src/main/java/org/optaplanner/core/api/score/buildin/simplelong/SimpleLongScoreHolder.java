@@ -23,9 +23,16 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see SimpleLongScore
+ */
 public class SimpleLongScoreHolder extends AbstractScoreHolder {
 
     protected long score;
+
+    public SimpleLongScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public long getScore() {
         return score;
@@ -41,8 +48,8 @@ public class SimpleLongScoreHolder extends AbstractScoreHolder {
 
     public void addConstraintMatch(RuleContext kcontext, final long weight) {
         score += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerLongConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 score -= weight;
             }
         });

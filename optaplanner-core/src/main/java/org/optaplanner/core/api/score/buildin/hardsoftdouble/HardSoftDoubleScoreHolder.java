@@ -23,10 +23,17 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see HardSoftDoubleScore
+ */
 public class HardSoftDoubleScoreHolder extends AbstractScoreHolder {
 
     protected double hardScore;
     protected double softScore;
+
+    public HardSoftDoubleScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public double getHardScore() {
         return hardScore;
@@ -50,8 +57,8 @@ public class HardSoftDoubleScoreHolder extends AbstractScoreHolder {
 
     public void addHardConstraintMatch(RuleContext kcontext, final double weight) {
         hardScore += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerDoubleConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 hardScore -= weight;
             }
         });
@@ -59,8 +66,8 @@ public class HardSoftDoubleScoreHolder extends AbstractScoreHolder {
 
     public void addSoftConstraintMatch(RuleContext kcontext, final double weight) {
         softScore += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerDoubleConstraintMatch(kcontext, 1, weight, new Runnable() {
+            public void run() {
                 softScore -= weight;
             }
         });

@@ -25,9 +25,16 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see SimpleBigDecimalScore
+ */
 public class SimpleBigDecimalScoreHolder extends AbstractScoreHolder {
 
     protected BigDecimal score;
+
+    public SimpleBigDecimalScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public BigDecimal getScore() {
         return score;
@@ -43,8 +50,8 @@ public class SimpleBigDecimalScoreHolder extends AbstractScoreHolder {
 
     public void addConstraintMatch(RuleContext kcontext, final BigDecimal weight) {
         score = score.add(weight);
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerBigDecimalConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 score = score.subtract(weight);
             }
         });

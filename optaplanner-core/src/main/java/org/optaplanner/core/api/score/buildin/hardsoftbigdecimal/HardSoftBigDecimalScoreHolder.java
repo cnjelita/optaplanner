@@ -25,10 +25,17 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see HardSoftBigDecimalScore
+ */
 public class HardSoftBigDecimalScoreHolder extends AbstractScoreHolder {
 
     protected BigDecimal hardScore;
     protected BigDecimal softScore;
+
+    public HardSoftBigDecimalScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public BigDecimal getHardScore() {
         return hardScore;
@@ -52,8 +59,8 @@ public class HardSoftBigDecimalScoreHolder extends AbstractScoreHolder {
 
     public void addHardConstraintMatch(RuleContext kcontext, final BigDecimal weight) {
         hardScore = hardScore.add(weight);
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerBigDecimalConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 hardScore = hardScore.subtract(weight);
             }
         });
@@ -61,8 +68,8 @@ public class HardSoftBigDecimalScoreHolder extends AbstractScoreHolder {
 
     public void addSoftConstraintMatch(RuleContext kcontext, final BigDecimal weight) {
         softScore = softScore.add(weight);
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerBigDecimalConstraintMatch(kcontext, 1, weight, new Runnable() {
+            public void run() {
                 softScore = softScore.subtract(weight);
             }
         });

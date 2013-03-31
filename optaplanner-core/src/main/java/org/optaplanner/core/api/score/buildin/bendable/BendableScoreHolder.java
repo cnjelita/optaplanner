@@ -25,12 +25,16 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see BendableScore
+ */
 public class BendableScoreHolder extends AbstractScoreHolder {
 
     private int[] hardScores;
     private int[] softScores;
 
-    public BendableScoreHolder(int hardLevelCount, int softLevelCount) {
+    public BendableScoreHolder(boolean constraintMatchEnabled, int hardLevelCount, int softLevelCount) {
+        super(constraintMatchEnabled);
         hardScores = new int[hardLevelCount];
         softScores = new int[softLevelCount];
     }
@@ -65,8 +69,8 @@ public class BendableScoreHolder extends AbstractScoreHolder {
 
     public void addHardConstraintMatch(RuleContext kcontext, final int hardLevel, final int weight) {
         hardScores[hardLevel] += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerIntConstraintMatch(kcontext, hardLevel, weight, new Runnable() {
+            public void run() {
                 hardScores[hardLevel] -= weight;
             }
         });
@@ -74,8 +78,8 @@ public class BendableScoreHolder extends AbstractScoreHolder {
 
     public void addSoftConstraintMatch(RuleContext kcontext, final int softLevel, final int weight) {
         softScores[softLevel] += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerIntConstraintMatch(kcontext, getHardLevelCount() + softLevel, weight, new Runnable() {
+            public void run() {
                 softScores[softLevel] -= weight;
             }
         });

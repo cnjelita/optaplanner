@@ -16,17 +16,23 @@
 
 package org.optaplanner.core.api.score.buildin.hardsoft;
 
-import org.kie.internal.event.rule.ActivationUnMatchListener;
 import org.optaplanner.core.api.score.Score;
+import org.optaplanner.core.api.score.constraint.primint.IntScoreConstraintMatch;
+import org.optaplanner.core.api.score.constraint.primint.IntScoreConstraintMatchTotal;
 import org.optaplanner.core.api.score.holder.AbstractScoreHolder;
-import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
-import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see HardSoftScore
+ */
 public class HardSoftScoreHolder extends AbstractScoreHolder {
 
     protected int hardScore;
     protected int softScore;
+
+    public HardSoftScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public int getHardScore() {
         return hardScore;
@@ -50,8 +56,8 @@ public class HardSoftScoreHolder extends AbstractScoreHolder {
 
     public void addHardConstraintMatch(RuleContext kcontext, final int weight) {
         hardScore += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerIntConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 hardScore -= weight;
             }
         });
@@ -59,8 +65,8 @@ public class HardSoftScoreHolder extends AbstractScoreHolder {
 
     public void addSoftConstraintMatch(RuleContext kcontext, final int weight) {
         softScore += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerIntConstraintMatch(kcontext, 1, weight, new Runnable() {
+            public void run() {
                 softScore -= weight;
             }
         });

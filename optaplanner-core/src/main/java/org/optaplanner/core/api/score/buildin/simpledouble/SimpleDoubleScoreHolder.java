@@ -23,9 +23,16 @@ import org.kie.api.runtime.rule.Match;
 import org.kie.api.runtime.rule.RuleContext;
 import org.kie.api.runtime.rule.Session;
 
+/**
+ * @see SimpleDoubleScore
+ */
 public class SimpleDoubleScoreHolder extends AbstractScoreHolder {
 
     protected double score;
+
+    public SimpleDoubleScoreHolder(boolean constraintMatchEnabled) {
+        super(constraintMatchEnabled);
+    }
 
     public double getScore() {
         return score;
@@ -41,8 +48,8 @@ public class SimpleDoubleScoreHolder extends AbstractScoreHolder {
 
     public void addConstraintMatch(RuleContext kcontext, final double weight) {
         score += weight;
-        registerUndoListener(kcontext, new ActivationUnMatchListener() {
-            public void unMatch(Session session, Match activation) {
+        registerDoubleConstraintMatch(kcontext, 0, weight, new Runnable() {
+            public void run() {
                 score -= weight;
             }
         });

@@ -16,14 +16,19 @@
 
 package org.optaplanner.core.impl.score.director;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.optaplanner.core.api.score.constraint.ScoreConstraintMatch;
+import org.optaplanner.core.api.score.constraint.ScoreConstraintMatchTotal;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.api.score.Score;
@@ -48,11 +53,13 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
 
     protected final F scoreDirectorFactory;
 
-    protected Solution workingSolution;
+    protected boolean constraintMatchEnabledPreference = true;
     protected boolean hasChainedVariables;
     // TODO it's unproven that this caching system is actually faster:
     // it happens for every step for every move, but is only needed for every step (with correction for composite moves)
     protected Map<PlanningVariableDescriptor, Map<Object, Set<Object>>> chainedVariableToTrailingEntitiesMap;
+
+    protected Solution workingSolution;
 
     protected long calculateCount = 0L;
 
@@ -237,6 +244,21 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
         calculateCount++;
     }
 
+    public boolean isConstraintMatchEnabled() {
+        // Doesn't return constraintMatchEnabledPreference because the implementation needs to implement it
+        return false;
+    }
+
+    public Collection<ScoreConstraintMatchTotal> getConstraintMatchTotals() {
+        if (isConstraintMatchEnabled()) {
+            throw new IllegalStateException("Subclass (" + getClass()
+                    + ") which overwrote constraintMatchEnabled (" + isConstraintMatchEnabled()
+                    + ") should also overwrite this method.");
+        }
+        throw new IllegalStateException("When constraintMatchEnabled (" + isConstraintMatchEnabled()
+                + ") is disabled, this method should not be called.");
+    }
+
     public AbstractScoreDirector clone() {
         // Breaks incremental score calculation.
         // Subclasses should overwrite this method to avoid breaking it if possible.
@@ -285,16 +307,90 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
             uncorruptedScoreDirector.dispose();
             throw new IllegalStateException(
                     "Score corruption: the workingScore (" + workingScore + ") is not the uncorruptedScore ("
-                            + uncorruptedScore + ")"
-                            + (scoreCorruptionAnalysis == null ? "." : ":\n" + scoreCorruptionAnalysis));
+                            + uncorruptedScore + "):\n" + scoreCorruptionAnalysis);
         } else {
             uncorruptedScoreDirector.dispose();
         }
     }
 
+    /**
+     * @param uncorruptedScoreDirector never null
+     * @return never null
+     */
     protected String buildScoreCorruptionAnalysis(ScoreDirector uncorruptedScoreDirector) {
-        // No analysis available
-        return null;
+        if (!isConstraintMatchEnabled() || !uncorruptedScoreDirector.isConstraintMatchEnabled()) {
+            return "  Score corruption analysis could not be generated because"
+                    + " either corrupted constraintMatchEnabled (" + isConstraintMatchEnabled()
+                    + " or uncorrupted constraintMatchEnabled (" + uncorruptedScoreDirector.isConstraintMatchEnabled()
+                    + ") is disabled.\n"
+                    + "  Check your score constraints manually.";
+        }
+        Collection<ScoreConstraintMatchTotal> corruptedConstraintMatchTotals = getConstraintMatchTotals();
+        Collection<ScoreConstraintMatchTotal> uncorruptedConstraintMatchTotals
+                = uncorruptedScoreDirector.getConstraintMatchTotals();
+
+        Map<List<Object>, ScoreConstraintMatch> corruptedMap = createConstraintMatchMap(corruptedConstraintMatchTotals);
+        Map<List<Object>, ScoreConstraintMatch> excessMap = new LinkedHashMap<List<Object>, ScoreConstraintMatch>(
+                corruptedMap);
+        Map<List<Object>, ScoreConstraintMatch> missingMap = createConstraintMatchMap(uncorruptedConstraintMatchTotals);
+        excessMap.keySet().removeAll(missingMap.keySet()); // missingMap == uncorruptedMap
+        missingMap.keySet().removeAll(corruptedMap.keySet());
+
+        final int CONSTRAINT_MATCH_DISPLAY_LIMIT = 8;
+        StringBuilder analysis = new StringBuilder();
+        if (!excessMap.isEmpty()) {
+            analysis.append("  The corrupted scoreDirector has ").append(excessMap.size())
+                    .append(" ScoreConstraintMatch(s) which are in excess (and should not be there):\n");
+            int count = 0;
+            for (ScoreConstraintMatch constraintMatch : excessMap.values()) {
+                if (count >= CONSTRAINT_MATCH_DISPLAY_LIMIT) {
+                    analysis.append("    ... ").append(excessMap.size() - CONSTRAINT_MATCH_DISPLAY_LIMIT)
+                            .append(" more\n");
+                    break;
+                }
+                analysis.append("    ").append(constraintMatch).append("\n");
+                count++;
+            }
+        }
+        if (!missingMap.isEmpty()) {
+            analysis.append("  The corrupted scoreDirector has ").append(missingMap.size())
+                    .append(" ScoreConstraintMatch(s) which are missing:\n");
+            int count = 0;
+            for (ScoreConstraintMatch constraintMatch : missingMap.values()) {
+                if (count >= CONSTRAINT_MATCH_DISPLAY_LIMIT) {
+                    analysis.append("    ... ").append(missingMap.size() - CONSTRAINT_MATCH_DISPLAY_LIMIT)
+                            .append(" more\n");
+                    break;
+                }
+                analysis.append("    ").append(constraintMatch).append("\n");
+                count++;
+            }
+        }
+        if (excessMap.isEmpty() && missingMap.isEmpty()) {
+            analysis.append("  The corrupted scoreDirector has no ScoreConstraintMatch(s) in excess or missing."
+                    + " That could be a bug in this class (").append(getClass()).append(").\n");
+        }
+        analysis.append("  Check your score constraints.");
+        return analysis.toString();
+    }
+
+    private Map<List<Object>, ScoreConstraintMatch> createConstraintMatchMap(
+            Collection<ScoreConstraintMatchTotal> constraintMatchTotals) {
+        Map<List<Object>, ScoreConstraintMatch> constraintMatchMap
+                = new LinkedHashMap<List<Object>, ScoreConstraintMatch>(constraintMatchTotals.size() * 16);
+        for (ScoreConstraintMatchTotal constraintMatchTotal : constraintMatchTotals) {
+            for (ScoreConstraintMatch scoreConstraintMatch : constraintMatchTotal.getConstraintMatchSet()) {
+                constraintMatchMap.put(
+                        Arrays.<Object>asList(
+                                constraintMatchTotal.getConstraintPackage(),
+                                constraintMatchTotal.getConstraintName(),
+                                constraintMatchTotal.getScoreLevel(),
+                                scoreConstraintMatch.getJustificationList(),
+                                scoreConstraintMatch.getWeightAsNumber()),
+                        scoreConstraintMatch);
+            }
+        }
+        return constraintMatchMap;
     }
 
     public void dispose() {
