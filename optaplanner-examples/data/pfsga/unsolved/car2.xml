@@ -1,0 +1,183 @@
+<PermutationFlowShop id="1">
+  <id>0</id>
+  <jobs id="2">
+    <Job id="3">
+      <id>1</id>
+      <machineTimes id="4">
+        <id>0</id>
+        <machineTimes id="5">
+          <int>654</int>
+          <int>147</int>
+          <int>345</int>
+          <int>447</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="6">
+      <id>2</id>
+      <machineTimes id="7">
+        <id>1</id>
+        <machineTimes id="8">
+          <int>321</int>
+          <int>520</int>
+          <int>789</int>
+          <int>702</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="9">
+      <id>3</id>
+      <machineTimes id="10">
+        <id>2</id>
+        <machineTimes id="11">
+          <int>12</int>
+          <int>147</int>
+          <int>630</int>
+          <int>255</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="12">
+      <id>4</id>
+      <machineTimes id="13">
+        <id>3</id>
+        <machineTimes id="14">
+          <int>345</int>
+          <int>586</int>
+          <int>214</int>
+          <int>866</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="15">
+      <id>5</id>
+      <machineTimes id="16">
+        <id>4</id>
+        <machineTimes id="17">
+          <int>678</int>
+          <int>532</int>
+          <int>275</int>
+          <int>332</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="18">
+      <id>6</id>
+      <machineTimes id="19">
+        <id>5</id>
+        <machineTimes id="20">
+          <int>963</int>
+          <int>145</int>
+          <int>302</int>
+          <int>225</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="21">
+      <id>7</id>
+      <machineTimes id="22">
+        <id>6</id>
+        <machineTimes id="23">
+          <int>25</int>
+          <int>24</int>
+          <int>142</int>
+          <int>589</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="24">
+      <id>8</id>
+      <machineTimes id="25">
+        <id>7</id>
+        <machineTimes id="26">
+          <int>874</int>
+          <int>517</int>
+          <int>24</int>
+          <int>996</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="27">
+      <id>9</id>
+      <machineTimes id="28">
+        <id>8</id>
+        <machineTimes id="29">
+          <int>114</int>
+          <int>896</int>
+          <int>520</int>
+          <int>541</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="30">
+      <id>10</id>
+      <machineTimes id="31">
+        <id>9</id>
+        <machineTimes id="32">
+          <int>785</int>
+          <int>543</int>
+          <int>336</int>
+          <int>234</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="33">
+      <id>11</id>
+      <machineTimes id="34">
+        <id>10</id>
+        <machineTimes id="35">
+          <int>203</int>
+          <int>210</int>
+          <int>699</int>
+          <int>784</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="36">
+      <id>12</id>
+      <machineTimes id="37">
+        <id>11</id>
+        <machineTimes id="38">
+          <int>696</int>
+          <int>784</int>
+          <int>855</int>
+          <int>512</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+    <Job id="39">
+      <id>13</id>
+      <machineTimes id="40">
+        <id>12</id>
+        <machineTimes id="41">
+          <int>302</int>
+          <int>512</int>
+          <int>221</int>
+          <int>345</int>
+        </machineTimes>
+      </machineTimes>
+    </Job>
+  </jobs>
+  <startingJobs id="42">
+    <StartingJob id="43">
+      <id>0</id>
+    </StartingJob>
+  </startingJobs>
+  <machineTimeSequences id="44">
+    <MachineTimeSequence reference="4"/>
+    <MachineTimeSequence reference="7"/>
+    <MachineTimeSequence reference="10"/>
+    <MachineTimeSequence reference="13"/>
+    <MachineTimeSequence reference="16"/>
+    <MachineTimeSequence reference="19"/>
+    <MachineTimeSequence reference="22"/>
+    <MachineTimeSequence reference="25"/>
+    <MachineTimeSequence reference="28"/>
+    <MachineTimeSequence reference="31"/>
+    <MachineTimeSequence reference="34"/>
+    <MachineTimeSequence reference="37"/>
+    <MachineTimeSequence reference="40"/>
+  </machineTimeSequences>
+  <numberOfMachines>4</numberOfMachines>
+  <numberOfJobs>13</numberOfJobs>
+</PermutationFlowShop>

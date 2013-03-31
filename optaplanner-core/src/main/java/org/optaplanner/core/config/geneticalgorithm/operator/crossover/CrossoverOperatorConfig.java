@@ -16,21 +16,121 @@
 
 package org.optaplanner.core.config.geneticalgorithm.operator.crossover;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.thoughtworks.xstream.annotations.XStreamInclude;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
+import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
+import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.AbstractCrossoverOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.CrossoverOperator;
 
 @XStreamInclude({
 		OnePointCrossoverConfig.class,
 		TwoPointCrossoverConfig.class,
-        OnePointCrossoverConfig.class,
-        TwoPointCrossoverConfig.class,
-        UniformCrossoverConfig.class,
-        UniformOrderCrossoverConfig.class,
-        CycleCrossoverConfig.class,
-        PartiallyMatchedCrossoverConfig.class
+		OnePointCrossoverConfig.class,
+		TwoPointCrossoverConfig.class,
+		UniformCrossoverConfig.class,
+		UniformOrderCrossoverConfig.class,
+		CycleCrossoverConfig.class,
+		PartiallyMatchedCrossoverConfig.class
 })
 public abstract class CrossoverOperatorConfig {
 
-	public abstract CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor);
+	protected Double crossoverRate = null;
+
+	private Class planningEntityClass = null;
+
+	public List<CrossoverOperator> buildCrossoverOperator(Double alternativeCrossoverRate,
+			SolutionDescriptor solutionDescriptor) {
+		List<CrossoverOperator> crossoverOperatorList = new ArrayList<CrossoverOperator>();
+		List<PlanningVariableDescriptor> planningVariableDescriptors;
+		if (planningEntityClass != null) {
+			planningVariableDescriptors =
+					getPlanningVariableDescriptors(planningEntityClass, solutionDescriptor);
+			List<PlanningVariableDescriptor> nonChainedVariableDescriptors = getNonChainedVariableDescriptors(
+					planningVariableDescriptors);
+			if (nonChainedVariableDescriptors.isEmpty()) {
+				throw new IllegalArgumentException(
+						this.getClass().getSimpleName() + " only works for entities which have variables which " +
+								"are not chained, none of those exist for provided class.");
+			}
+			AbstractCrossoverOperator crossoverOperator = createInstance();
+			crossoverOperator.setEntityClass(planningEntityClass);
+			crossoverOperator.setPlanningVariableDescriptors(planningVariableDescriptors);
+			setCrossoverRate(crossoverOperator, alternativeCrossoverRate);
+			crossoverOperatorList.add(crossoverOperator);
+		} else {
+			List<Class> planningEntityClassList = new ArrayList<Class>(solutionDescriptor.getPlanningEntityClassSet());
+			for (Class planningEntityClass : planningEntityClassList) {
+				planningVariableDescriptors = getPlanningVariableDescriptors(planningEntityClass, solutionDescriptor);
+				List<PlanningVariableDescriptor> nonChainedVariableDescriptors = getNonChainedVariableDescriptors(
+						planningVariableDescriptors);
+				if (!nonChainedVariableDescriptors.isEmpty()) {
+					AbstractCrossoverOperator crossoverOperator = createInstance();
+					crossoverOperator.setEntityClass(planningEntityClass);
+					crossoverOperator.setPlanningVariableDescriptors(planningVariableDescriptors);
+					setCrossoverRate(crossoverOperator, alternativeCrossoverRate);
+					crossoverOperatorList.add(crossoverOperator);
+				}
+			}
+			if (crossoverOperatorList.isEmpty()) {
+				throw new IllegalArgumentException(
+						"All planning variables for the given domain are chained. " +
+								this.getClass().getSimpleName() + " is not suitable for your domain.");
+			}
+		}
+		return crossoverOperatorList;
+	}
+
+	protected abstract AbstractCrossoverOperator createInstance();
+
+	protected void setCrossoverRate(CrossoverOperator crossoverOperator, Double alternativeCrossoverRate) {
+		if (crossoverRate != null && (crossoverRate < 0 || crossoverRate > 1)) {
+			throw new IllegalArgumentException(
+					"Crossover rate should be larger than 0 and smaller than or equal to 1");
+		} else if (crossoverRate == null && alternativeCrossoverRate != null) {
+			crossoverOperator.setCrossoverRate(alternativeCrossoverRate);
+		} else if (crossoverRate != null) {
+			crossoverOperator.setCrossoverRate(crossoverRate);
+		} else {
+			crossoverOperator.setCrossoverRate(1);
+		}
+	}
+
+	protected List<PlanningVariableDescriptor> getPlanningVariableDescriptors(Class planningEntityClass,
+			SolutionDescriptor solutionDescriptor) {
+		List<PlanningVariableDescriptor> planningVariableDescriptors;
+		if (solutionDescriptor.getPlanningEntityClassSet().contains(planningEntityClass)) {
+			planningVariableDescriptors = new ArrayList<PlanningVariableDescriptor>(
+					solutionDescriptor.getPlanningEntityDescriptor(
+							planningEntityClass).getPlanningVariableDescriptors());
+		} else {
+			throw new IllegalArgumentException("The planning entity class " + planningEntityClass.getSimpleName()
+					+ "is not a planning entity class.");
+		}
+		return planningVariableDescriptors;
+	}
+
+	protected List<PlanningVariableDescriptor> getChainedVariableDescriptors(
+			List<PlanningVariableDescriptor> receivedPlanningVariableDescriptors) {
+		List<PlanningVariableDescriptor> chainedVariableDescriptors = new ArrayList<PlanningVariableDescriptor>();
+		for (PlanningVariableDescriptor planningVariableDescriptor : receivedPlanningVariableDescriptors) {
+			if (planningVariableDescriptor.isChained()) {
+				chainedVariableDescriptors.add(planningVariableDescriptor);
+			}
+		}
+		return chainedVariableDescriptors;
+	}
+
+	protected List<PlanningVariableDescriptor> getNonChainedVariableDescriptors(
+			List<PlanningVariableDescriptor> receivedPlanningVariableDescriptors) {
+		List<PlanningVariableDescriptor> nonChainedVariableDescriptors = new ArrayList<PlanningVariableDescriptor>();
+		for (PlanningVariableDescriptor planningVariableDescriptor : receivedPlanningVariableDescriptors) {
+			if (!planningVariableDescriptor.isChained()) {
+				nonChainedVariableDescriptors.add(planningVariableDescriptor);
+			}
+		}
+		return nonChainedVariableDescriptors;
+	}
 }

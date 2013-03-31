@@ -16,13 +16,9 @@
 
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
@@ -36,34 +32,35 @@ import org.optaplanner.core.impl.score.director.ScoreDirector;
 public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
 		CrossoverOperator {
 
+	protected double crossoverRate;
+	protected Class entityClass;
+	protected List<PlanningVariableDescriptor> planningVariableDescriptors;
 	protected Random workingRandom;
-	protected List<Class<?>> entityClassList;
-	protected Map<Class<?>, Collection<PlanningVariableDescriptor>> entityClassToVariableDescriptorMap;
-	protected int entityListClassSize;
 	protected SolutionDescriptor solutionDescriptor;
 
 	@Override
-	public abstract void performCrossover(GeneticAlgorithmStepScope stepScope);
+	public final void performCrossover(GeneticAlgorithmStepScope stepScope) {
+		List<ScoreDirector> individuals = stepScope.getIntermediatePopulation().getIndividuals();
+		Collections.shuffle(individuals, workingRandom);
+		int populationSize = stepScope.getIntermediatePopulationSize();
+		for (int i = 0; i < populationSize / 2; i += 2) {
+			if (workingRandom.nextDouble() < crossoverRate) {
+				performCrossover(individuals.get(i), individuals.get(i + 1));
+			}
+		}
+	}
+
+	protected abstract void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector);
 
 	@Override
 	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
 		super.phaseStarted(phaseScope);
 		workingRandom = phaseScope.getWorkingRandom();
 		solutionDescriptor = phaseScope.getSolutionDescriptor();
-		entityClassList = new ArrayList<Class<?>>();
-		Set<Class<?>> entityClassSet = solutionDescriptor.getPlanningEntityClassSet();
-		entityListClassSize = entityClassSet.size();
-		entityClassToVariableDescriptorMap = new HashMap<Class<?>, Collection<PlanningVariableDescriptor>>();
-		for (Class<?> entityClass : entityClassSet) {
-			entityClassList.add(entityClass);
-			//TODO check for chaining!
-			entityClassToVariableDescriptorMap.put(entityClass,
-					solutionDescriptor.getPlanningEntityDescriptor(entityClass).getPlanningVariableDescriptors());
-		}
 	}
 
-	protected void swapValues(Collection<PlanningVariableDescriptor> planningVariableDescriptors, Object leftEntity,
-			ScoreDirector leftScoreDirector, Object rightEntity, ScoreDirector rightScoreDirector) {
+	protected void swapValues(Object leftEntity, ScoreDirector leftScoreDirector, Object rightEntity,
+			ScoreDirector rightScoreDirector) {
 		Move leftMove = new SwapMove(planningVariableDescriptors, leftEntity, rightEntity);
 		if (leftMove.isMoveDoable(leftScoreDirector)) {
 			leftMove.doMove(leftScoreDirector);
@@ -72,5 +69,17 @@ public abstract class AbstractCrossoverOperator extends GeneticAlgorithmSolverPh
 		if (rightMove.isMoveDoable(rightScoreDirector)) {
 			rightMove.doMove(rightScoreDirector);
 		}
+	}
+
+	public void setCrossoverRate(double crossoverRate) {
+		this.crossoverRate = crossoverRate;
+	}
+
+	public void setPlanningVariableDescriptors(List<PlanningVariableDescriptor> planningVariableDescriptors) {
+		this.planningVariableDescriptors = planningVariableDescriptors;
+	}
+
+	public void setEntityClass(Class entityClass) {
+		this.entityClass = entityClass;
 	}
 }

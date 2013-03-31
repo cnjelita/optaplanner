@@ -6,6 +6,6 @@ import org.optaplanner.examples.pfsga.model.PermutationFlowShop;
 public class PFSDaoImpl extends XStreamSolutionDaoImpl {
 
 	public PFSDaoImpl() {
-		super("pfs", PermutationFlowShop.class);
+		super("pfsga", PermutationFlowShop.class);
 	}
 }

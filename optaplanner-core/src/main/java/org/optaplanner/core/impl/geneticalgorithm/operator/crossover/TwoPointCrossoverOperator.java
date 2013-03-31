@@ -16,48 +16,27 @@
 
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.Individual;
-import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.core.impl.util.RandomUtils;
 
 public class TwoPointCrossoverOperator extends AbstractCrossoverOperator {
 
 	@Override
-	public void performCrossover(GeneticAlgorithmStepScope stepScope) {
-		List<ScoreDirector> individuals = stepScope.getIntermediatePopulation().getIndividuals();
-		int populationSize = stepScope.getIntermediatePopulationSize();
+	protected void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
+		Individual leftParent = (Individual) leftScoreDirector.getWorkingSolution();
+		Individual rightParent = (Individual) rightScoreDirector.getWorkingSolution();
+		long entitySize = leftParent.getEntitySize(entityClass);
 
-		Collections.shuffle(individuals, workingRandom);
+		long leftCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+		long rightCrossoverPoint;
+		do {
+			rightCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+		} while (leftCrossoverPoint == rightCrossoverPoint);
 
-		for (int i = 0; i < populationSize / 2; i += 2) {
-			ScoreDirector leftScoreDirector = individuals.get(i);
-			Individual leftParent = (Individual) leftScoreDirector.getWorkingSolution();
-			ScoreDirector rightScoreDirector = individuals.get(i + 1);
-			Individual rightParent = (Individual) rightScoreDirector.getWorkingSolution();
-
-			Class<?> entityClass = entityClassList.get(workingRandom.nextInt(entityListClassSize));
-			Collection<PlanningVariableDescriptor> variableDescriptors = entityClassToVariableDescriptorMap.get(
-					entityClass);
-
-			long entitySize = leftParent.getEntitySize(entityClass);
-
-			long leftCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
-			long rightCrossoverPoint;
-			do {
-				rightCrossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
-			} while (leftCrossoverPoint == rightCrossoverPoint);
-
-			for (long j = leftCrossoverPoint; j < rightCrossoverPoint; j++) {
-				swapValues(variableDescriptors, leftParent.getEntityByClassAndId(entityClass, j),
-						leftScoreDirector,
-						rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
-			}
+		for (long j = leftCrossoverPoint; j < rightCrossoverPoint; j++) {
+			swapValues(leftParent.getEntityByClassAndId(entityClass, j), leftScoreDirector,
+					rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
 		}
 	}
 }

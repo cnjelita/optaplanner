@@ -37,10 +37,10 @@
   <termination>
     <maximumSecondsSpend>100</maximumSecondsSpend>
   </termination>
-  <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-    <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
-  </constructionHeuristic>
+  <!--<constructionHeuristic>-->
+    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+    <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
   <!--<localSearch>-->
   <!--<acceptor>-->
   <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
@@ -51,15 +51,16 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>40</populationSize>
-      <elitistSize>1</elitistSize>
+      <populationSize>60</populationSize>
+      <elitistSize>0</elitistSize>
     </populationParameters>
-    <mutationOperator>
-      <unionMoveSelector>
-        <swapMoveSelector/>
-        <changeMoveSelector/>
-      </unionMoveSelector>
-    </mutationOperator>
+    <!--<mutationOperator>-->
+      <!--<unionMoveSelector>-->
+        <!--<swapMoveSelector/>-->
+        <!--<changeMoveSelector/>-->
+        <!--&lt;!&ndash;<pillarSwapMoveSelector/>&ndash;&gt;-->
+      <!--</unionMoveSelector>-->
+    <!--</mutationOperator>-->
     <stochasticUniversalSamplingSelector/>
     <!--<tournamentSelector>-->
     <!--<tournamentSize>3</tournamentSize>-->

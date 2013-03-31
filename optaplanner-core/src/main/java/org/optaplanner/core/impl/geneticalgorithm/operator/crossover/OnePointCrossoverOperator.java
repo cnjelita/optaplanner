@@ -16,43 +16,21 @@
 
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.Individual;
-import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.core.impl.util.RandomUtils;
 
 public class OnePointCrossoverOperator extends AbstractCrossoverOperator {
 
 	@Override
-	public void performCrossover(GeneticAlgorithmStepScope stepScope) {
-		List<ScoreDirector> individuals = stepScope.getIntermediatePopulation().getIndividuals();
-		int populationSize = stepScope.getIntermediatePopulationSize();
-
-		Collections.shuffle(individuals, workingRandom);
-
-		for (int i = 0; i < populationSize / 2; i += 2) {
-			ScoreDirector leftScoreDirector = individuals.get(i);
-			Individual leftParent = (Individual) leftScoreDirector.getWorkingSolution();
-			ScoreDirector rightScoreDirector = individuals.get(i + 1);
-			Individual rightParent = (Individual) rightScoreDirector.getWorkingSolution();
-
-			Class<?> entityClass = entityClassList.get(workingRandom.nextInt(entityListClassSize));
-			Collection<PlanningVariableDescriptor> variableDescriptors = entityClassToVariableDescriptorMap.get(
-					entityClass);
-
-			long entitySize = leftParent.getEntitySize(entityClass);
-			long crossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
-
-			for (long j = 0; j < crossoverPoint; j++) {
-				swapValues(variableDescriptors, leftParent.getEntityByClassAndId(entityClass, j),
-						leftScoreDirector,
-						rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
-			}
+	protected void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
+		Individual leftParent = (Individual) leftScoreDirector.getWorkingSolution();
+		Individual rightParent = (Individual) rightScoreDirector.getWorkingSolution();
+		long entitySize = leftParent.getEntitySize(entityClass);
+		long crossoverPoint = RandomUtils.nextLong(workingRandom, entitySize);
+		for (long j = 0; j < crossoverPoint; j++) {
+			swapValues(leftParent.getEntityByClassAndId(entityClass, j),
+					leftScoreDirector, rightParent.getEntityByClassAndId(entityClass, j), rightScoreDirector);
 		}
 	}
 

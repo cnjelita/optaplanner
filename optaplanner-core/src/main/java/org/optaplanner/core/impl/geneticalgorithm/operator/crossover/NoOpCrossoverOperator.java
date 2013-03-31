@@ -16,12 +16,12 @@
 
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
-import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public class NoOpCrossoverOperator extends AbstractCrossoverOperator {
 
 	@Override
-	public void performCrossover(GeneticAlgorithmStepScope stepScope) {
+	protected void performCrossover(ScoreDirector leftScoreDirector, ScoreDirector rightScoreDirector) {
 		//Do nothing as this is the no operation crossover operator
 	}
 }

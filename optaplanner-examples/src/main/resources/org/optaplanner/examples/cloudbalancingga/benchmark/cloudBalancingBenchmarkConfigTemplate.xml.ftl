@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plannerBenchmark>
-  <benchmarkDirectory>local/data/cloudbalancing/template</benchmarkDirectory>
-  <parallelBenchmarkCount>AUTO</parallelBenchmarkCount>
-  <warmUpSecondsSpend>30</warmUpSecondsSpend>
+  <benchmarkDirectory>local/data/cloudbalancingga/template</benchmarkDirectory>
+  <parallelBenchmarkCount>1</parallelBenchmarkCount>
+  <!--<warmUpSecondsSpend>4</warmUpSecondsSpend>-->
 
   <inheritedSolverBenchmark>
     <problemBenchmarks>
-      <xstreamAnnotatedClass>org.optaplanner.examples.cloudbalancing.domain.CloudBalance</xstreamAnnotatedClass>
+      <xstreamAnnotatedClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</xstreamAnnotatedClass>
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0002comp-0006proc.xml</inputSolutionFile>-->
-      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0003comp-0009proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancingga/unsolved/cb-0003comp-0009proc.xml</inputSolutionFile>-->
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0004comp-0012proc.xml</inputSolutionFile>-->
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>-->
       <inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>-->
       <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
     </problemBenchmarks>
-
     <solver>
-      <solutionClass>org.optaplanner.examples.cloudbalancing.domain.CloudBalance</solutionClass>
-      <planningEntityClass>org.optaplanner.examples.cloudbalancing.domain.CloudProcess</planningEntityClass>
+      <solutionClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</solutionClass>
+      <planningEntityClass>org.optaplanner.examples.cloudbalancingga.domain.CloudProcess</planningEntityClass>
       <scoreDirectorFactory>
         <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
-        <scoreDrl>/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl</scoreDrl>
+        <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>
       </scoreDirectorFactory>
       <termination>
-        <maximumMinutesSpend>5</maximumMinutesSpend>
+        <maximumMinutesSpend>4</maximumMinutesSpend>
       </termination>
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-        <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
-      </constructionHeuristic>
     </solver>
   </inheritedSolverBenchmark>
 
-<#list [5, 7, 11, 13] as planningEntityTabuSize>
-<#list [500, 1000, 2000] as minimalAcceptedSelection>
+  <#list [20, 40, 80, 120, 150, 250, 350, 400] as popsize>
   <solverBenchmark>
-    <name>entityTabu ${planningEntityTabuSize} acceptedSelection ${minimalAcceptedSelection}</name>
+    <name>Genetic Algorithm with stochasticUniversalSampling popsize ${popsize}</name>
     <solver>
-      <localSearch>
-        <unionMoveSelector>
-          <changeMoveSelector/>
-          <swapMoveSelector/>
-        </unionMoveSelector>
-        <acceptor>
-          <planningEntityTabuSize>${planningEntityTabuSize}</planningEntityTabuSize>
-        </acceptor>
-        <forager>
-          <minimalAcceptedSelection>${minimalAcceptedSelection}</minimalAcceptedSelection>
-        </forager>
-      </localSearch>
+      <!--<constructionHeuristic>-->
+      <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+      <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+      <!--</constructionHeuristic>-->
+      <geneticAlgorithm>
+        <populationParameters>
+          <populationSize>${popsize}</populationSize>
+          <elitistSize>0</elitistSize>
+        </populationParameters>
+        <!--<rouletteWheelSelector/>-->
+        <stochasticUniversalSamplingSelector/>
+        <mutationOperator>
+          <unionMoveSelector>
+            <swapMoveSelector/>
+            <changeMoveSelector/>
+          </unionMoveSelector>
+        </mutationOperator>
+        <uniformCrossoverOperator/>
+        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+      </geneticAlgorithm>
     </solver>
   </solverBenchmark>
 </#list>
-</#list>
-</plannerBenchmark>
+    </plannerBenchmark>

@@ -1,63 +1,42 @@
 package org.optaplanner.core.impl.geneticalgorithm.operator.crossover;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import org.optaplanner.core.impl.domain.entity.PlanningEntityDescriptor;
-import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
-import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
-import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
-import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.impl.heuristic.selector.move.generic.chained.ChainedSwapMove;
+import org.optaplanner.core.impl.move.Move;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public abstract class AbstractChainingCrossoverOperator extends
-		GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-		CrossoverOperator {
+		AbstractCrossoverOperator {
 
-	protected Random workingRandom;
-	protected SolutionDescriptor solutionDescriptor;
-	protected ArrayList<Class<?>> entityClassList;
-	protected int entityListClassSize;
-	protected HashMap<Class<?>, Collection<PlanningVariableDescriptor>> entityClassToVariableDescriptorMap;
+	private PlanningVariableDescriptor chainedPlanningVariableDescriptor;
 
-	@Override
-	public abstract void performCrossover(GeneticAlgorithmStepScope stepScope);
-
-	@Override
-	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		super.phaseStarted(phaseScope);
-		workingRandom = phaseScope.getWorkingRandom();
-		solutionDescriptor = phaseScope.getSolutionDescriptor();
-		entityClassList = new ArrayList<Class<?>>();
-		Set<Class<?>> entityClassSet = solutionDescriptor.getPlanningEntityClassSet();
-		entityListClassSize = entityClassSet.size();
-		entityClassToVariableDescriptorMap = new HashMap<Class<?>, Collection<PlanningVariableDescriptor>>();
-		for (Class<?> entityClass : entityClassSet) {
-			entityClassList.add(entityClass);
-			//TODO check for chaining!
-			entityClassToVariableDescriptorMap.put(entityClass,
-					solutionDescriptor.getPlanningEntityDescriptor(entityClass).getPlanningVariableDescriptors());
-		}
-	}
-
-	protected List<Object> getOrderedList(Object planningEntity, ScoreDirector scoreDirector,
-			PlanningVariableDescriptor chainedVariableDescriptor) {
+	protected List<Object> getOrderedList(ScoreDirector scoreDirector) {
+		Object entity = solutionDescriptor.getPlanningEntityDescriptor(entityClass).extractEntities(
+				scoreDirector.getWorkingSolution()).get(0);
 		List<Object> orderedList = new ArrayList<Object>();
-		PlanningEntityDescriptor entityDescriptor = chainedVariableDescriptor.getPlanningEntityDescriptor();
-		while (scoreDirector.getTrailingEntity(chainedVariableDescriptor, planningEntity) != null) {
-			planningEntity = scoreDirector.getTrailingEntity(chainedVariableDescriptor, planningEntity);
+		PlanningEntityDescriptor entityDescriptor = chainedPlanningVariableDescriptor.getPlanningEntityDescriptor();
+		while (scoreDirector.getTrailingEntity(chainedPlanningVariableDescriptor, entity) != null) {
+			entity = scoreDirector.getTrailingEntity(chainedPlanningVariableDescriptor, entity);
 		}
-		while (planningEntity != null && entityDescriptor.appliesToPlanningEntity(planningEntity)) {
-			orderedList.add(planningEntity);
-			planningEntity = chainedVariableDescriptor.getValue(planningEntity);
+		while (entity != null && entityDescriptor.appliesToPlanningEntity(entity)) {
+			orderedList.add(entity);
+			entity = chainedPlanningVariableDescriptor.getValue(entity);
 		}
 		Collections.reverse(orderedList);
 		return orderedList;
+	}
+
+	public void setChainedPlanningVariableDescriptor(PlanningVariableDescriptor planningVariableDescriptor) {
+		this.chainedPlanningVariableDescriptor = planningVariableDescriptor;
+	}
+
+	protected void performMove(ScoreDirector leftScoreDirector, Object fromObject, Object toObject) {
+		Move move = new ChainedSwapMove(planningVariableDescriptors, fromObject, toObject);
+		move.doMove(leftScoreDirector);
 	}
 }

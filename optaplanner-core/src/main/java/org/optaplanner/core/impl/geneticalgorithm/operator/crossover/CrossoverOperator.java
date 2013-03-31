@@ -29,4 +29,6 @@ public interface CrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCycleL
 	 */
 	void performCrossover(GeneticAlgorithmStepScope stepScope);
 
+	void setCrossoverRate(double crossoverRate);
+
 }

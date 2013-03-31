@@ -38,6 +38,7 @@ import org.optaplanner.core.impl.geneticalgorithm.initializer.PopulationInitiali
 import org.optaplanner.core.impl.geneticalgorithm.initializer.RandomPopulationInitializer;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.CrossoverOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.NoOpCrossoverOperator;
+import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.UnionCrossoverOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.SolutionSelector;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.TournamentSelector;
@@ -74,54 +75,6 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 	private List<PopulationInitializerConfig> populationInitializerConfigList = null;
 
 	private ReplacementStrategyType replacementStrategyType = null;
-
-	public PopulationParametersConfig getPopulationParametersConfig() {
-		return populationParametersConfig;
-	}
-
-	public void setPopulationParametersConfig(PopulationParametersConfig populationParametersConfig) {
-		this.populationParametersConfig = populationParametersConfig;
-	}
-
-	public List<SolutionSelectorConfig> getSolutionSelectorConfigList() {
-		return solutionSelectorConfigList;
-	}
-
-	public void setSolutionSelectorConfigList(List<SolutionSelectorConfig> solutionSelectorConfigList) {
-		this.solutionSelectorConfigList = solutionSelectorConfigList;
-	}
-
-	public List<CrossoverOperatorConfig> getCrossoverOperatorConfigList() {
-		return crossoverOperatorConfigList;
-	}
-
-	public void setCrossoverOperatorConfigList(List<CrossoverOperatorConfig> crossoverOperatorConfigList) {
-		this.crossoverOperatorConfigList = crossoverOperatorConfigList;
-	}
-
-	public List<MutationOperatorConfig> getMutationOperatorConfig() {
-		return mutationOperatorConfigList;
-	}
-
-	public void setMutationOperatorConfig(List<MutationOperatorConfig> mutationOperatorConfig) {
-		this.mutationOperatorConfigList = mutationOperatorConfig;
-	}
-
-	public List<PopulationInitializerConfig> getPopulationInitializerConfigList() {
-		return populationInitializerConfigList;
-	}
-
-	public void setPopulationInitializerConfigList(List<PopulationInitializerConfig> populationInitializerConfigList) {
-		this.populationInitializerConfigList = populationInitializerConfigList;
-	}
-
-	public ReplacementStrategyType getReplacementStrategyType() {
-		return replacementStrategyType;
-	}
-
-	public void setReplacementStrategyType(ReplacementStrategyType replacementStrategyType) {
-		this.replacementStrategyType = replacementStrategyType;
-	}
 
 // ************************************************************************
 	// Builder methods
@@ -220,7 +173,17 @@ public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 			//TODO or keep using no crossover as default?
 			crossoverOperator = new NoOpCrossoverOperator();
 		} else if (crossoverOperatorConfigList.size() == 1) {
-			crossoverOperator = crossoverOperatorConfigList.get(0).buildCrossoverOperator(solutionDescriptor);
+			List<CrossoverOperator> crossoverOperators = crossoverOperatorConfigList.get(0).buildCrossoverOperator(
+					null, solutionDescriptor);
+			if (crossoverOperators.size() > 0) {
+				UnionCrossoverOperator unionCrossoverOperator = new UnionCrossoverOperator();
+				for (CrossoverOperator co : crossoverOperators) {
+					unionCrossoverOperator.addCrossoverOperator(co);
+				}
+				crossoverOperator = unionCrossoverOperator;
+			} else {
+				crossoverOperator = crossoverOperators.get(0);
+			}
 		} else {
 			throw new IllegalArgumentException("The crossoverOperatorConfigList (" + crossoverOperatorConfigList
 					+ ") cannot contain multiple items.");

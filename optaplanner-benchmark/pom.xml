@@ -77,7 +77,7 @@
           <instructions>
             <Bundle-SymbolicName>org.optaplanner.benchmark</Bundle-SymbolicName>
             <Export-Package>
-              org.optaplanner.benchmark.*
+              org.optaplanner.org.optaplanner.examples.pfsga.benchmark.*
             </Export-Package>
           </instructions>
         </configuration>

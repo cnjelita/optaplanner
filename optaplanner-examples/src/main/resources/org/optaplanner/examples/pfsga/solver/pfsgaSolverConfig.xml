@@ -29,55 +29,60 @@
   <termination>
     <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
-  <!--<constructionHeuristic>-->
-    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-  <!--</constructionHeuristic>-->
-  <!--<localSearch>-->
-    <!--<unionMoveSelector>-->
-      <!--<changeMoveSelector>-->
-        <!--<cacheType>PHASE</cacheType>-->
-        <!--<selectionOrder>SHUFFLED</selectionOrder>-->
-      <!--</changeMoveSelector>-->
-      <!--&lt;!&ndash;<swapMoveSelector>&ndash;&gt;-->
-      <!--&lt;!&ndash;<cacheType>PHASE</cacheType>&ndash;&gt;-->
-      <!--&lt;!&ndash;<selectionOrder>SHUFFLED</selectionOrder>&ndash;&gt;-->
-      <!--&lt;!&ndash;</swapMoveSelector>&ndash;&gt;-->
-      <!--<subChainChangeMoveSelector>-->
-        <!--<subChainSelector>-->
-          <!--<maximumSubChainSize>13</maximumSubChainSize>-->
-        <!--</subChainSelector>-->
-        <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-      <!--</subChainChangeMoveSelector>-->
-      <!--&lt;!&ndash;<subChainSwapMoveSelector>&ndash;&gt;-->
-      <!--&lt;!&ndash;<selectReversingMoveToo>false</selectReversingMoveToo>&ndash;&gt;-->
-      <!--&lt;!&ndash;</subChainSwapMoveSelector>&ndash;&gt;-->
-    <!--</unionMoveSelector>-->
-    <!--<acceptor>-->
-      <!--<planningEntityTabuSize>2</planningEntityTabuSize>-->
-    <!--</acceptor>-->
-    <!--<forager>-->
-      <!--<minimalAcceptedSelection>5000</minimalAcceptedSelection>-->
-    <!--</forager>-->
-  <!--</localSearch>-->
+  <constructionHeuristic>
+  <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  </constructionHeuristic>
+  <localSearch>
+    <termination>
+      <maximumSecondsSpend>30</maximumSecondsSpend>
+    </termination>
+  <!--<unionMoveSelector>-->
+  <!--<changeMoveSelector>-->
+  <!--<cacheType>PHASE</cacheType>-->
+  <!--<selectionOrder>SHUFFLED</selectionOrder>-->
+  <!--</changeMoveSelector>-->
+  <!--&lt;!&ndash;<swapMoveSelector>&ndash;&gt;-->
+  <!--&lt;!&ndash;<cacheType>PHASE</cacheType>&ndash;&gt;-->
+  <!--&lt;!&ndash;<selectionOrder>SHUFFLED</selectionOrder>&ndash;&gt;-->
+  <!--&lt;!&ndash;</swapMoveSelector>&ndash;&gt;-->
+  <!--<subChainChangeMoveSelector>-->
+  <!--<subChainSelector>-->
+  <!--<maximumSubChainSize>13</maximumSubChainSize>-->
+  <!--</subChainSelector>-->
+  <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+  <!--</subChainChangeMoveSelector>-->
+  <!--&lt;!&ndash;<subChainSwapMoveSelector>&ndash;&gt;-->
+  <!--&lt;!&ndash;<selectReversingMoveToo>false</selectReversingMoveToo>&ndash;&gt;-->
+  <!--&lt;!&ndash;</subChainSwapMoveSelector>&ndash;&gt;-->
+  <!--</unionMoveSelector>-->
+  <acceptor>
+  <planningEntityTabuSize>17</planningEntityTabuSize>
+  </acceptor>
+  <forager>
+  <minimalAcceptedSelection>500</minimalAcceptedSelection>
+  </forager>
+  </localSearch>
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>175</populationSize>
+      <populationSize>550</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
     <stochasticUniversalSamplingSelector/>
-    <cycleCrossoverOperator/>
-    <mutationOperator>
-      <unionMoveSelector>
-        <swapMoveSelector/>
-        <changeMoveSelector/>
-        <subChainChangeMoveSelector>
-          <subChainSelector>
-            <maximumSubChainSize>7</maximumSubChainSize>
-          </subChainSelector>
-          <selectReversingMoveToo>true</selectReversingMoveToo>
-        </subChainChangeMoveSelector>
-      </unionMoveSelector>
-    </mutationOperator>
+    <cycleCrossoverOperator>
+      <crossoverRate>1</crossoverRate>
+    </cycleCrossoverOperator>
+    <!--<mutationOperator>-->
+    <!--<unionMoveSelector>-->
+    <!--&lt;!&ndash;<swapMoveSelector/>&ndash;&gt;-->
+    <!--<changeMoveSelector/>-->
+    <!--&lt;!&ndash;<subChainChangeMoveSelector>&ndash;&gt;-->
+    <!--&lt;!&ndash;<subChainSelector>&ndash;&gt;-->
+    <!--&lt;!&ndash;<maximumSubChainSize>50</maximumSubChainSize>&ndash;&gt;-->
+    <!--&lt;!&ndash;</subChainSelector>&ndash;&gt;-->
+    <!--&lt;!&ndash;<selectReversingMoveToo>true</selectReversingMoveToo>&ndash;&gt;-->
+    <!--&lt;!&ndash;</subChainChangeMoveSelector>&ndash;&gt;-->
+    <!--</unionMoveSelector>-->
+    <!--</mutationOperator>-->
     <replacementStrategyType>KEEP_NEW</replacementStrategyType>
   </geneticAlgorithm>
 </solver>

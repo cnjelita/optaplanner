@@ -17,16 +17,14 @@
 package org.optaplanner.core.config.geneticalgorithm.operator.crossover;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
-import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.CrossoverOperator;
+import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.AbstractCrossoverOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.UniformCrossoverOperator;
 
 @XStreamAlias("uniformCrossoverOperator")
 public class UniformCrossoverConfig extends CrossoverOperatorConfig {
 
 	@Override
-	public CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor) {
-		UniformCrossoverOperator uniformCrossoverOperator = new UniformCrossoverOperator();
-		return uniformCrossoverOperator;
+	protected AbstractCrossoverOperator createInstance() {
+		return new UniformCrossoverOperator();
 	}
 }

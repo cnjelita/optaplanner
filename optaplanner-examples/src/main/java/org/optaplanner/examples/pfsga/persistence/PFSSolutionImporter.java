@@ -15,6 +15,12 @@ import org.optaplanner.examples.pfsga.model.StartingJob;
 
 public class PFSSolutionImporter extends AbstractTxtSolutionImporter {
 
+	private static final String INPUT_FILE_SUFFIX = ".txt";
+
+	public static void main(String[] args) {
+		new PFSSolutionImporter().convertAll();
+	}
+
 	public PFSSolutionImporter() {
 		super(new PFSDaoImpl());
 	}
