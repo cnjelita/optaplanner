@@ -64,26 +64,27 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>80</populationSize>
+      <populationSize>140</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
-    <stochasticUniversalSamplingSelector/>
-    <uniformOrderCrossoverOperator/>
+    <rankBasedSelector/>
+    <!--<partiallyMatchedCrossoverOperator/>-->
     <!--<tournamentSelector>-->
     <!--<tournamentSize>20s</tournamentSize>-->
     <!--</tournamentSelector>-->
-    <!--<mutationOperator>-->
-    <!--<unionMoveSelector>-->
-    <!--&lt;!&ndash;<swapMoveSelector/>&ndash;&gt;-->
-    <!--<changeMoveSelector/>-->
-    <!--&lt;!&ndash;<subChainChangeMoveSelector>&ndash;&gt;-->
-    <!--&lt;!&ndash;<subChainSelector>&ndash;&gt;-->
-    <!--&lt;!&ndash;<maximumSubChainSize>50</maximumSubChainSize>&ndash;&gt;-->
-    <!--&lt;!&ndash;</subChainSelector>&ndash;&gt;-->
-    <!--&lt;!&ndash;<selectReversingMoveToo>true</selectReversingMoveToo>&ndash;&gt;-->
-    <!--&lt;!&ndash;</subChainChangeMoveSelector>&ndash;&gt;-->
-    <!--</unionMoveSelector>-->
-    <!--</mutationOperator>-->
+    <mutationOperator>
+      <unionMoveSelector>
+        <swapMoveSelector/>
+        <changeMoveSelector/>
+        <subChainChangeMoveSelector>
+          <subChainSelector>
+            <maximumSubChainSize>50</maximumSubChainSize>
+          </subChainSelector>
+          <selectReversingMoveToo>true</selectReversingMoveToo>
+        </subChainChangeMoveSelector>
+      </unionMoveSelector>
+    </mutationOperator>
+
     <replacementStrategyType>KEEP_NEW</replacementStrategyType>
   </geneticAlgorithm>
 </solver>

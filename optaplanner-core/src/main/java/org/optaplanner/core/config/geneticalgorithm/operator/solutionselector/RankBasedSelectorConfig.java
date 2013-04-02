@@ -16,20 +16,16 @@
 
 package org.optaplanner.core.config.geneticalgorithm.operator.solutionselector;
 
-import com.thoughtworks.xstream.annotations.XStreamInclude;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
+import org.optaplanner.core.impl.geneticalgorithm.operator.selector.RankBasedSelector;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.SolutionSelector;
 
-//TODO add possible selection operators for XStream
-//TODO rename to selection operator?
-@XStreamInclude({
-        TournamentSelectorConfig.class,
-        RouletteWheelSelectorConfig.class,
-        StochasticUniversalSamplingSelectorConfig.class,
-        TruncationSelectorConfig.class,
-        RankBasedSelectorConfig.class
-})
-public abstract class SolutionSelectorConfig {
+@XStreamAlias("rankBasedSelector")
+public class RankBasedSelectorConfig extends SolutionSelectorConfig {
 
-    public abstract SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor);
+    @Override
+    public SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
+        return new RankBasedSelector();
+    }
 }

@@ -16,20 +16,26 @@
 
 package org.optaplanner.core.config.geneticalgorithm.operator.solutionselector;
 
-import com.thoughtworks.xstream.annotations.XStreamInclude;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.SolutionSelector;
+import org.optaplanner.core.impl.geneticalgorithm.operator.selector.TruncationSelector;
 
-//TODO add possible selection operators for XStream
-//TODO rename to selection operator?
-@XStreamInclude({
-        TournamentSelectorConfig.class,
-        RouletteWheelSelectorConfig.class,
-        StochasticUniversalSamplingSelectorConfig.class,
-        TruncationSelectorConfig.class,
-        RankBasedSelectorConfig.class
-})
-public abstract class SolutionSelectorConfig {
+@XStreamAlias("truncationSelector")
+public class TruncationSelectorConfig extends SolutionSelectorConfig {
 
-    public abstract SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor);
+    private Double threshold = null;
+
+    @Override
+    public SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
+        if (threshold == null) {
+            throw new IllegalArgumentException("Please select a threshold for the truncation selector");
+        }
+        if (threshold > 1 || threshold <= 0) {
+            throw new IllegalArgumentException("The threshold for the truncation selector should be between" +
+                    " 0 and 1");
+        }
+        return new TruncationSelector(threshold);
+
+    }
 }
