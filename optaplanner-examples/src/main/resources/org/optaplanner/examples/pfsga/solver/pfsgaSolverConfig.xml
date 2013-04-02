@@ -64,7 +64,7 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>140</populationSize>
+      <populationSize>350</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
     <rankBasedSelector/>
@@ -73,6 +73,7 @@
     <!--<tournamentSize>20s</tournamentSize>-->
     <!--</tournamentSelector>-->
     <mutationOperator>
+      <mutationRate>1</mutationRate>
       <unionMoveSelector>
         <swapMoveSelector/>
         <changeMoveSelector/>

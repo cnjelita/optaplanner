@@ -51,24 +51,29 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>120</populationSize>
-      <elitistSize>0</elitistSize>
+      <populationSize>350</populationSize>
+      <elitistSize>1</elitistSize>
     </populationParameters>
-    <tournamentSelector>
-      <tournamentSize>40</tournamentSize>
-    </tournamentSelector>
-    <!--<rouletteWheelSelector/>-->
-    <!--<mutationOperator>-->
-    <!--<unionMoveSelector>-->
-    <!--<swapMoveSelector/>-->
-    <!--<changeMoveSelector/>-->
-    <!--&lt;!&ndash;<pillarSwapMoveSelector/>&ndash;&gt;-->
-    <!--</unionMoveSelector>-->
-    <!--</mutationOperator>-->
-    <!--<stochasticUniversalSamplingSelector/>-->
     <!--<tournamentSelector>-->
-    <!--<tournamentSize>3</tournamentSize>-->
+    <!--<tournamentSize>40</tournamentSize>-->
     <!--</tournamentSelector>-->
+
+    <!--<rouletteWheelSelector/>-->
+    <mutationOperator>
+      <mutationRate>1</mutationRate>
+      <unionMoveSelector>
+        <swapMoveSelector/>
+        <changeMoveSelector/>
+        <!--<pillarSwapMoveSelector/>-->
+      </unionMoveSelector>
+    </mutationOperator>
+    <truncationSelector>
+      <threshold>0.1</threshold>
+    </truncationSelector>
+    <!--<tournamentSelector>-->
+    <!--<tournamentSize>60</tournamentSize>-->
+    <!--</tournamentSelector>-->
+    <!--<rankBasedSelector/>-->
     <replacementStrategyType>KEEP_NEW</replacementStrategyType>
     <!--<uniformCrossoverOperator/>-->
     <twoPointCrossoverOperator/>

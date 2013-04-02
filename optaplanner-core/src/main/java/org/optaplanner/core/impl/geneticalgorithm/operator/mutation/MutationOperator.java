@@ -17,6 +17,7 @@
 package org.optaplanner.core.impl.geneticalgorithm.operator.mutation;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import org.optaplanner.core.impl.geneticalgorithm.Population;
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
@@ -30,46 +31,59 @@ import org.optaplanner.core.impl.solver.scope.DefaultSolverScope;
 //TODO Should this be called DefaultMutationOperator?
 public class MutationOperator extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter {
 
-	private MoveSelector moveSelector;
+    private MoveSelector moveSelector;
+    private int mutationRate;
+    private Random workingRandom;
 
-	public void setMoveSelector(MoveSelector moveSelector) {
-		this.moveSelector = moveSelector;
-	}
+    public void setMoveSelector(MoveSelector moveSelector) {
+        this.moveSelector = moveSelector;
+    }
 
-	public MoveSelector getMoveSelector() {
-		return moveSelector;
-	}
+    public MoveSelector getMoveSelector() {
+        return moveSelector;
+    }
 
-	public void performMutation(GeneticAlgorithmStepScope stepScope) {
+    public void performMutation(GeneticAlgorithmStepScope stepScope) {
 
-		Population population = stepScope.getIntermediatePopulation();
-		for (ScoreDirector scoreDirector : population) {
-			//TODO make moveselectors more population friendly so there's need to do the two things below
-			stepScope.getPhaseScope().getSolverScope().setScoreDirector(scoreDirector);
-			moveSelector.stepStarted(stepScope);
+        Population population = stepScope.getIntermediatePopulation();
+        for (ScoreDirector scoreDirector : population) {
+            //TODO make moveselectors more population friendly so there's need to do the two things below
+            stepScope.getPhaseScope().getSolverScope().setScoreDirector(scoreDirector);
 
-			Iterator<Move> moveIterator = moveSelector.iterator();
-			boolean foundDoableMove = false;
-			Move move = null;
-			while (moveIterator.hasNext() && !foundDoableMove) {
-				move = moveIterator.next();
-				foundDoableMove = move.isMoveDoable(scoreDirector);
-			}
-			if (move != null) {
-				move.doMove(scoreDirector);
-			}
-		}
-	}
+            int mutationCount = 0;
+            int numberOfMutations = mutationRate;
 
-	@Override
-	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		super.phaseStarted(phaseScope);
-		moveSelector.phaseStarted(phaseScope);
-	}
+            while (mutationCount < numberOfMutations) {
+                moveSelector.stepStarted(stepScope);
+                Iterator<Move> moveIterator = moveSelector.iterator();
+                boolean foundDoableMove = false;
+                Move move = null;
+                while (moveIterator.hasNext() && !foundDoableMove) {
+                    move = moveIterator.next();
+                    foundDoableMove = move.isMoveDoable(scoreDirector);
+                }
+                if (move != null) {
+                    move.doMove(scoreDirector);
+                }
+                mutationCount++;
+            }
+        }
+    }
 
-	@Override
-	public void solvingStarted(DefaultSolverScope solverScope) {
-		super.solvingStarted(solverScope);
-		moveSelector.solvingStarted(solverScope);
-	}
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        super.phaseStarted(phaseScope);
+        moveSelector.phaseStarted(phaseScope);
+        workingRandom = phaseScope.getWorkingRandom();
+    }
+
+    @Override
+    public void solvingStarted(DefaultSolverScope solverScope) {
+        super.solvingStarted(solverScope);
+        moveSelector.solvingStarted(solverScope);
+    }
+
+    public void setMutationRate(int mutationRate) {
+        this.mutationRate = mutationRate;
+    }
 }

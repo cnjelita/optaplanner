@@ -36,49 +36,61 @@ import org.optaplanner.core.impl.heuristic.selector.move.MoveSelector;
 @XStreamAlias("mutationOperator")
 public class MutationOperatorConfig {
 
-	// TODO This is a List due to XStream limitations. With JAXB it could be just a MoveSelectorConfig instead.
-	@XStreamImplicit()
-	private List<MoveSelectorConfig> moveSelectorConfigList = null;
-	//TODO maybe add something like mutationRate?
+    // TODO This is a List due to XStream limitations. With JAXB it could be just a MoveSelectorConfig instead.
+    @XStreamImplicit()
+    private List<MoveSelectorConfig> moveSelectorConfigList = null;
 
-	public MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
-			SolutionDescriptor solutionDescriptor, SelectionCacheType defaultCacheType,
-			SelectionOrder defaultSelectionOrder) {
+    private Integer mutationRate = null;
 
-		MutationOperator mutationOperator = new MutationOperator();
-		mutationOperator.setMoveSelector(buildMoveSelector(environmentMode, solutionDescriptor, defaultCacheType,
-				defaultSelectionOrder));
-		return mutationOperator;
-	}
+    public MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
+            SolutionDescriptor solutionDescriptor, SelectionCacheType defaultCacheType,
+            SelectionOrder defaultSelectionOrder) {
 
-	private MoveSelector buildMoveSelector(EnvironmentMode environmentMode, SolutionDescriptor solutionDescriptor,
-			SelectionCacheType cacheType, SelectionOrder selectionOrder) {
-		MoveSelector moveSelector;
-		SelectionCacheType defaultCacheType = cacheType;
-		SelectionOrder defaultSelectionOrder = selectionOrder;
-		if (CollectionUtils.isEmpty(moveSelectorConfigList)) {
-			// Default to changeMoveSelector and swapMoveSelector
-			UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
-			unionMoveSelectorConfig.setMoveSelectorConfigList(Arrays.asList(
-					new ChangeMoveSelectorConfig(), new SwapMoveSelectorConfig()));
-			moveSelector = unionMoveSelectorConfig.buildMoveSelector(environmentMode, solutionDescriptor,
-					defaultCacheType, defaultSelectionOrder);
-		} else if (moveSelectorConfigList.size() == 1) {
-			moveSelector = moveSelectorConfigList.get(0).buildMoveSelector(
-					environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
-			//  TODO FAIL FAST if cacheType is something other than jit? Can be updated?
+        MutationOperator mutationOperator = new MutationOperator();
+        mutationOperator.setMutationRate(buildMutationRate());
+        mutationOperator.setMoveSelector(buildMoveSelector(environmentMode, solutionDescriptor, defaultCacheType,
+                defaultSelectionOrder));
+        return mutationOperator;
+    }
+
+    private int buildMutationRate() {
+        int chosenMutationRate = 1;
+        if (mutationRate != null && mutationRate <= 0) {
+            throw new IllegalArgumentException("Mutationrate should be between 0 and 1");
+        } else if (mutationRate != null) {
+            chosenMutationRate = mutationRate;
+        }
+        return chosenMutationRate;
+    }
+
+    private MoveSelector buildMoveSelector(EnvironmentMode environmentMode, SolutionDescriptor solutionDescriptor,
+            SelectionCacheType cacheType, SelectionOrder selectionOrder) {
+        MoveSelector moveSelector;
+        SelectionCacheType defaultCacheType = cacheType;
+        SelectionOrder defaultSelectionOrder = selectionOrder;
+        if (CollectionUtils.isEmpty(moveSelectorConfigList)) {
+            // Default to changeMoveSelector and swapMoveSelector
+            UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
+            unionMoveSelectorConfig.setMoveSelectorConfigList(Arrays.asList(
+                    new ChangeMoveSelectorConfig(), new SwapMoveSelectorConfig()));
+            moveSelector = unionMoveSelectorConfig.buildMoveSelector(environmentMode, solutionDescriptor,
+                    defaultCacheType, defaultSelectionOrder);
+        } else if (moveSelectorConfigList.size() == 1) {
+            moveSelector = moveSelectorConfigList.get(0).buildMoveSelector(
+                    environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
+            //  TODO FAIL FAST if cacheType is something other than jit? Can be updated?
 //			System.out.println(moveSelector.getCacheType());
-			if (moveSelector.getCacheType() != null &&
-					moveSelector.getCacheType() != defaultCacheType) {
-				throw new IllegalArgumentException("Only JIT move selectors are allowed for mutation operator in " +
-						"genetic algorithms.");
-			}
-		} else {
-			throw new IllegalArgumentException("The moveSelectorConfigList (" + moveSelectorConfigList
-					+ ") must a singleton or empty. Use a single " + UnionMoveSelectorConfig.class
-					+ " element to nest multiple MoveSelectors.");
-		}
-		return moveSelector;
-	}
+            if (moveSelector.getCacheType() != null &&
+                    moveSelector.getCacheType() != defaultCacheType) {
+                throw new IllegalArgumentException("Only JIT move selectors are allowed for mutation operator in " +
+                        "genetic algorithms.");
+            }
+        } else {
+            throw new IllegalArgumentException("The moveSelectorConfigList (" + moveSelectorConfigList
+                    + ") must a singleton or empty. Use a single " + UnionMoveSelectorConfig.class
+                    + " element to nest multiple MoveSelectors.");
+        }
+        return moveSelector;
+    }
 
 }
