@@ -42,9 +42,7 @@ public class CloudBalancingBenchmarkApp extends CommonBenchmarkApp {
 				throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
 			}
 		} else {
-			benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
-			new CloudBalancingBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
-			return;
+            benchmarkConfig = SCORE_DIRECTOR_BENCHMARK_CONFIG;
 		}
 		new CloudBalancingBenchmarkApp().buildAndBenchmark(benchmarkConfig);
 	}

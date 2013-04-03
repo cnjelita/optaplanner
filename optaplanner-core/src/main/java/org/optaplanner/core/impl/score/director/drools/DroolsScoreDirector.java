@@ -17,19 +17,15 @@
 package org.optaplanner.core.impl.score.director.drools;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
-import org.kie.api.runtime.ClassObjectFilter;
-import org.kie.api.runtime.rule.FactHandle;
 import org.kie.api.KieBase;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.constraint.ScoreConstraintMatchTotal;
-import org.optaplanner.core.impl.score.constraint.ConstraintOccurrence;
+import org.optaplanner.core.api.score.holder.ScoreHolder;
 import org.optaplanner.core.impl.score.director.AbstractScoreDirector;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
-import org.optaplanner.core.api.score.holder.ScoreHolder;
 import org.optaplanner.core.impl.solution.Solution;
 
 /**

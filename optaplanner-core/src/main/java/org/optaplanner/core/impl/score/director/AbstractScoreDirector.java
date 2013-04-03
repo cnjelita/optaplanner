@@ -22,16 +22,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.constraint.ScoreConstraintMatch;
 import org.optaplanner.core.api.score.constraint.ScoreConstraintMatchTotal;
 import org.optaplanner.core.impl.domain.solution.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.PlanningVariableDescriptor;
-import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.impl.score.definition.ScoreDefinition;
 import org.optaplanner.core.impl.solution.Solution;
 import org.slf4j.Logger;
@@ -400,6 +399,10 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" + calculateCount + ")";
+    }
+
+    public void addToCalculationCount(int calculateCount) {
+        this.calculateCount += calculateCount;
     }
 
 }

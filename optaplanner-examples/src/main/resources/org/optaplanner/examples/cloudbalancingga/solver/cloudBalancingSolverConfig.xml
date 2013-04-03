@@ -25,9 +25,9 @@
   <!-- Score configuration -->
   <scoreDirectorFactory>
     <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
-    <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingSimpleScoreCalculator</simpleScoreCalculatorClass>-->
+    <simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingSimpleScoreCalculator</simpleScoreCalculatorClass>
     <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancing.solver.score.CloudBalancingMapBasedSimpleScoreCalculator</simpleScoreCalculatorClass>-->
-    <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>
+    <!--<incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
     <!--<assertionScoreDirectorFactory>-->
     <!--<scoreDrl>/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl</scoreDrl>-->
     <!--</assertionScoreDirectorFactory>-->
@@ -51,7 +51,7 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>350</populationSize>
+      <populationSize>10</populationSize>
       <elitistSize>1</elitistSize>
     </populationParameters>
     <!--<tournamentSelector>-->

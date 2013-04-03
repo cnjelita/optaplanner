@@ -28,175 +28,177 @@ import org.optaplanner.core.impl.phase.AbstractSolverPhase;
 import org.optaplanner.core.impl.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
-		implements GeneticAlgorithmSolverPhaseLifeCycleListener {
+        implements GeneticAlgorithmSolverPhaseLifeCycleListener {
 
-	private int populationSize;
+    private int populationSize;
 
-	private boolean assertStepScoreIsUncorrupted;
+    private boolean assertStepScoreIsUncorrupted;
 
-	private SolutionSelector solutionSelector;
-	private CrossoverOperator crossoverOperator;
-	private MutationOperator mutationOperator;
-	private PopulationInitializer populationInitializer;
-	private ReplacementStrategy replacementStrategy;
-	private int elitistSize;
+    private SolutionSelector solutionSelector;
+    private CrossoverOperator crossoverOperator;
+    private MutationOperator mutationOperator;
+    private PopulationInitializer populationInitializer;
+    private ReplacementStrategy replacementStrategy;
+    private int elitistSize;
 
-	public void setSolutionSelector(SolutionSelector solutionSelector) {
-		this.solutionSelector = solutionSelector;
-	}
+    public void setSolutionSelector(SolutionSelector solutionSelector) {
+        this.solutionSelector = solutionSelector;
+    }
 
-	public void setCrossoverOperator(CrossoverOperator crossoverOperator) {
-		this.crossoverOperator = crossoverOperator;
-	}
+    public void setCrossoverOperator(CrossoverOperator crossoverOperator) {
+        this.crossoverOperator = crossoverOperator;
+    }
 
-	public void setMutationOperator(MutationOperator mutationOperator) {
-		this.mutationOperator = mutationOperator;
-	}
+    public void setMutationOperator(MutationOperator mutationOperator) {
+        this.mutationOperator = mutationOperator;
+    }
 
-	public void setPopulationSize(int populationSize) {
-		this.populationSize = populationSize;
-	}
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
 
-	public void setAssertStepScoreIsUncorrupted(boolean assertStepScoreIsUncorrupted) {
-		this.assertStepScoreIsUncorrupted = assertStepScoreIsUncorrupted;
-	}
+    public void setAssertStepScoreIsUncorrupted(boolean assertStepScoreIsUncorrupted) {
+        this.assertStepScoreIsUncorrupted = assertStepScoreIsUncorrupted;
+    }
 
-	public void setPopulationInitializer(PopulationInitializer populationInitializer) {
-		this.populationInitializer = populationInitializer;
-	}
+    public void setPopulationInitializer(PopulationInitializer populationInitializer) {
+        this.populationInitializer = populationInitializer;
+    }
 
-	public void setReplacementStrategy(ReplacementStrategy replacementStrategy) {
-		this.replacementStrategy = replacementStrategy;
-	}
+    public void setReplacementStrategy(ReplacementStrategy replacementStrategy) {
+        this.replacementStrategy = replacementStrategy;
+    }
 
-	@Override
-	public void solve(DefaultSolverScope solverScope) {
-		GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope, populationSize,
-				elitistSize);
-		phaseStarted(phaseScope);
+    @Override
+    public void solve(DefaultSolverScope solverScope) {
+        GeneticAlgorithmSolverPhaseScope phaseScope = new GeneticAlgorithmSolverPhaseScope(solverScope, populationSize,
+                elitistSize);
+        phaseStarted(phaseScope);
 
-		populationInitializer.initializePopulation(phaseScope);
+        populationInitializer.initializePopulation(phaseScope);
 
-		GeneticAlgorithmStepScope stepScope = createNextStepScope(phaseScope, null);
+        GeneticAlgorithmStepScope stepScope = createNextStepScope(phaseScope, null);
 
-		while (!termination.isPhaseTerminated(phaseScope)) {
-			stepStarted(stepScope);
+        while (!termination.isPhaseTerminated(phaseScope)) {
+            stepStarted(stepScope);
 
-			solutionSelector.selectParents(stepScope);
-			crossoverOperator.performCrossover(stepScope);
-			mutationOperator.performMutation(stepScope);
-			replacementStrategy.createNewGeneration(stepScope);
+            solutionSelector.selectParents(stepScope);
+            crossoverOperator.performCrossover(stepScope);
+            mutationOperator.performMutation(stepScope);
+            replacementStrategy.createNewGeneration(stepScope);
 
-			//TODO stepEnded just prints out the current best score, so if score improved it should already
-			//have been notified to phaseScope
-			stepEnded(stepScope);
-			if (assertStepScoreIsUncorrupted) {
-				phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
-				phaseScope.assertExpectedWorkingScore(stepScope.getScore());
-			}
-			stepScope = createNextStepScope(phaseScope, stepScope);
-		}
+            //TODO stepEnded just prints out the current best score, so if score improved it should already
+            //have been notified to phaseScope
+            stepEnded(stepScope);
+            if (assertStepScoreIsUncorrupted) {
+                phaseScope.assertWorkingScoreFromScratch(stepScope.getScore());
+                phaseScope.assertExpectedWorkingScore(stepScope.getScore());
+            }
+            stepScope = createNextStepScope(phaseScope, stepScope);
+        }
 
-		phaseEnded(phaseScope);
-	}
+        phaseEnded(phaseScope);
+    }
 
-	//TODO do genetic algorithms really use step index, or can this method be removed?
-	private GeneticAlgorithmStepScope createNextStepScope(GeneticAlgorithmSolverPhaseScope phaseScope,
-			GeneticAlgorithmStepScope completedStepScope) {
-		if (completedStepScope == null) {
-			completedStepScope = new GeneticAlgorithmStepScope(phaseScope);
-			completedStepScope.setScore(phaseScope.getStartingScore());
-			completedStepScope.setStepIndex(-1);
-			phaseScope.calculateScore();
-		}
-		phaseScope.setLastCompletedStepScope(completedStepScope);
-		GeneticAlgorithmStepScope stepScope = new GeneticAlgorithmStepScope(phaseScope);
-		stepScope.setStepIndex(completedStepScope.getStepIndex() + 1);
-		return stepScope;
-	}
+    //TODO do genetic algorithms really use step index, or can this method be removed?
+    private GeneticAlgorithmStepScope createNextStepScope(GeneticAlgorithmSolverPhaseScope phaseScope,
+            GeneticAlgorithmStepScope completedStepScope) {
+        if (completedStepScope == null) {
+            completedStepScope = new GeneticAlgorithmStepScope(phaseScope);
+            completedStepScope.setScore(phaseScope.getStartingScore());
+            completedStepScope.setStepIndex(-1);
+            phaseScope.calculateScore();
+        }
+        phaseScope.setLastCompletedStepScope(completedStepScope);
+        GeneticAlgorithmStepScope stepScope = new GeneticAlgorithmStepScope(phaseScope);
+        stepScope.setStepIndex(completedStepScope.getStepIndex() + 1);
+        return stepScope;
+    }
 
-	@Override
-	public void solvingStarted(DefaultSolverScope solverScope) {
-		super.solvingStarted(solverScope);
-		mutationOperator.solvingStarted(solverScope);
-	}
+    @Override
+    public void solvingStarted(DefaultSolverScope solverScope) {
+        super.solvingStarted(solverScope);
+        mutationOperator.solvingStarted(solverScope);
+    }
 
-	@Override
-	public void solvingEnded(DefaultSolverScope solverScope) {
-		super.solvingEnded(solverScope);
-	}
+    @Override
+    public void solvingEnded(DefaultSolverScope solverScope) {
+        super.solvingEnded(solverScope);
+    }
 
-	@Override
-	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		//TODO Should something else be done when phase starts?
-		super.phaseStarted(phaseScope);
-		mutationOperator.phaseStarted(phaseScope);
-		//TODO crossover operator should search for variables, values and entities for problem when phase starts.
-		crossoverOperator.phaseStarted(phaseScope);
-		solutionSelector.phaseStarted(phaseScope);
-		populationInitializer.phaseStarted(phaseScope);
-		replacementStrategy.phaseStarted(phaseScope);
-	}
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        //TODO Should something else be done when phase starts?
+        super.phaseStarted(phaseScope);
+        mutationOperator.phaseStarted(phaseScope);
+        //TODO crossover operator should search for variables, values and entities for problem when phase starts.
+        crossoverOperator.phaseStarted(phaseScope);
+        solutionSelector.phaseStarted(phaseScope);
+        populationInitializer.phaseStarted(phaseScope);
+        replacementStrategy.phaseStarted(phaseScope);
+    }
 
-	@Override
-	public void phaseEnded(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		//TODO Should something else be done when phase ends?
-		super.phaseEnded(phaseScope);
-		mutationOperator.phaseEnded(phaseScope);
-		crossoverOperator.phaseEnded(phaseScope);
-		solutionSelector.phaseEnded(phaseScope);
-		populationInitializer.phaseEnded(phaseScope);
-		replacementStrategy.phaseEnded(phaseScope);
+    @Override
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        //TODO Should something else be done when phase ends?
+        super.phaseEnded(phaseScope);
+        mutationOperator.phaseEnded(phaseScope);
+        crossoverOperator.phaseEnded(phaseScope);
+        solutionSelector.phaseEnded(phaseScope);
+        populationInitializer.phaseEnded(phaseScope);
+        replacementStrategy.phaseEnded(phaseScope);
+        phaseScope.getSolverScope()
+                .addToCalculationCount(phaseScope.getPopulationSize() * phaseScope.getLastCompletedStepScope()
+                        .getStepIndex());
+        logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
+                phaseIndex,
+                phaseScope.getLastCompletedStepScope().getStepIndex() + 1,
+                phaseScope.calculateSolverTimeMillisSpend(),
+                phaseScope.getBestScore());
+    }
 
-		logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
-				phaseIndex,
-				phaseScope.getLastCompletedStepScope().getStepIndex() + 1,
-				phaseScope.calculateSolverTimeMillisSpend(),
-				phaseScope.getBestScore());
-	}
+    @Override
+    public void stepStarted(GeneticAlgorithmStepScope stepScope) {
+        //TODO Should something else be done when step starts?
+        super.stepStarted(stepScope);
+        mutationOperator.stepStarted(stepScope);
+        crossoverOperator.stepStarted(stepScope);
+        //TODO solution selector should calculate fitness of individuals in generation during stepStarted
+        solutionSelector.stepStarted(stepScope);
+        populationInitializer.stepStarted(stepScope);
+        replacementStrategy.stepStarted(stepScope);
+    }
 
-	@Override
-	public void stepStarted(GeneticAlgorithmStepScope stepScope) {
-		//TODO Should something else be done when step starts?
-		super.stepStarted(stepScope);
-		mutationOperator.stepStarted(stepScope);
-		crossoverOperator.stepStarted(stepScope);
-		//TODO solution selector should calculate fitness of individuals in generation during stepStarted
-		solutionSelector.stepStarted(stepScope);
-		populationInitializer.stepStarted(stepScope);
-		replacementStrategy.stepStarted(stepScope);
-	}
+    @Override
+    public void stepEnded(GeneticAlgorithmStepScope stepScope) {
+        //TODO Should something else be done when step ends?
+        super.stepEnded(stepScope);
+        mutationOperator.stepEnded(stepScope);
+        crossoverOperator.stepEnded(stepScope);
+        solutionSelector.stepEnded(stepScope);
+        populationInitializer.stepEnded(stepScope);
+        replacementStrategy.stepEnded(stepScope);
+        if (assertStepScoreIsUncorrupted) {
+            stepScope.getPhaseScope().getSolverScope().getScoreDirector()
+                    .setWorkingSolution(stepScope.createOrGetClonedSolution());
+        }
+        if (logger.isDebugEnabled()) {
+            GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
+            long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();
+            logger.debug("    Step index ({}), time spend ({}), score ({}), {} best score ({})",
+                    new Object[]{stepScope.getStepIndex(), timeMillisSpend,
+                            stepScope.getScore(),
+                            (stepScope.getBestScoreImproved() ? "new" : "   "),
+                            phaseScope.getBestScore()
+                    });
+        }
+    }
 
-	@Override
-	public void stepEnded(GeneticAlgorithmStepScope stepScope) {
-		//TODO Should something else be done when step ends?
-		super.stepEnded(stepScope);
-		mutationOperator.stepEnded(stepScope);
-		crossoverOperator.stepEnded(stepScope);
-		solutionSelector.stepEnded(stepScope);
-		populationInitializer.stepEnded(stepScope);
-		replacementStrategy.stepEnded(stepScope);
-		if (assertStepScoreIsUncorrupted) {
-			stepScope.getPhaseScope().getSolverScope().getScoreDirector()
-					.setWorkingSolution(stepScope.createOrGetClonedSolution());
-		}
-		if (logger.isDebugEnabled()) {
-			GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
-			long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();
-			logger.debug("    Step index ({}), time spend ({}), score ({}), {} best score ({})",
-					new Object[]{stepScope.getStepIndex(), timeMillisSpend,
-							stepScope.getScore(),
-							(stepScope.getBestScoreImproved() ? "new" : "   "),
-							phaseScope.getBestScore()
-					});
-		}
-	}
+    public void setElitistSize(int elitistSize) {
+        this.elitistSize = elitistSize;
+    }
 
-	public void setElitistSize(int elitistSize) {
-		this.elitistSize = elitistSize;
-	}
-
-	public int getElitistSize() {
-		return elitistSize;
-	}
+    public int getElitistSize() {
+        return elitistSize;
+    }
 }

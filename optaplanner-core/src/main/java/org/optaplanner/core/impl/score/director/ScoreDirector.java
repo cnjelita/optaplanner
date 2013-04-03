@@ -177,4 +177,5 @@ public interface ScoreDirector {
      */
     void dispose();
 
+    void addToCalculationCount(int numberOfCalculations);
 }
