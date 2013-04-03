@@ -14,31 +14,32 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.api.score.constraint.primdouble;
+package org.optaplanner.core.api.score.constraint.bigdecimal;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import org.optaplanner.core.api.score.constraint.ScoreConstraintMatch;
+import org.optaplanner.core.api.score.constraint.ConstraintMatch;
 
-public class DoubleScoreConstraintMatch extends ScoreConstraintMatch {
+public class BigDecimalConstraintMatch extends ConstraintMatch {
 
-    protected final DoubleScoreConstraintMatchTotal scoreConstraintMatchTotal;
+    protected final BigDecimalConstraintMatchTotal constraintMatchTotal;
 
-    protected final double weight;
+    protected final BigDecimal weight;
 
-    public DoubleScoreConstraintMatch(DoubleScoreConstraintMatchTotal scoreConstraintMatchTotal,
-            List<Object> justificationList, double weight) {
+    public BigDecimalConstraintMatch(BigDecimalConstraintMatchTotal constraintMatchTotal,
+            List<Object> justificationList, BigDecimal weight) {
         super(justificationList);
-        this.scoreConstraintMatchTotal = scoreConstraintMatchTotal;
+        this.constraintMatchTotal = constraintMatchTotal;
         this.weight = weight;
     }
 
     @Override
-    public DoubleScoreConstraintMatchTotal getScoreConstraintMatchTotal() {
-        return scoreConstraintMatchTotal;
+    public BigDecimalConstraintMatchTotal getConstraintMatchTotal() {
+        return constraintMatchTotal;
     }
 
-    public double getWeight() {
+    public BigDecimal getWeight() {
         return weight;
     }
 

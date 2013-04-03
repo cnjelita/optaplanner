@@ -56,7 +56,7 @@ public class SolverAndPersistenceFrame extends JFrame {
     private SolutionBusiness solutionBusiness;
 
     private SolutionPanel solutionPanel;
-    private ConstraintScoreMapDialog constraintScoreMapDialog;
+    private ConstraintMatchesDialog constraintMatchesDialog;
 
     private List<Action> loadUnsolvedActionList;
     private List<Action> loadSolvedActionList;
@@ -70,7 +70,7 @@ public class SolverAndPersistenceFrame extends JFrame {
     private Action exportAction;
     private JProgressBar progressBar;
     private JLabel resultLabel;
-    private ShowConstraintScoreMapDialogAction showConstraintScoreMapDialogAction;
+    private ShowConstraintMatchesDialogAction showConstraintMatchesDialogAction;
 
     public SolverAndPersistenceFrame(SolutionBusiness solutionBusiness, SolutionPanel solutionPanel, String exampleName) {
         super(exampleName + " OptaPlanner example");
@@ -79,8 +79,8 @@ public class SolverAndPersistenceFrame extends JFrame {
         solutionPanel.setSolutionBusiness(solutionBusiness);
         solutionPanel.setSolverAndPersistenceFrame(this);
         registerListeners();
-        constraintScoreMapDialog = new ConstraintScoreMapDialog(this);
-        constraintScoreMapDialog.setSolutionBusiness(solutionBusiness);
+        constraintMatchesDialog = new ConstraintMatchesDialog(this);
+        constraintMatchesDialog.setSolutionBusiness(solutionBusiness);
     }
 
     private void registerListeners() {
@@ -202,34 +202,6 @@ public class SolverAndPersistenceFrame extends JFrame {
         exportAction.setEnabled(false);
         panel.add(new JButton(exportAction));
         return panel;
-    }
-
-    private void setSolutionLoaded() {
-        solveAction.setEnabled(true);
-        saveAction.setEnabled(true);
-        exportAction.setEnabled(solutionBusiness.hasExporter());
-        resetScreen();
-    }
-
-    private void setSolvingState(boolean solving) {
-        for (Action action : loadUnsolvedActionList) {
-            action.setEnabled(!solving);
-        }
-        for (Action action : loadSolvedActionList) {
-            action.setEnabled(!solving);
-        }
-        solveAction.setEnabled(!solving);
-        terminateSolvingEarlyAction.setEnabled(solving);
-        openAction.setEnabled(!solving);
-        saveAction.setEnabled(!solving);
-        importAction.setEnabled(!solving && solutionBusiness.hasImporter());
-        exportAction.setEnabled(!solving && solutionBusiness.hasExporter());
-        solutionPanel.setEnabled(!solving);
-        progressBar.setIndeterminate(solving);
-        progressBar.setStringPainted(solving);
-        progressBar.setString(solving ? "Solving..." : null);
-        showConstraintScoreMapDialogAction.setEnabled(!solving);
-        solutionPanel.setSolvingState(solving);
     }
 
     private class SolveAction extends AbstractAction {
@@ -423,23 +395,53 @@ public class SolverAndPersistenceFrame extends JFrame {
         resultLabel = new JLabel("No solution loaded yet");
         resultLabel.setBorder(BorderFactory.createLoweredBevelBorder());
         panel.add(resultLabel, BorderLayout.CENTER);
-        showConstraintScoreMapDialogAction = new ShowConstraintScoreMapDialogAction();
-        JButton constraintScoreMapButton = new JButton(showConstraintScoreMapDialogAction);
+        showConstraintMatchesDialogAction = new ShowConstraintMatchesDialogAction();
+        showConstraintMatchesDialogAction.setEnabled(false);
+        JButton constraintScoreMapButton = new JButton(showConstraintMatchesDialogAction);
         panel.add(constraintScoreMapButton, BorderLayout.EAST);
         return panel;
     }
 
-    private class ShowConstraintScoreMapDialogAction extends AbstractAction {
+    private class ShowConstraintMatchesDialogAction extends AbstractAction {
 
-        public ShowConstraintScoreMapDialogAction() {
-            super("Constraint scores");
+        public ShowConstraintMatchesDialogAction() {
+            super("Constraint matches");
         }
 
         public void actionPerformed(ActionEvent e) {
-            constraintScoreMapDialog.resetContentPanel();
-            constraintScoreMapDialog.setVisible(true);
+            constraintMatchesDialog.resetContentPanel();
+            constraintMatchesDialog.setVisible(true);
         }
 
+    }
+
+    private void setSolutionLoaded() {
+        solveAction.setEnabled(true);
+        saveAction.setEnabled(true);
+        exportAction.setEnabled(solutionBusiness.hasExporter());
+        showConstraintMatchesDialogAction.setEnabled(true);
+        resetScreen();
+    }
+
+    private void setSolvingState(boolean solving) {
+        for (Action action : loadUnsolvedActionList) {
+            action.setEnabled(!solving);
+        }
+        for (Action action : loadSolvedActionList) {
+            action.setEnabled(!solving);
+        }
+        solveAction.setEnabled(!solving);
+        terminateSolvingEarlyAction.setEnabled(solving);
+        openAction.setEnabled(!solving);
+        saveAction.setEnabled(!solving);
+        importAction.setEnabled(!solving && solutionBusiness.hasImporter());
+        exportAction.setEnabled(!solving && solutionBusiness.hasExporter());
+        solutionPanel.setEnabled(!solving);
+        progressBar.setIndeterminate(solving);
+        progressBar.setStringPainted(solving);
+        progressBar.setString(solving ? "Solving..." : null);
+        showConstraintMatchesDialogAction.setEnabled(!solving);
+        solutionPanel.setSolvingState(solving);
     }
 
     public void resetScreen() {

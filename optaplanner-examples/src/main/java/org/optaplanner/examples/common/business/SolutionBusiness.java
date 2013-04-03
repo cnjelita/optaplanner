@@ -20,24 +20,18 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.SwingUtilities;
 
-import org.kie.api.runtime.ClassObjectFilter;
-import org.kie.api.runtime.KieSession;
+import org.optaplanner.core.api.score.constraint.ConstraintMatchTotal;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.impl.event.BestSolutionChangedEvent;
 import org.optaplanner.core.impl.event.SolverEventListener;
 import org.optaplanner.core.impl.move.Move;
 import org.optaplanner.core.api.score.Score;
-import org.optaplanner.core.impl.score.constraint.ConstraintOccurrence;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.core.impl.score.director.ScoreDirectorFactory;
-import org.optaplanner.core.impl.score.director.drools.DroolsScoreDirector;
 import org.optaplanner.core.impl.solution.Solution;
 import org.optaplanner.core.impl.solver.ProblemFactChange;
 import org.optaplanner.examples.common.persistence.AbstractSolutionExporter;
@@ -208,28 +202,15 @@ public class SolutionBusiness {
         });
     }
 
-    public List<ScoreDetail> getScoreDetailList() {
-        if (!(guiScoreDirector instanceof DroolsScoreDirector)) {
-            return null;
-        }
-        Map<String, ScoreDetail> scoreDetailMap = new HashMap<String, ScoreDetail>();
-        KieSession kieSession = ((DroolsScoreDirector) guiScoreDirector).getKieSession();
-        if (kieSession == null) {
-            return Collections.emptyList();
-        }
-        Collection<ConstraintOccurrence> constraintOccurrences = (Collection<ConstraintOccurrence>)
-                kieSession.getObjects(new ClassObjectFilter(ConstraintOccurrence.class));
-        for (ConstraintOccurrence constraintOccurrence : constraintOccurrences) {
-            ScoreDetail scoreDetail = scoreDetailMap.get(constraintOccurrence.getRuleId());
-            if (scoreDetail == null) {
-                scoreDetail = new ScoreDetail(constraintOccurrence.getRuleId(), constraintOccurrence.getConstraintType());
-                scoreDetailMap.put(constraintOccurrence.getRuleId(), scoreDetail);
-            }
-            scoreDetail.addConstraintOccurrence(constraintOccurrence);
-        }
-        List<ScoreDetail> scoreDetailList = new ArrayList<ScoreDetail>(scoreDetailMap.values());
-        Collections.sort(scoreDetailList);
-        return scoreDetailList;
+    public boolean isConstraintMatchEnabled() {
+        return guiScoreDirector.isConstraintMatchEnabled();
+    }
+
+    public List<ConstraintMatchTotal> getConstraintMatchTotalList() {
+        List<ConstraintMatchTotal> constraintMatchTotalList = new ArrayList<ConstraintMatchTotal>(
+                guiScoreDirector.getConstraintMatchTotals());
+        Collections.sort(constraintMatchTotalList);
+        return constraintMatchTotalList;
     }
 
     public void importSolution(File file) {

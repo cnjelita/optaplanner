@@ -22,15 +22,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.CompareToBuilder;
 import org.kie.api.runtime.rule.RuleContext;
 
-public abstract class ScoreConstraintMatchTotal implements Serializable {
+public abstract class ConstraintMatchTotal implements Serializable, Comparable<ConstraintMatchTotal> {
 
     protected final String constraintPackage;
     protected final String constraintName;
     protected final int scoreLevel;
 
-    protected ScoreConstraintMatchTotal(String constraintPackage, String constraintName, int scoreLevel) {
+    protected ConstraintMatchTotal(String constraintPackage, String constraintName, int scoreLevel) {
         this.constraintPackage = constraintPackage;
         this.constraintName = constraintName;
         this.scoreLevel = scoreLevel;
@@ -48,7 +49,7 @@ public abstract class ScoreConstraintMatchTotal implements Serializable {
         return scoreLevel;
     }
 
-    public abstract Set<? extends ScoreConstraintMatch> getConstraintMatchSet();
+    public abstract Set<? extends ConstraintMatch> getConstraintMatchSet();
 
     public abstract Number getWeightTotalAsNumber();
 
@@ -67,6 +68,16 @@ public abstract class ScoreConstraintMatchTotal implements Serializable {
 
     public String getIdentificationString() {
         return constraintPackage + "/" + constraintName + "/level" + scoreLevel;
+    }
+
+    @Override
+    public int compareTo(ConstraintMatchTotal other) {
+        return new CompareToBuilder()
+                .append(getConstraintPackage(), other.getConstraintPackage())
+                .append(getConstraintName(), other.getConstraintName())
+                .append(getScoreLevel(), other.getScoreLevel())
+                .append(getWeightTotalAsNumber(), other.getWeightTotalAsNumber())
+                .toComparison();
     }
 
     @Override

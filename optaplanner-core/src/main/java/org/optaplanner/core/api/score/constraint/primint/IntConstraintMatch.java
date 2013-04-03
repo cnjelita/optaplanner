@@ -14,37 +14,41 @@
  * limitations under the License.
  */
 
-package org.optaplanner.core.api.score.constraint;
+package org.optaplanner.core.api.score.constraint.primint;
 
-import java.io.Serializable;
 import java.util.List;
 
-public abstract class ScoreConstraintMatch implements Serializable {
+import org.optaplanner.core.api.score.constraint.ConstraintMatch;
 
-    protected final List<Object> justificationList;
+public class IntConstraintMatch extends ConstraintMatch {
 
-    protected ScoreConstraintMatch(List<Object> justificationList) {
-        this.justificationList = justificationList;
+    protected final IntConstraintMatchTotal constraintMatchTotal;
+
+    protected final int weight;
+
+    public IntConstraintMatch(IntConstraintMatchTotal constraintMatchTotal,
+            List<Object> justificationList, int weight) {
+        super(justificationList);
+        this.constraintMatchTotal = constraintMatchTotal;
+        this.weight = weight;
     }
 
-    public abstract ScoreConstraintMatchTotal getScoreConstraintMatchTotal();
-
-    public List<Object> getJustificationList() {
-        return justificationList;
+    @Override
+    public IntConstraintMatchTotal getConstraintMatchTotal() {
+        return constraintMatchTotal;
     }
 
-    public abstract Number getWeightAsNumber();
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public Number getWeightAsNumber() {
+        return weight;
+    }
 
     // ************************************************************************
     // Worker methods
     // ************************************************************************
-
-    private String getIdentificationString() {
-        return getScoreConstraintMatchTotal().getIdentificationString() + "/" + justificationList;
-    }
-
-    public String toString() {
-        return getIdentificationString()  + "=" + getWeightAsNumber();
-    }
 
 }
