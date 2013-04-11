@@ -17,6 +17,7 @@
 package org.optaplanner.core.impl.geneticalgorithm.replacementstrategy;
 
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
+import org.optaplanner.core.impl.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
 //TODO should be in operator package?
@@ -31,4 +32,8 @@ public interface ReplacementStrategy extends GeneticAlgorithmSolverPhaseLifeCycl
 	 */
 	//TODO maybe rename this method?
 	void createNewGeneration(GeneticAlgorithmStepScope stepScope);
+
+    void setDiversityRate(double diversityRate);
+
+    void setPopulationInitializer(PopulationInitializer initializer);
 }

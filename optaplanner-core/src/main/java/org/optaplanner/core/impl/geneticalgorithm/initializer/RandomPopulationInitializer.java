@@ -146,6 +146,38 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
     }
 
     @Override
+    public ScoreDirector diversifyIndividual(ScoreDirector scoreDirector, double diversityRate) {
+        List<Object> planningEntityList = solutionDescriptor.getPlanningEntityList(scoreDirector.getWorkingSolution());
+//        Collections.shuffle(planningEntityList, workingRandom);
+        for (int j = planningEntityList.size() - 1; j > 0; j--) {
+            Object planningEntity = planningEntityList.get(j);
+            PlanningEntityDescriptor entityDescriptor =
+                    entityClassToDescriptorMap.get(planningEntity.getClass());
+            List<PlanningVariableDescriptor> variableDescriptors = entityDescriptorToVariableDescriptorsMap.get(
+                    entityDescriptor);
+            for (PlanningVariableDescriptor variableDescriptor : variableDescriptors) {
+                if (workingRandom.nextDouble() < diversityRate) {
+                    if (variableDescriptor.isChained()) {
+                        int index = workingRandom.nextInt(j + 1);
+                        Move swapMove = new ChainedSwapMove(Arrays
+                                .asList(variableDescriptor), planningEntity, planningEntityList
+                                .get(index));
+                        swapMove.doMove(scoreDirector);
+                    } else {
+                        List<Object> planningValues = variableDescriptorToValuesMap.get(variableDescriptor);
+                        //TODO maybe use changeMoves so the isDoable option is available?
+                        Move move = new ChangeMove(planningEntity, variableDescriptor,
+                                planningValues.get(workingRandom.nextInt(planningValues.size())));
+                        move.doMove(scoreDirector);
+                    }
+                }
+            }
+        }
+        scoreDirector.calculateScore();
+        return scoreDirector;
+    }
+
+    @Override
     public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
         super.phaseStarted(phaseScope);
         workingRandom = phaseScope.getWorkingRandom();

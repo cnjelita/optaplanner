@@ -18,6 +18,7 @@ package org.optaplanner.core.impl.geneticalgorithm.initializer;
 
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListener;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 //TODO should be in operator package? of
 //TODO maybe add abstract class with code which is reused in every type of initializer
@@ -31,4 +32,5 @@ public interface PopulationInitializer extends GeneticAlgorithmSolverPhaseLifeCy
 	 */
 	void initializePopulation(GeneticAlgorithmSolverPhaseScope phaseScope);
 
+    ScoreDirector diversifyIndividual(ScoreDirector scoreDirector, double diversityRate);
 }

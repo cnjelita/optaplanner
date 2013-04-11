@@ -27,62 +27,62 @@ import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public class KeepBestStrategy extends AbstractReplacementStrategy {
 
-	@Override
-	public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+    @Override
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
 
-		stepScope.performScoreCalculation();
-		stepScope.getIntermediatePopulation().sort();
+        stepScope.performScoreCalculation();
+        stepScope.getIntermediatePopulation().sort();
 //        System.out.println("currgen");
 //        System.out.println(stepScope.getCurrentGeneration());
 //        System.out.println("intermediate");
 //        System.out.println(stepScope.getIntermediatePopulation());
-		List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
-		List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
+        List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
+        List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
 
-		Population newGeneration = new Population(populationSize);
+        Population newGeneration = new Population(populationSize);
 
-		int intermediateListIndex = 0;
-		int generationListIndex = 0;
+        int intermediateListIndex = 0;
+        int generationListIndex = 0;
 
-		ScoreDirector intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
-		ScoreDirector generationIndividual = currentGeneration.get(generationListIndex);
+        ScoreDirector intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+        ScoreDirector generationIndividual = currentGeneration.get(generationListIndex);
 
-		ScoreDirector bestIndividual =
-				scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
-						intermediateIndividual : generationIndividual;
-		newGeneration.setBestIndividual(bestIndividual);
+        ScoreDirector bestIndividual =
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
+                        intermediateIndividual : generationIndividual;
+        newGeneration.setBestIndividual(bestIndividual);
 
-		for (int i = 0; i < elitistSize; i++) {
-			newGeneration.addIndividual(currentGeneration.get(generationListIndex));
-			generationListIndex++;
-		}
-		for (int i = 0; i < populationSize - elitistSize; i++) {
-			intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
-			generationIndividual = currentGeneration.get(generationListIndex);
-			//TODO does this method sort from worst to best?
-			if (scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0) {
-				newGeneration.addIndividual(intermediateIndividual);
-				intermediateListIndex++;
-			} else {
-				newGeneration.addIndividual(generationIndividual);
-				generationListIndex++;
-			}
-		}
+        for (int i = 0; i < elitistSize; i++) {
+            newGeneration.addIndividual(currentGeneration.get(generationListIndex));
+            generationListIndex++;
+        }
+        for (int i = 0; i < populationSize - elitistSize; i++) {
+            intermediateIndividual = intermediatePopulation.get(intermediateListIndex);
+            generationIndividual = currentGeneration.get(generationListIndex);
+            //TODO does this method sort from worst to best?
+            if (scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0) {
+                newGeneration.addIndividual(intermediateIndividual);
+                intermediateListIndex++;
+            } else {
+                newGeneration.addIndividual(generationIndividual);
+                generationListIndex++;
+            }
+        }
 
-		if (elitistSize > 0) {
-			newGeneration.sort();
-		}
+        if (elitistSize > 0) {
+            newGeneration.sort();
+        }
 //        System.out.println("new");
 //        System.out.println(newGeneration);
-		stepScope.setNewGeneration(newGeneration);
+        stepScope.setNewGeneration(newGeneration);
 
-	}
+    }
 
-	@Override
-	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		super.phaseStarted(phaseScope);
-		scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
-		populationSize = phaseScope.getPopulationSize();
-		elitistSize = phaseScope.getElitistSize();
-	}
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        super.phaseStarted(phaseScope);
+        scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
+        populationSize = phaseScope.getPopulationSize();
+        elitistSize = phaseScope.getElitistSize();
+    }
 }

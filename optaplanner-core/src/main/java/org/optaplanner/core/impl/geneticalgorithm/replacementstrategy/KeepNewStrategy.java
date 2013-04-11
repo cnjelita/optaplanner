@@ -24,30 +24,37 @@ import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public class KeepNewStrategy extends AbstractReplacementStrategy {
 
-	@Override
-	public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
-		stepScope.performScoreCalculation();
-		stepScope.getIntermediatePopulation().sort();
-		List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
-		List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
+    @Override
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+        stepScope.performScoreCalculation();
+        stepScope.getIntermediatePopulation().sort();
+        List<ScoreDirector> intermediatePopulation = stepScope.getIntermediatePopulation().getIndividuals();
+        List<ScoreDirector> currentGeneration = stepScope.getCurrentGeneration().getIndividuals();
 
-		Population newGeneration = new Population(populationSize);
-		ScoreDirector intermediateIndividual = intermediatePopulation.get(0);
-		ScoreDirector generationIndividual = currentGeneration.get(0);
+        Population newGeneration = new Population(populationSize);
+        ScoreDirector intermediateIndividual = intermediatePopulation.get(0);
+        ScoreDirector generationIndividual = currentGeneration.get(0);
 
-		ScoreDirector bestIndividual =
-				scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
-						intermediateIndividual : generationIndividual;
-		newGeneration.setBestIndividual(bestIndividual);
+        ScoreDirector bestIndividual =
+                scoreDirectorComparator.compare(intermediateIndividual, generationIndividual) < 0 ?
+                        intermediateIndividual : generationIndividual;
+        newGeneration.setBestIndividual(bestIndividual);
 
-		for (int i = 0; i < elitistSize; i++) {
-			newGeneration.addIndividual(currentGeneration.get(i));
-		}
-		for (int i = 0; i < populationSize - elitistSize; i++) {
-			newGeneration.addIndividual(intermediatePopulation.get(i));
-		}
-		newGeneration.sort();
-		stepScope.setNewGeneration(newGeneration);
-	}
+        int numberOfNewIndividuals = (int) (populationSize * diversityRate);
+
+        for (int i = 0; i < elitistSize; i++) {
+            newGeneration.addIndividual(currentGeneration.get(i));
+        }
+        for (int i = 0; i < populationSize - elitistSize; i++) {
+            if (workingRandom.nextDouble() < diversityRate) {
+                newGeneration
+                        .addIndividual(initializer.diversifyIndividual(intermediatePopulation.get(i), diversityRate));
+            } else {
+                newGeneration.addIndividual(intermediatePopulation.get(i));
+            }
+        }
+        newGeneration.sort();
+        stepScope.setNewGeneration(newGeneration);
+    }
 
 }
