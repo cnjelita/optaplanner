@@ -28,37 +28,35 @@
   </scoreDirectorFactory>
 
   <termination>
-    <maximumSecondsSpend>50</maximumSecondsSpend>
+    <maximumSecondsSpend>60</maximumSecondsSpend>
   </termination>
   <!--<constructionHeuristic>-->
   <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
   <!--</constructionHeuristic>-->
-  <geneticAlgorithm>
-    <populationParameters>
-      <populationSize>300</populationSize>
-      <elitistSize>0</elitistSize>
-    </populationParameters>
-    <rankBasedSelector/>
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <cycleCrossoverOperator/>
-    <!--<partiallyMatchedCrossoverOperator/>-->
-    <!--<tournamentSelector>-->
-    <!--<tournamentSize>55</tournamentSize>-->
-    <!--</tournamentSelector>-->
-    <mutationOperator>
-      <mutationRate>1</mutationRate>
-      <unionMoveSelector>
-        <swapMoveSelector/>
-        <changeMoveSelector/>
-        <!--<subChainChangeMoveSelector>-->
-        <!--<subChainSelector>-->
-        <!--<maximumSubChainSize>5</maximumSubChainSize>-->
-        <!--</subChainSelector>-->
-        <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-        <!--</subChainChangeMoveSelector>-->
-      </unionMoveSelector>
-    </mutationOperator>
+  <constructionHeuristic>
+    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  </constructionHeuristic>
+  <localSearch>
 
-    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-  </geneticAlgorithm>
+    <unionMoveSelector>
+      <swapMoveSelector/>
+      <changeMoveSelector/>
+      <!--<changeMoveSelector>-->
+      <!--<cacheType>PHASE</cacheType>-->
+      <!--<selectionOrder>SHUFFLED</selectionOrder>-->
+      <!--</changeMoveSelector>-->
+      <!--<subChainChangeMoveSelector>-->
+      <!--<subChainSelector>-->
+      <!--<maximumSubChainSize>13</maximumSubChainSize>-->
+      <!--</subChainSelector>-->
+      <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+      <!--</subChainChangeMoveSelector>-->
+    </unionMoveSelector>
+    <acceptor>
+      <planningEntityTabuSize>7</planningEntityTabuSize>
+    </acceptor>
+    <forager>
+      <minimalAcceptedSelection>500</minimalAcceptedSelection>
+    </forager>
+  </localSearch>
 </solver>

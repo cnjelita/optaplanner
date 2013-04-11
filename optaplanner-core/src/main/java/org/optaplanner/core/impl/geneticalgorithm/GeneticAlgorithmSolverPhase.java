@@ -26,6 +26,7 @@ import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPh
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.impl.phase.AbstractSolverPhase;
 import org.optaplanner.core.impl.solver.scope.DefaultSolverScope;
+import org.uncommons.maths.random.CellularAutomatonRNG;
 
 public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         implements GeneticAlgorithmSolverPhaseLifeCycleListener {
