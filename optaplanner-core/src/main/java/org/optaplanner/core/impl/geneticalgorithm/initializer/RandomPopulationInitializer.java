@@ -138,11 +138,8 @@ public class RandomPopulationInitializer extends GeneticAlgorithmSolverPhaseLife
             }
             population.addIndividual(scoreDirector);
         }
-
-        System.out.println("b");
         population.performScoreCalculation();
         phaseScope.setNewGeneration(population);
-
     }
 
     @Override

@@ -19,7 +19,6 @@
   <benchmarkDirectory>local/data/pfsga</benchmarkDirectory>
   <parallelBenchmarkCount>2</parallelBenchmarkCount>
   <!--<warmUpSecondsSpend>30</warmUpSecondsSpend>-->
-
   <inheritedSolverBenchmark>
     <problemBenchmarks>
       <xstreamAnnotatedClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</xstreamAnnotatedClass>
@@ -41,6 +40,8 @@
     </problemBenchmarks>
 
     <solver>
+      <environmentMode>PRODUCTION</environmentMode>
+
       <solutionClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</solutionClass>
       <planningEntityClass>org.optaplanner.examples.pfsga.model.Job</planningEntityClass>
       <scoreDirectorFactory>
@@ -65,23 +66,23 @@
     <name>Genetic algorithm</name>
     <solver>
       <!--<constructionHeuristic>-->
-        <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+      <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
       <!--</constructionHeuristic>-->
       <geneticAlgorithm>
         <populationParameters>
-          <populationSize>40</populationSize>
+          <populationSize>200</populationSize>
           <elitistSize>0</elitistSize>
         </populationParameters>
         <rankBasedSelector/>
+        <cycleCrossoverOperator/>
         <mutationOperator>
-          <mutationRate>1</mutationRate>
           <unionMoveSelector>
             <swapMoveSelector/>
             <changeMoveSelector/>
           </unionMoveSelector>
+          <mutationRate>1</mutationRate>
         </mutationOperator>
         <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-        <cycleCrossoverOperator/>
       </geneticAlgorithm>
     </solver>
   </solverBenchmark>
@@ -99,14 +100,14 @@
           <swapMoveSelector/>
           <changeMoveSelector/>
           <!--<changeMoveSelector>-->
-            <!--<cacheType>PHASE</cacheType>-->
-            <!--<selectionOrder>SHUFFLED</selectionOrder>-->
+          <!--<cacheType>PHASE</cacheType>-->
+          <!--<selectionOrder>SHUFFLED</selectionOrder>-->
           <!--</changeMoveSelector>-->
           <!--<subChainChangeMoveSelector>-->
-            <!--<subChainSelector>-->
-              <!--<maximumSubChainSize>13</maximumSubChainSize>-->
-            <!--</subChainSelector>-->
-            <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+          <!--<subChainSelector>-->
+          <!--<maximumSubChainSize>13</maximumSubChainSize>-->
+          <!--</subChainSelector>-->
+          <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
           <!--</subChainChangeMoveSelector>-->
         </unionMoveSelector>
         <acceptor>

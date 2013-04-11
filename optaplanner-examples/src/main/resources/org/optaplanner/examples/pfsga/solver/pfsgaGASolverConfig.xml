@@ -17,7 +17,7 @@
 
 <solver>
   <environmentMode>PRODUCTION</environmentMode>
-  <randomSeed>1111</randomSeed>
+  <!--<randomSeed>1111</randomSeed>-->
   <!--<environmentMode>FULL_ASSERT</environmentMode>-->
   <solutionClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</solutionClass>
   <planningEntityClass>org.optaplanner.examples.pfsga.model.Job</planningEntityClass>
@@ -28,20 +28,20 @@
   </scoreDirectorFactory>
 
   <termination>
-    <maximumSecondsSpend>50</maximumSecondsSpend>
+    <maximumSecondsSpend>60</maximumSecondsSpend>
   </termination>
   <!--<constructionHeuristic>-->
-  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
   <!--</constructionHeuristic>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>300</populationSize>
+      <populationSize>200</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
-    <rankBasedSelector/>
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <cycleCrossoverOperator/>
-    <!--<partiallyMatchedCrossoverOperator/>-->
+    <!--<rankBasedSelector/>-->
+    <stochasticUniversalSamplingSelector/>
+    <!--<cycleCrossoverOperator/>-->
+    <partiallyMatchedCrossoverOperator/>
     <!--<tournamentSelector>-->
     <!--<tournamentSize>55</tournamentSize>-->
     <!--</tournamentSelector>-->
@@ -58,9 +58,7 @@
         <!--</subChainChangeMoveSelector>-->
       </unionMoveSelector>
     </mutationOperator>
-    <replacementStrategy>
-      <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      <!--<diversityRate>0.008</diversityRate>-->
-    </replacementStrategy>
+
+    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
   </geneticAlgorithm>
 </solver>
