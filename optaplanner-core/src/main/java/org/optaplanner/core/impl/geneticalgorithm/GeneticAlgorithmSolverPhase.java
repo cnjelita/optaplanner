@@ -186,11 +186,10 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
             GeneticAlgorithmSolverPhaseScope phaseScope = stepScope.getPhaseScope();
             long timeMillisSpend = phaseScope.calculateSolverTimeMillisSpend();
             logger.debug("    Step index ({}), time spend ({}), score ({}), {} best score ({})",
-                    new Object[]{stepScope.getStepIndex(), timeMillisSpend,
-                            stepScope.getScore(),
-                            (stepScope.getBestScoreImproved() ? "new" : "   "),
-                            phaseScope.getBestScore()
-                    });
+                    stepScope.getStepIndex(), timeMillisSpend,
+                    stepScope.getScore(),
+                    (stepScope.getBestScoreImproved() ? "new" : "   "),
+                    phaseScope.getBestScore());
         }
     }
 

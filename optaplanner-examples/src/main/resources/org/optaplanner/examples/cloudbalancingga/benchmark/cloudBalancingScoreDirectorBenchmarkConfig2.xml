@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2013 JBoss Inc
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <plannerBenchmark>
-  <benchmarkDirectory>local/data/cloudbalancing/scoreDirector3</benchmarkDirectory>
+  <benchmarkDirectory>local/data/cloudbalancing/scoreDirector2</benchmarkDirectory>
   <!--<warmUpSecondsSpend>30</warmUpSecondsSpend>-->
   <parallelBenchmarkCount>2</parallelBenchmarkCount>
 
@@ -10,7 +26,7 @@
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0002comp-0006proc.xml</inputSolutionFile>-->
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0003comp-0009proc.xml</inputSolutionFile>-->
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0004comp-0012proc.xml</inputSolutionFile>-->
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>-->
       <inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>
       <inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>
       <inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>
@@ -25,38 +41,17 @@
         <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>
       </scoreDirectorFactory>
       <termination>
-        <maximumMinutesSpend>5</maximumMinutesSpend>
+        <maximumSecondsSpend>40</maximumSecondsSpend>
       </termination>
     </solver>
   </inheritedSolverBenchmark>
 
   <solverBenchmark>
-    <name>GA met rank based</name>
+    <name>GA met Incremental Java</name>
     <solver>
       <geneticAlgorithm>
         <populationParameters>
-          <populationSize>40</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <rankBasedSelector/>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-        <uniformCrossoverOperator/>
-      </geneticAlgorithm>
-    </solver>
-  </solverBenchmark>
-  <solverBenchmark>
-    <name>GA met SUS</name>
-    <solver>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>40</populationSize>
+          <populationSize>80</populationSize>
           <elitistSize>0</elitistSize>
         </populationParameters>
         <mutationOperator>
@@ -68,31 +63,25 @@
         </mutationOperator>
         <stochasticUniversalSamplingSelector/>
         <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-        <uniformCrossoverOperator/>
+        <twoPointCrossoverOperator/>
       </geneticAlgorithm>
     </solver>
   </solverBenchmark>
   <solverBenchmark>
-    <name>GA met truncation 0.1</name>
+    <name>Local search</name>
     <solver>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>40</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <truncationSelector>
-          <threshold>0.1</threshold>
-        </truncationSelector>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-        <uniformCrossoverOperator/>
-      </geneticAlgorithm>
+      <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+        <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
+      </constructionHeuristic>
+      <localSearch>
+        <acceptor>
+          <planningEntityTabuSize>7</planningEntityTabuSize>
+        </acceptor>
+        <forager>
+          <minimalAcceptedSelection>1000</minimalAcceptedSelection>
+        </forager>
+      </localSearch>
     </solver>
   </solverBenchmark>
 </plannerBenchmark>

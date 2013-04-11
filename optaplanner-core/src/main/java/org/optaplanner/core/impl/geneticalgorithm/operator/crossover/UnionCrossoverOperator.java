@@ -20,28 +20,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
+import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
 public class UnionCrossoverOperator extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-		CrossoverOperator {
+        CrossoverOperator {
 
-	private List<CrossoverOperator> crossoverOperatorList;
+    private List<CrossoverOperator> crossoverOperatorList;
 
-	public UnionCrossoverOperator() {
-		crossoverOperatorList = new ArrayList<CrossoverOperator>();
-	}
+    public UnionCrossoverOperator() {
+        crossoverOperatorList = new ArrayList<CrossoverOperator>();
+    }
 
-	@Override
-	public void performCrossover(GeneticAlgorithmStepScope stepScope) {
-		//TODO implement
-	}
+    @Override
+    public void performCrossover(GeneticAlgorithmStepScope stepScope) {
+        crossoverOperatorList.get(stepScope.getWorkingRandom().nextInt(crossoverOperatorList.size()))
+                .performCrossover(stepScope);
+    }
 
-	@Override
-	public void setCrossoverRate(double crossoverRate) {
-		//TODO implement
-	}
+    @Override
+    public void setCrossoverRate(double crossoverRate) {
+        //TODO implement
+    }
 
-	public void addCrossoverOperator(CrossoverOperator crossoverOperator) {
-		crossoverOperatorList.add(crossoverOperator);
-	}
+    public void addCrossoverOperator(CrossoverOperator crossoverOperator) {
+        crossoverOperatorList.add(crossoverOperator);
+    }
+
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        for (CrossoverOperator crossoverOperator : crossoverOperatorList) {
+            crossoverOperator.phaseStarted(phaseScope);
+        }
+    }
+
+    @Override
+    public void phaseEnded(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        for (CrossoverOperator crossoverOperator : crossoverOperatorList) {
+            crossoverOperator.phaseEnded(phaseScope);
+        }
+    }
+
+    @Override
+    public void stepStarted(GeneticAlgorithmStepScope stepScope) {
+        for (CrossoverOperator crossoverOperator : crossoverOperatorList) {
+            crossoverOperator.stepStarted(stepScope);
+        }
+    }
+
+    @Override
+    public void stepEnded(GeneticAlgorithmStepScope stepScope) {
+        for (CrossoverOperator crossoverOperator : crossoverOperatorList) {
+            crossoverOperator.stepEnded(stepScope);
+        }
+    }
 }

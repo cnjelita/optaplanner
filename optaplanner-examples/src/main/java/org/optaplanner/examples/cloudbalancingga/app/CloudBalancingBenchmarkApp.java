@@ -20,31 +20,36 @@ import org.optaplanner.examples.common.app.CommonBenchmarkApp;
 
 public class CloudBalancingBenchmarkApp extends CommonBenchmarkApp {
 
-	public static final String DEFAULT_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfig.xml";
-	public static final String SCORE_DIRECTOR_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingScoreDirectorBenchmarkConfig.xml";
-	public static final String TEMPLATE_BENCHMARK_CONFIG_TEMPLATE
-			= "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl";
+    public static final String DEFAULT_BENCHMARK_CONFIG
+            = "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfig.xml";
+    public static final String SCORE_DIRECTOR_BENCHMARK_CONFIG
+            = "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingScoreDirectorBenchmarkConfig.xml";
+    public static final String SCORE_DIRECTOR_BENCHMARK_CONFIG2
+            = "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingScoreDirectorBenchmarkConfig2.xml";
+    public static final String TEMPLATE_BENCHMARK_CONFIG_TEMPLATE
+            = "/org/optaplanner/examples/cloudbalancingga/benchmark/cloudBalancingBenchmarkConfigTemplate.xml.ftl";
 
-	public static void main(String[] args) {
-		String benchmarkConfig;
-		if (args.length > 0) {
-			if (args[0].equals("default")) {
-				benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
-			} else if (args[0].equals("scoreDirector")) {
-				benchmarkConfig = SCORE_DIRECTOR_BENCHMARK_CONFIG;
-			} else if (args[0].equals("template")) {
-				benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
-				new CloudBalancingBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
-				return;
-			} else {
-				throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
-			}
-		} else {
-            benchmarkConfig = SCORE_DIRECTOR_BENCHMARK_CONFIG;
-		}
-		new CloudBalancingBenchmarkApp().buildAndBenchmark(benchmarkConfig);
-	}
+    public static void main(String[] args) {
+        String benchmarkConfig;
+        if (args.length > 0) {
+            if (args[0].equals("default")) {
+                benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
+            } else if (args[0].equals("scoreDirector")) {
+                benchmarkConfig = SCORE_DIRECTOR_BENCHMARK_CONFIG;
+            } else if (args[0].equals("template")) {
+                benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
+                new CloudBalancingBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
+                return;
+            } else {
+                throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
+            }
+        } else {
+            benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
+//            benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
+//            new CloudBalancingBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
+//            return;
+        }
+        new CloudBalancingBenchmarkApp().buildAndBenchmark(benchmarkConfig);
+    }
 
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plannerBenchmark>
+  <benchmarkDirectory>local/data/cloudbalancingga/template</benchmarkDirectory>
+  <parallelBenchmarkCount>2</parallelBenchmarkCount>
+  <!--<warmUpSecondsSpend>4</warmUpSecondsSpend>-->
+
+  <inheritedSolverBenchmark>
+    <problemBenchmarks>
+      <xstreamAnnotatedClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</xstreamAnnotatedClass>
+      <inputSolutionFile>data/pfsga/unsolved/reC15.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC17.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC19.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC21.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC23.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC25.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC27.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC29.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC31.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC33.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC35.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC37.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC39.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC41.xml</inputSolutionFile>
+      <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
+    </problemBenchmarks>
+   <solver>
+         <solutionClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</solutionClass>
+         <planningEntityClass>org.optaplanner.examples.pfsga.model.Job</planningEntityClass>
+         <scoreDirectorFactory>
+           <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
+           <simpleScoreCalculatorClass>org.optaplanner.examples.pfsga.solver.PFSSimpleScoreCalculator</simpleScoreCalculatorClass>
+         </scoreDirectorFactory>
+         <termination>
+           <maximumSecondsSpend>20</maximumSecondsSpend>
+         </termination>
+       </solver>
+  </inheritedSolverBenchmark>
+
+  <#list [40, 80, 160, 200, 250, 350] as popsize>
+  <solverBenchmark>
+    <name>Genetic Algorithm with RBS and popsize ${popsize}</name>
+    <solver>
+      <geneticAlgorithm>
+        <populationParameters>
+          <populationSize>${popsize}</populationSize>
+          <elitistSize>0</elitistSize>
+        </populationParameters>
+        <rankBasedSelector/>
+        <mutationOperator>
+          <unionMoveSelector>
+            <swapMoveSelector/>
+            <changeMoveSelector/>
+          </unionMoveSelector>
+        </mutationOperator>
+        <cycleCrossoverOperator/>
+        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+      </geneticAlgorithm>
+    </solver>
+  </solverBenchmark>
+</#list>
+    </plannerBenchmark>

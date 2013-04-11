@@ -26,55 +26,55 @@ import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public class TournamentSelector extends AbstractSolutionSelector {
 
-	private int tournamentSize;
+    private int tournamentSize;
 
-	public TournamentSelector() {
-		scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
-	}
+    public TournamentSelector() {
+        scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
+    }
 
-	public void setTournamentSize(int tournamentSize) {
-		this.tournamentSize = tournamentSize;
-	}
+    public void setTournamentSize(int tournamentSize) {
+        this.tournamentSize = tournamentSize;
+    }
 
-	public int getTournamentSize() {
-		return tournamentSize;
-	}
+    public int getTournamentSize() {
+        return tournamentSize;
+    }
 
-	@Override
-	public void selectParents(GeneticAlgorithmStepScope stepScope) {
-		List<ScoreDirector> generation = stepScope.getCurrentGeneration().getIndividuals();
+    @Override
+    public void selectParents(GeneticAlgorithmStepScope stepScope) {
+        List<ScoreDirector> generation = stepScope.getCurrentGeneration().getIndividuals();
 
-		Population parents = new Population(populationSize);
-		//if parentSize is not even we have to do strange tricks during crossover
-		int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
+        //if parentSize is not even we have to do strange tricks during crossover
+        int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
+        Population parents = new Population(intermediatePopulationSize);
 
-		for (int i = 0; i < intermediatePopulationSize; i++) {
-			int leftIndex = workingRandom.nextInt(populationSize);
-			ScoreDirector leftIndividual = generation.get(leftIndex);
-			for (int j = 0; j < tournamentSize; j++) {
-				int rightIndex;
-				do {
-					rightIndex = workingRandom.nextInt(populationSize);
-				} while (rightIndex == leftIndex);
-				ScoreDirector rightIndividual = generation.get(rightIndex);
-				//FIXME how does scoredirectorcomparator work?
-				if (scoreDirectorComparator.compare(leftIndividual, rightIndividual) > 0) {
+        for (int i = 0; i < intermediatePopulationSize; i++) {
+            int leftIndex = workingRandom.nextInt(populationSize);
+            ScoreDirector leftIndividual = generation.get(leftIndex);
+            for (int j = 0; j < tournamentSize; j++) {
+                int rightIndex;
+                do {
+                    rightIndex = workingRandom.nextInt(populationSize);
+                } while (rightIndex == leftIndex);
+                ScoreDirector rightIndividual = generation.get(rightIndex);
+                //FIXME how does scoredirectorcomparator work?
+                if (scoreDirectorComparator.compare(leftIndividual, rightIndividual) > 0) {
 //                    System.out.println(rightIndividual.getWorkingSolution().getScore() + " better than" +
 //                            leftIndividual.getWorkingSolution().getScore());
-					leftIndividual = rightIndividual;
-					leftIndex = rightIndex;
-				}
-			}
+                    leftIndividual = rightIndividual;
+                    leftIndex = rightIndex;
+                }
+            }
 //            if (selectedIndices.contains(leftIndividual)) {
-			parents.addIndividual(leftIndividual.clone());
+            parents.addIndividual(leftIndividual.clone());
 //            } else {
 //                parents.addIndividual(leftIndividual);
 //                selectedIndices.add(leftIndividual);
 //            }
-		}
+        }
 
-		stepScope.setIntermediatePopulation(parents);
-		stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
-	}
+        stepScope.setIntermediatePopulation(parents);
+        stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
+    }
 
 }

@@ -21,13 +21,14 @@
   <!-- Domain model configuration -->
   <solutionClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</solutionClass>
   <planningEntityClass>org.optaplanner.examples.cloudbalancingga.domain.CloudProcess</planningEntityClass>
+  <environmentMode>PRODUCTION</environmentMode>
 
   <!-- Score configuration -->
   <scoreDirectorFactory>
     <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
-    <simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingSimpleScoreCalculator</simpleScoreCalculatorClass>
+    <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingSimpleScoreCalculator</simpleScoreCalculatorClass>-->
     <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancing.solver.score.CloudBalancingMapBasedSimpleScoreCalculator</simpleScoreCalculatorClass>-->
-    <!--<incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>-->
+    <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculator</incrementalScoreCalculatorClass>
     <!--<assertionScoreDirectorFactory>-->
     <!--<scoreDrl>/org/optaplanner/examples/cloudbalancing/solver/cloudBalancingScoreRules.drl</scoreDrl>-->
     <!--</assertionScoreDirectorFactory>-->
@@ -51,14 +52,15 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>10</populationSize>
-      <elitistSize>1</elitistSize>
+      <populationSize>80</populationSize>
+      <!--<elitistSize>1</elitistSize>-->
     </populationParameters>
     <!--<tournamentSelector>-->
     <!--<tournamentSize>40</tournamentSize>-->
     <!--</tournamentSelector>-->
 
     <!--<rouletteWheelSelector/>-->
+    <!--<stochasticUniversalSamplingSelector/>-->
     <mutationOperator>
       <mutationRate>1</mutationRate>
       <unionMoveSelector>
@@ -67,13 +69,13 @@
         <!--<pillarSwapMoveSelector/>-->
       </unionMoveSelector>
     </mutationOperator>
-    <truncationSelector>
-      <threshold>0.1</threshold>
-    </truncationSelector>
+    <!--<truncationSelector>-->
+      <!--<threshold>0.1</threshold>-->
+    <!--</truncationSelector>-->
     <!--<tournamentSelector>-->
     <!--<tournamentSize>60</tournamentSize>-->
     <!--</tournamentSelector>-->
-    <!--<rankBasedSelector/>-->
+    <rankBasedSelector/>
     <replacementStrategyType>KEEP_NEW</replacementStrategyType>
     <!--<uniformCrossoverOperator/>-->
     <twoPointCrossoverOperator/>

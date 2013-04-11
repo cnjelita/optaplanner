@@ -21,7 +21,7 @@ import org.optaplanner.examples.common.app.CommonBenchmarkApp;
 public class TspBenchmarkApp extends CommonBenchmarkApp {
 
 	public static final String DEFAULT_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/tsp/benchmark/tspBenchmarkConfig.xml";
+			= "/org/optaplanner/examples/tsp/benchmarkga/tspBenchmarkConfig.xml";
 
 	public static void main(String[] args) {
 		String benchmarkConfig;

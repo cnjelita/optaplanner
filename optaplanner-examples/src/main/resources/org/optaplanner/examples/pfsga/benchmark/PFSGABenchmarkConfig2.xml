@@ -19,15 +19,23 @@
   <benchmarkDirectory>local/data/pfsga</benchmarkDirectory>
   <parallelBenchmarkCount>2</parallelBenchmarkCount>
   <!--<warmUpSecondsSpend>30</warmUpSecondsSpend>-->
-  <environmentMode>PRODUCTION</environmentMode>
 
   <inheritedSolverBenchmark>
     <problemBenchmarks>
       <xstreamAnnotatedClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</xstreamAnnotatedClass>
       <inputSolutionFile>data/pfsga/unsolved/reC15.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC17.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC19.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC21.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC23.xml</inputSolutionFile>
       <inputSolutionFile>data/pfsga/unsolved/reC25.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC27.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC29.xml</inputSolutionFile>
       <inputSolutionFile>data/pfsga/unsolved/reC31.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC33.xml</inputSolutionFile>
       <inputSolutionFile>data/pfsga/unsolved/reC35.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC37.xml</inputSolutionFile>
+      <inputSolutionFile>data/pfsga/unsolved/reC39.xml</inputSolutionFile>
       <inputSolutionFile>data/pfsga/unsolved/reC41.xml</inputSolutionFile>
       <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
     </problemBenchmarks>
@@ -54,11 +62,14 @@
   <!--</solverBenchmark>-->
 
   <solverBenchmark>
-    <name>Cycle</name>
+    <name>Genetic algorithm</name>
     <solver>
+      <!--<constructionHeuristic>-->
+        <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+      <!--</constructionHeuristic>-->
       <geneticAlgorithm>
         <populationParameters>
-          <populationSize>200</populationSize>
+          <populationSize>40</populationSize>
           <elitistSize>0</elitistSize>
         </populationParameters>
         <rankBasedSelector/>
@@ -75,66 +86,36 @@
     </solver>
   </solverBenchmark>
   <solverBenchmark>
-    <name>Partially matched</name>
+    <name>Tabu Search</name>
     <solver>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>200</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <rankBasedSelector/>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <partiallyMatchedCrossoverOperator/>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      </geneticAlgorithm>
-    </solver>
-  </solverBenchmark>
-  <solverBenchmark>
-    <name>order based</name>
-    <solver>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>200</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <rankBasedSelector/>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <orderBasedCrossoverOperator/>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      </geneticAlgorithm>
-    </solver>
-  </solverBenchmark>
-  <solverBenchmark>
-    <name>Uniform Order crossover</name>
-    <solver>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>200</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <rankBasedSelector/>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <uniformOrderCrossoverOperator/>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      </geneticAlgorithm>
+      <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+      </constructionHeuristic>
+      <localSearch>
+        <termination>
+          <maximumSecondsSpend>30</maximumSecondsSpend>
+        </termination>
+        <unionMoveSelector>
+          <swapMoveSelector/>
+          <changeMoveSelector/>
+          <!--<changeMoveSelector>-->
+            <!--<cacheType>PHASE</cacheType>-->
+            <!--<selectionOrder>SHUFFLED</selectionOrder>-->
+          <!--</changeMoveSelector>-->
+          <!--<subChainChangeMoveSelector>-->
+            <!--<subChainSelector>-->
+              <!--<maximumSubChainSize>13</maximumSubChainSize>-->
+            <!--</subChainSelector>-->
+            <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+          <!--</subChainChangeMoveSelector>-->
+        </unionMoveSelector>
+        <acceptor>
+          <planningEntityTabuSize>7</planningEntityTabuSize>
+        </acceptor>
+        <forager>
+          <minimalAcceptedSelection>500</minimalAcceptedSelection>
+        </forager>
+      </localSearch>
     </solver>
   </solverBenchmark>
 </plannerBenchmark>

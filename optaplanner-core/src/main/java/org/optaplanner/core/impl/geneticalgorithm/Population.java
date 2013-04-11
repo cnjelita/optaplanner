@@ -26,93 +26,92 @@ import org.optaplanner.core.impl.score.director.ScoreDirector;
 //TODO should be in other package?
 public class Population implements Iterable<ScoreDirector> {
 
-	private List<ScoreDirector> individuals;
-	private int populationSize;
-	private ScoreDirector bestIndividual;
+    private List<ScoreDirector> individuals;
+    private int populationSize;
+    private ScoreDirector bestIndividual;
 
-	public Population(int populationSize) {
-		this.populationSize = populationSize;
-		individuals = new ArrayList<ScoreDirector>(populationSize);
-	}
+    public Population(int populationSize) {
+        this.populationSize = populationSize;
+        individuals = new ArrayList<ScoreDirector>(populationSize);
+    }
 
-	@Override
-	public Iterator<ScoreDirector> iterator() {
-		return individuals.iterator();
-	}
+    @Override
+    public Iterator<ScoreDirector> iterator() {
+        return individuals.iterator();
+    }
 
-	public void addIndividual(ScoreDirector scoreDirector) {
-		individuals.add(scoreDirector);
-	}
+    public void addIndividual(ScoreDirector scoreDirector) {
+        individuals.add(scoreDirector);
+    }
 
-	public List<ScoreDirector> getIndividuals() {
-		return individuals;
-	}
+    public List<ScoreDirector> getIndividuals() {
+        return individuals;
+    }
 
-	public void setIndividuals(List<ScoreDirector> individuals) {
-		this.individuals = individuals;
-	}
+    public void setIndividuals(List<ScoreDirector> individuals) {
+        this.individuals = individuals;
+    }
 
-	public void performScoreCalculation() {
-		for (ScoreDirector individual : individuals) {
-			individual.calculateScore();
-		}
-//        for (ScoreDirector individual : individuals){
-//            System.out.println(individual.getWorkingSolution().getScore());
-//        }
-		//TODO calculate other statistics
-	}
+    public void performScoreCalculation() {
 
-	public void setBestIndividual(ScoreDirector bestIndividual) {
-		this.bestIndividual = bestIndividual;
-	}
+        //TODO calculate other statistics
+        for (ScoreDirector individual : individuals) {
+            individual.calculateScore();
+        }
+    }
 
-	public ScoreDirector getBestIndividual() {
-		return bestIndividual;
-	}
+    public void setBestIndividual(ScoreDirector bestIndividual) {
+        this.bestIndividual = bestIndividual;
+    }
 
-	public void sort() {
-		Collections.sort(individuals, Collections.reverseOrder(new ScoreDirectorComparator()));
-	}
+    public ScoreDirector getBestIndividual() {
+        return bestIndividual;
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < populationSize; i++) {
-			buffer.append(individuals.get(i).getWorkingSolution().getScore()).append("\n");
-		}
-		return buffer.toString();
-	}
+    public void sort() {
+        Collections.sort(individuals, Collections.reverseOrder(new ScoreDirectorComparator()));
+    }
 
-	//TODO this only works for maximization problems
-	public double[][] calculatePopulationParameters() {
-		double[] worstScorePerLevel = null;
-		double[] bestScorePerLevel = null;
-		for (ScoreDirector individual : individuals) {
-			double[] scoreDoubleLevels = individual.getWorkingSolution().getScore().toDoubleLevels();
-			if (bestScorePerLevel == null) {
-				bestScorePerLevel = new double[scoreDoubleLevels.length];
-				for (int i = 0; i < bestScorePerLevel.length; i++) {
-					bestScorePerLevel[i] = -Double.MAX_VALUE;
-				}
-			}
-			if (worstScorePerLevel == null) {
-				worstScorePerLevel = new double[scoreDoubleLevels.length];
-			}
-			for (int i = 0; i < scoreDoubleLevels.length; i++) {
-				if (worstScorePerLevel[i] > scoreDoubleLevels[i]) {
-					worstScorePerLevel[i] = scoreDoubleLevels[i];
-				}
-				if (bestScorePerLevel[i] < scoreDoubleLevels[i]) {
-					bestScorePerLevel[i] = scoreDoubleLevels[i];
-				}
-			}
-		}
-		double[] weightPerScoreLevel = new double[worstScorePerLevel.length];
-		weightPerScoreLevel[0] = 1;
-		for (int i = 1; i < worstScorePerLevel.length; i++) {
-			weightPerScoreLevel[i] =
-					(bestScorePerLevel[i - 1] - worstScorePerLevel[i - 1]) * weightPerScoreLevel[i - 1] + 1;
-		}
-		return new double[][]{weightPerScoreLevel, worstScorePerLevel};
-	}
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < populationSize; i++) {
+            buffer.append(individuals.get(i).getWorkingSolution().getScore()).append("\n");
+        }
+        return buffer.toString();
+    }
+
+    //TODO this only works for maximization problems
+    public double[][] calculatePopulationParameters() {
+        double[] worstScorePerLevel = null;
+        double[] bestScorePerLevel = null;
+        for (ScoreDirector individual : individuals) {
+            double[] scoreDoubleLevels = individual.getWorkingSolution().getScore().toDoubleLevels();
+            if (bestScorePerLevel == null) {
+                bestScorePerLevel = new double[scoreDoubleLevels.length];
+                for (int i = 0; i < bestScorePerLevel.length; i++) {
+                    bestScorePerLevel[i] = -Double.MAX_VALUE;
+                }
+            }
+            if (worstScorePerLevel == null) {
+                worstScorePerLevel = new double[scoreDoubleLevels.length];
+            }
+            for (int i = 0; i < scoreDoubleLevels.length; i++) {
+                if (worstScorePerLevel[i] > scoreDoubleLevels[i]) {
+                    worstScorePerLevel[i] = scoreDoubleLevels[i];
+                }
+                if (bestScorePerLevel[i] < scoreDoubleLevels[i]) {
+                    bestScorePerLevel[i] = scoreDoubleLevels[i];
+                }
+            }
+        }
+        double[] weightPerScoreLevel = new double[worstScorePerLevel.length];
+        weightPerScoreLevel[0] = 1;
+        for (int i = 1; i < worstScorePerLevel.length; i++) {
+            weightPerScoreLevel[i] =
+                    (bestScorePerLevel[i - 1] - worstScorePerLevel[i - 1]) * weightPerScoreLevel[i - 1]
+                            + weightPerScoreLevel[i - 1];
+        }
+        return new double[][]{weightPerScoreLevel, worstScorePerLevel};
+    }
 }

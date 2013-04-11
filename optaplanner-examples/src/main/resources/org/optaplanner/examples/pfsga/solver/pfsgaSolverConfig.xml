@@ -17,6 +17,7 @@
 
 <solver>
   <environmentMode>PRODUCTION</environmentMode>
+  <randomSeed>1111</randomSeed>
   <!--<environmentMode>FULL_ASSERT</environmentMode>-->
   <solutionClass>org.optaplanner.examples.pfsga.model.PermutationFlowShop</solutionClass>
   <planningEntityClass>org.optaplanner.examples.pfsga.model.Job</planningEntityClass>
@@ -29,9 +30,9 @@
   <termination>
     <maximumSecondsSpend>1600</maximumSecondsSpend>
   </termination>
-  <!--<constructionHeuristic>-->
-  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-  <!--</constructionHeuristic>-->
+  <constructionHeuristic>
+    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+  </constructionHeuristic>
   <!--<localSearch>-->
   <!--<termination>-->
   <!--<maximumSecondsSpend>30</maximumSecondsSpend>-->
@@ -64,25 +65,27 @@
   <!--</localSearch>-->
   <geneticAlgorithm>
     <populationParameters>
-      <populationSize>350</populationSize>
+      <populationSize>200</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
     <rankBasedSelector/>
+    <!--<stochasticUniversalSamplingSelector/>-->
+    <cycleCrossoverOperator/>
     <!--<partiallyMatchedCrossoverOperator/>-->
     <!--<tournamentSelector>-->
-    <!--<tournamentSize>20s</tournamentSize>-->
+      <!--<tournamentSize>55</tournamentSize>-->
     <!--</tournamentSelector>-->
     <mutationOperator>
       <mutationRate>1</mutationRate>
       <unionMoveSelector>
         <swapMoveSelector/>
         <changeMoveSelector/>
-        <subChainChangeMoveSelector>
-          <subChainSelector>
-            <maximumSubChainSize>50</maximumSubChainSize>
-          </subChainSelector>
-          <selectReversingMoveToo>true</selectReversingMoveToo>
-        </subChainChangeMoveSelector>
+        <!--<subChainChangeMoveSelector>-->
+        <!--<subChainSelector>-->
+        <!--<maximumSubChainSize>5</maximumSubChainSize>-->
+        <!--</subChainSelector>-->
+        <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
+        <!--</subChainChangeMoveSelector>-->
       </unionMoveSelector>
     </mutationOperator>
 
