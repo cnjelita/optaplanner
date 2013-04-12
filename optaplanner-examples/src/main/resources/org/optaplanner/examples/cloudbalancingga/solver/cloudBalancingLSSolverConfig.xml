@@ -36,51 +36,23 @@
 
   <!-- Optimization algorithms configuration -->
   <termination>
-    <maximumSecondsSpend>100</maximumSecondsSpend>
+    <maximumMinutesSpent>10</maximumMinutesSpent>
+    <!--<maximumSecondsSpend>5</maximumSecondsSpend>-->
   </termination>
-  <!--<constructionHeuristic>-->
-  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
-  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
-  <!--</constructionHeuristic>-->
-  <!--<localSearch>-->
-  <!--<acceptor>-->
-  <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
-  <!--</acceptor>-->
-  <!--<forager>-->
-  <!--<minimalAcceptedSelection>1000</minimalAcceptedSelection>-->
-  <!--</forager>-->
-  <!--</localSearch>-->
-  <geneticAlgorithm>
-    <populationParameters>
-      <populationSize>80</populationSize>
-      <!--<elitistSize>1</elitistSize>-->
-    </populationParameters>
-    <!--<tournamentSelector>-->
-    <!--<tournamentSize>40</tournamentSize>-->
-    <!--</tournamentSelector>-->
-
-    <!--<rouletteWheelSelector/>-->
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <mutationOperator>
-      <mutationRate>1</mutationRate>
-      <unionMoveSelector>
-        <swapMoveSelector/>
-        <changeMoveSelector/>
-        <!--<pillarSwapMoveSelector/>-->
-      </unionMoveSelector>
-    </mutationOperator>
-    <!--<truncationSelector>-->
-    <!--<threshold>0.1</threshold>-->
-    <!--</truncationSelector>-->
-    <!--<tournamentSelector>-->
-    <!--<tournamentSize>60</tournamentSize>-->
-    <!--</tournamentSelector>-->
-    <rankBasedSelector/>
-    <replacementStrategy>
-      <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      <!--<diversityRate>0.1</diversityRate>-->
-    </replacementStrategy>
-    <!--<uniformCrossoverOperator/>-->
-    <twoPointCrossoverOperator/>
-  </geneticAlgorithm>
+  <constructionHeuristic>
+    <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+    <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
+  </constructionHeuristic>
+  <localSearch>
+    <unionMoveSelector>
+      <changeMoveSelector/>
+      <swapMoveSelector/>
+    </unionMoveSelector>
+    <acceptor>
+      <simulatedAnnealingStartingTemperature>0hard/400soft</simulatedAnnealingStartingTemperature>
+    </acceptor>
+    <forager>
+      <minimalAcceptedSelection>4</minimalAcceptedSelection>
+    </forager>
+  </localSearch>
 </solver>

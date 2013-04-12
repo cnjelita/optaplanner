@@ -40,8 +40,6 @@ public class KeepNewStrategy extends AbstractReplacementStrategy {
                         intermediateIndividual : generationIndividual;
         newGeneration.setBestIndividual(bestIndividual);
 
-        int numberOfNewIndividuals = (int) (populationSize * diversityRate);
-
         for (int i = 0; i < elitistSize; i++) {
             newGeneration.addIndividual(currentGeneration.get(i));
         }

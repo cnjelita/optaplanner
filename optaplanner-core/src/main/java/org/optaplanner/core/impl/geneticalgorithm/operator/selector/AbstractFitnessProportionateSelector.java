@@ -35,7 +35,7 @@ public abstract class AbstractFitnessProportionateSelector extends AbstractSolut
 		double[] worstPerScoreLevel = resultingParameters[1];
 		fitnessMap = new TreeMap<Double, ScoreDirector>();
 		for (ScoreDirector individual : generation) {
-			double[] scoreDoubleLevels = individual.getWorkingSolution().getScore().toDoubleLevels();
+            double[] scoreDoubleLevels = individual.getWorkingSolution().getScore().toDoubleLevels();
 			double flattenedScore = 0;
 			for (int i = 0; i < scoreDoubleLevels.length; i++) {
 				flattenedScore += (scoreDoubleLevels[i] - worstPerScoreLevel[i]) * weightsPerScoreLevel[i];

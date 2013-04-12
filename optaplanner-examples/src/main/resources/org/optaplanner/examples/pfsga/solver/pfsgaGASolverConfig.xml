@@ -29,21 +29,22 @@
 
   <termination>
     <maximumSecondsSpend>60</maximumSecondsSpend>
+    <!--<maximumSecondsSpend>5</maximumSecondsSpend>-->
   </termination>
   <!--<constructionHeuristic>-->
-    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
   <!--</constructionHeuristic>-->
   <geneticAlgorithm>
     <populationParameters>
       <populationSize>200</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
-    <!--<rankBasedSelector/>-->
-    <stochasticUniversalSamplingSelector/>
-    <!--<cycleCrossoverOperator/>-->
-    <partiallyMatchedCrossoverOperator/>
+    <rankBasedSelector/>
+    <!--<stochasticUniversalSamplingSelector/>-->
+    <cycleCrossoverOperator/>
+    <!--<partiallyMatchedCrossoverOperator/>-->
     <!--<tournamentSelector>-->
-    <!--<tournamentSize>55</tournamentSize>-->
+    <!--<tournamentSize>1</tournamentSize>-->
     <!--</tournamentSelector>-->
     <mutationOperator>
       <mutationRate>1</mutationRate>
@@ -59,6 +60,9 @@
       </unionMoveSelector>
     </mutationOperator>
 
-    <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+    <replacementStrategy>
+      <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+      <!--<diversityRate>0.1</diversityRate>-->
+    </replacementStrategy>
   </geneticAlgorithm>
 </solver>

@@ -29,6 +29,7 @@
 
   <termination>
     <maximumSecondsSpend>60</maximumSecondsSpend>
+    <!--<maximumSecondsSpend>5</maximumSecondsSpend>-->
   </termination>
   <!--<constructionHeuristic>-->
   <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->

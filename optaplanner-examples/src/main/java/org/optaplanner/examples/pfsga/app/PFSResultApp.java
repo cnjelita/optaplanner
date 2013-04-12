@@ -29,11 +29,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.optaplanner.core.api.score.Score;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.score.buildin.simpledouble.SimpleDoubleScore;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.config.solver.XmlSolverFactory;
 import org.optaplanner.core.impl.event.BestSolutionChangedEvent;
 import org.optaplanner.core.impl.event.SolverEventListener;
+import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
+import org.optaplanner.examples.cloudbalancingga.persistence.CloudBalancingDaoImpl;
 import org.optaplanner.examples.pfsga.model.PermutationFlowShop;
 import org.optaplanner.examples.pfsga.persistence.PFSSolutionImporter;
 
@@ -45,7 +48,13 @@ public class PFSResultApp {
     public static final String LS_SOLVER_CONFIG
             = "/org/optaplanner/examples/pfsga/solver/pfsgaLSSolverConfig.xml";
 
-    private static int numberOfRuns = 5;
+    public static final String CB_GA_SOLVER_CONFIG
+            = "/org/optaplanner/examples/cloudbalancingga/solver/cloudBalancingGASolverConfig.xml";
+
+    public static final String CB_LS_SOLVER_CONFIG
+            = "/org/optaplanner/examples/cloudbalancingga/solver/cloudBalancingLSSolverConfig.xml";
+
+    private static int numberOfRuns = 10;
 
     public static void main(String[] args) throws IOException {
 
@@ -54,8 +63,7 @@ public class PFSResultApp {
 //
 //        System.exit(0);
         List<String> dataFiles = Arrays
-                .asList("car1", "car2"
-                        , "car3", "car4", "car5", "car6", "car7", "car8", "reC01", "reC03", "reC05",
+                .asList("car1", "car2", "car3", "car4", "car5", "car6", "car7", "car8", "reC01", "reC03", "reC05",
                         "reC07", "reC09", "reC11", "reC13", "reC15", "reC17", "reC19", "reC21", "reC23",
                         "reC25", "reC27", "reC29", "reC31", "reC33", "reC35", "reC37", "reC39"
                         , "reC41");
@@ -122,10 +130,9 @@ public class PFSResultApp {
                 solver.setPlanningProblem(instance);
                 Listener l = new Listener(solver, dataFileToOptimalScoreMap.get(dataFile));
                 solver.addEventListener(l);
-                long startTimeMillis = System.currentTimeMillis();
                 solver.solve();
                 solver.getTimeMillisSpend();
-                dataFileConvergenceTimeList.add(l.getConvergenceTimeMillis() - startTimeMillis);
+                dataFileConvergenceTimeList.add(l.getConvergenceTimeMillis());
                 Score currentScore = solver.getBestSolution().getScore();
                 meanScore += currentScore.toDoubleLevels()[0];
                 if (maxScore == null || maxScore.compareTo(currentScore) < 0) {
@@ -230,6 +237,136 @@ public class PFSResultApp {
         }
         sc.println(outputString);
         sc.close();
+
+        dataFiles = Arrays
+                .asList("cb-0100comp-0300proc"
+                        , "cb-0200comp-0600proc"
+                        , "cb-0400comp-1200proc",
+                        "cb-0800comp-2400proc");
+//
+//                        ,
+//
+
+        fileName = new SimpleDateFormat("'cb_ga_'dd-MM-yy:hh-mm'.txt'").format(new Date());
+        outputFile = new File("/home/sam/Desktop/results/" + fileName);
+        sc = new PrintWriter(new FileWriter(outputFile));
+
+        outputString = "";
+        // Build the Solver
+        for (String dataFile : dataFiles) {
+
+            File f = new File("/home/sam/git-repos/optaplanner/optaplanner-examples/data/cloudbalancing/unsolved/" + dataFile + ".xml");
+
+            outputString += dataFile;
+
+            sc.println("GA===========================");
+            List<Score> dataFileScoreList = new ArrayList<Score>();
+            List<Long> dataFileConvergenceTimeList = new ArrayList<Long>();
+            Score maxScore = null;
+            Score minScore = null;
+            Score meanScore = HardSoftScore.valueOf(0, 0);
+
+            for (int i = 0; i < numberOfRuns; i++) {
+                XmlSolverFactory solverFactory = new XmlSolverFactory();
+                Solver solver = solverFactory.configure(CB_GA_SOLVER_CONFIG).buildSolver();
+                CloudBalance instance = (CloudBalance) new CloudBalancingDaoImpl().readSolution(f);
+                solver.setPlanningProblem(instance);
+                Listener l = new Listener(solver, -1);
+                solver.addEventListener(l);
+                solver.solve();
+                solver.getTimeMillisSpend();
+                dataFileConvergenceTimeList.add(l.getConvergenceTimeMillis());
+                Score currentScore = solver.getBestSolution().getScore();
+                meanScore.add(currentScore);
+                if (maxScore == null || maxScore.compareTo(currentScore) < 0) {
+                    maxScore = currentScore;
+                }
+                if (minScore == null || minScore.compareTo(currentScore) > 0) {
+                    minScore = currentScore;
+                }
+                dataFileScoreList.add(currentScore);
+
+            }
+
+            meanScore.divide(numberOfRuns);
+
+            sc.println(dataFile);
+            double meanConvergenceTime = calculateMeanConvergenceTime(dataFileConvergenceTimeList);
+            sc.println("Mean convergence time " + meanConvergenceTime);
+            sc.println("mean score " + meanScore);
+            sc.println("max score " + maxScore);
+            sc.println("min score " + minScore);
+
+            outputString += " & " + minScore + " & " + meanScore + " & " + maxScore + " & " + " & " + meanConvergenceTime;
+
+            sc.println("Raw convergence time results: ");
+            for (int i = 0; i < dataFileConvergenceTimeList.size(); i++) {
+                sc.print(dataFileConvergenceTimeList.get(i) + ", ");
+            }
+            sc.println();
+            sc.println("Raw score results: ");
+            for (int i = 0; i < dataFileScoreList.size(); i++) {
+                sc.print(dataFileScoreList.get(i) + ", ");
+            }
+
+            sc.println("\nLS===========================");
+            dataFileScoreList = new ArrayList<Score>();
+            dataFileConvergenceTimeList = new ArrayList<Long>();
+            maxScore = null;
+            minScore = null;
+            meanScore = HardSoftScore.valueOf(0, 0);
+
+            for (int i = 0; i < numberOfRuns; i++) {
+                XmlSolverFactory solverFactory = new XmlSolverFactory();
+                Solver solver = solverFactory.configure(CB_LS_SOLVER_CONFIG).buildSolver();
+                CloudBalance instance = (CloudBalance) new CloudBalancingDaoImpl().readSolution(f);
+                solver.setPlanningProblem(instance);
+                Listener l = new Listener(solver, -1);
+                solver.addEventListener(l);
+                solver.solve();
+                solver.getTimeMillisSpend();
+                dataFileConvergenceTimeList.add(l.getConvergenceTimeMillis());
+                Score currentScore = solver.getBestSolution().getScore();
+                meanScore.add(currentScore);
+                if (maxScore == null || maxScore.compareTo(currentScore) < 0) {
+                    maxScore = currentScore;
+                }
+                if (minScore == null || minScore.compareTo(currentScore) > 0) {
+                    minScore = currentScore;
+                }
+                dataFileScoreList.add(currentScore);
+
+            }
+
+            meanScore.divide(numberOfRuns);
+
+            meanConvergenceTime = calculateMeanConvergenceTime(dataFileConvergenceTimeList);
+            sc.println("Mean convergence time " + meanConvergenceTime);
+            sc.println("mean score " + meanScore);
+            sc.println("max score " + maxScore);
+            sc.println("min score " + minScore);
+//            sc.println("min gap " + calculateGap(minScore, dataFileToOptimalScoreMap.get(dataFile)));
+
+            outputString += " & " + minScore + " & " + meanScore + " & " + maxScore + " & " + meanConvergenceTime;
+
+            sc.println("Raw convergence time results: ");
+            for (int i = 0; i < dataFileConvergenceTimeList.size(); i++) {
+                sc.print(dataFileConvergenceTimeList.get(i) + ", ");
+            }
+            sc.println();
+            sc.println("Raw score results: ");
+            for (int i = 0; i < dataFileScoreList.size(); i++) {
+                sc.print(dataFileScoreList.get(i) + ", ");
+            }
+
+            sc.println();
+            sc.println();
+            sc.println();
+            sc.println();
+            outputString += "\n";
+        }
+        sc.println(outputString);
+        sc.close();
 //
     }
 
@@ -263,7 +400,8 @@ public class PFSResultApp {
         @Override
         public void bestSolutionChanged(BestSolutionChangedEvent event) {
             convergenceTimeMillis = event.getTimeMillisSpend();
-            if ((int) (event.getNewBestSolution().getScore().toDoubleLevels()[0] * -1) == optimalScore) {
+            if (optimalScore != -1 && (int) (event.getNewBestSolution().getScore()
+                    .toDoubleLevels()[0] * -1) == optimalScore) {
                 convergenceTimeMillis = event.getTimeMillisSpend();
                 solver.terminateEarly();
             }

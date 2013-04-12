@@ -43,10 +43,10 @@
     <cycleCrossoverOperator/>
     <!--<partiallyMatchedCrossoverOperator/>-->
     <!--<tournamentSelector>-->
-    <!--<tournamentSize>55</tournamentSize>-->
+    <!--<tournamentSize>3</tournamentSize>-->
     <!--</tournamentSelector>-->
     <mutationOperator>
-      <mutationRate>1</mutationRate>
+      <mutationRate>3</mutationRate>
       <unionMoveSelector>
         <swapMoveSelector/>
         <changeMoveSelector/>
@@ -60,7 +60,7 @@
     </mutationOperator>
     <replacementStrategy>
       <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-      <!--<diversityRate>0.008</diversityRate>-->
+      <!--<diversityRate>0.001</diversityRate>-->
     </replacementStrategy>
   </geneticAlgorithm>
 </solver>
