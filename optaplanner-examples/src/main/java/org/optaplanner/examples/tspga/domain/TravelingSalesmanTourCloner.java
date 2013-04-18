@@ -56,6 +56,8 @@ public class TravelingSalesmanTourCloner implements SolutionCloner<TravelingSale
 		clone.setDomicileList(clonedDomicileList);
 		clone.setVisitList(clonedVisitList);
 		clone.setScore(original.getScore());
+        clone.setName(original.getName());
+        clone.setId(original.getId());
 //		clone.generateIdMaps();
 //		System.out.println(clonedVisitList.size());
 		return clone;

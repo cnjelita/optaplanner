@@ -29,15 +29,15 @@ public class PFSSimpleScoreCalculator implements SimpleScoreCalculator<Permutati
 //		for (int j = 1; j < numberOfMachines; j++) {
 //			times[j] = times[j - 1] + timerPerMachine.get(j);
 //		}
-		List<Integer> timerPerMachine;
+		List<Integer> timePerMachine;
 		while ((currentUnitOfWork = inverseChain.get(currentUnitOfWork)) != null) {
-			timerPerMachine = currentUnitOfWork.getMachineTimeSequence().getMachineTimes();
-			times[0] = times[0] + timerPerMachine.get(0);
+			timePerMachine = currentUnitOfWork.getMachineTimeSequence().getMachineTimes();
+			times[0] = times[0] + timePerMachine.get(0);
 			for (int i = 1; i < numberOfMachines; i++) {
 				if (times[i - 1] > times[i]) {
-					times[i] = times[i - 1] + timerPerMachine.get(i);
+					times[i] = times[i - 1] + timePerMachine.get(i);
 				} else {
-					times[i] += timerPerMachine.get(i);
+					times[i] += timePerMachine.get(i);
 				}
 			}
 		}

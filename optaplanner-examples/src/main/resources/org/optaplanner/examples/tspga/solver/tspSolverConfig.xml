@@ -31,9 +31,9 @@
     <!--</assertionScoreDirectorFactory>-->
   </scoreDirectorFactory>
 
-  <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-  </constructionHeuristic>
+  <!--<constructionHeuristic>-->
+    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--</constructionHeuristic>-->
   <!--<localSearch>-->
     <!--<unionMoveSelector>-->
       <!--<changeMoveSelector/>-->
@@ -61,7 +61,7 @@
       <maximumSecondsSpend>60</maximumSecondsSpend>
     </termination>
     <populationParameters>
-      <populationSize>600</populationSize>
+      <populationSize>50</populationSize>
       <elitistSize>0</elitistSize>
     </populationParameters>
     <stochasticUniversalSamplingSelector/>

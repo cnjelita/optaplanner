@@ -29,7 +29,7 @@ import org.optaplanner.examples.tspga.swingui.TspPanel;
 public class TspApp extends CommonApp {
 
 	public static final String SOLVER_CONFIG
-			= "/org/optaplanner/examples/tsp/solver/tspSolverConfig.xml";
+			= "/org/optaplanner/examples/tspga/solver/tspSolverConfig.xml";
 
 	public static void main(String[] args) {
 		fixateLookAndFeel();
