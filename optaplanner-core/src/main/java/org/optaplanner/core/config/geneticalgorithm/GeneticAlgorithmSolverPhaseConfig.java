@@ -25,6 +25,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.optaplanner.core.config.geneticalgorithm.initializer.PopulationInitializerConfig;
 import org.optaplanner.core.config.geneticalgorithm.operator.crossover.CrossoverOperatorConfig;
 import org.optaplanner.core.config.geneticalgorithm.operator.mutation.MutationOperatorConfig;
+import org.optaplanner.core.config.geneticalgorithm.operator.replacementstrategy.ReplacementStrategyConfig;
 import org.optaplanner.core.config.geneticalgorithm.operator.solutionselector.SolutionSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
 import org.optaplanner.core.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
@@ -42,11 +43,7 @@ import org.optaplanner.core.impl.geneticalgorithm.operator.crossover.UnionCrosso
 import org.optaplanner.core.impl.geneticalgorithm.operator.mutation.MutationOperator;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.SolutionSelector;
 import org.optaplanner.core.impl.geneticalgorithm.operator.selector.TournamentSelector;
-import org.optaplanner.core.impl.geneticalgorithm.replacementstrategy.KeepBestStrategy;
-import org.optaplanner.core.impl.geneticalgorithm.replacementstrategy.KeepNewStrategy;
-import org.optaplanner.core.impl.geneticalgorithm.replacementstrategy.RandomStrategy;
 import org.optaplanner.core.impl.geneticalgorithm.replacementstrategy.ReplacementStrategy;
-import org.optaplanner.core.impl.geneticalgorithm.replacementstrategy.SteadyStateStrategy;
 import org.optaplanner.core.impl.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.impl.phase.SolverPhase;
 import org.optaplanner.core.impl.score.definition.ScoreDefinition;
@@ -55,154 +52,139 @@ import org.optaplanner.core.impl.termination.Termination;
 @XStreamAlias("geneticAlgorithm")
 public class GeneticAlgorithmSolverPhaseConfig extends SolverPhaseConfig {
 
-	// Warning: all fields are null (and not defaulted) because they can be inherited
-	// and also because the input config file should match the output config file
+    // Warning: all fields are null (and not defaulted) because they can be inherited
+    // and also because the input config file should match the output config file
 
-	@XStreamAlias("populationParameters")
-	private PopulationParametersConfig populationParametersConfig = null;
+    @XStreamAlias("populationParameters")
+    private PopulationParametersConfig populationParametersConfig = null;
 
-	//TODO all of the operators are read into a list due to XStream limitations
-	@XStreamImplicit()
-	private List<SolutionSelectorConfig> solutionSelectorConfigList = null;
+    //TODO all of the operators are read into a list due to XStream limitations
+    @XStreamImplicit()
+    private List<SolutionSelectorConfig> solutionSelectorConfigList = null;
 
-	@XStreamImplicit()
-	private List<CrossoverOperatorConfig> crossoverOperatorConfigList = null;
+    @XStreamImplicit()
+    private List<CrossoverOperatorConfig> crossoverOperatorConfigList = null;
 
-	@XStreamImplicit()
-	private List<MutationOperatorConfig> mutationOperatorConfigList = null;
+    @XStreamImplicit()
+    private List<MutationOperatorConfig> mutationOperatorConfigList = null;
 
-	@XStreamImplicit()
-	private List<PopulationInitializerConfig> populationInitializerConfigList = null;
+    @XStreamImplicit()
+    private List<PopulationInitializerConfig> populationInitializerConfigList = null;
 
-	private ReplacementStrategyType replacementStrategyType = null;
+    @XStreamAlias("replacementStrategy")
+    private ReplacementStrategyConfig replacementStrategyConfig = null;
 
-// ************************************************************************
-	// Builder methods
-	// ************************************************************************
+    // ************************************************************************
+    // Builder methods
+    // ************************************************************************
 
-	@Override
-	public SolverPhase buildSolverPhase(int phaseIndex, EnvironmentMode environmentMode,
-			SolutionDescriptor solutionDescriptor, ScoreDefinition scoreDefinition, Termination solverTermination) {
-		//TODO do necessary checks:
-		// *check whether score toDoubleLevels is implemented for FPSelection
-		GeneticAlgorithmSolverPhase solverPhase = new GeneticAlgorithmSolverPhase();
-		configureSolverPhase(solverPhase, phaseIndex, environmentMode, scoreDefinition, solverTermination);
+    @Override
+    public SolverPhase buildSolverPhase(int phaseIndex, EnvironmentMode environmentMode,
+            SolutionDescriptor solutionDescriptor, ScoreDefinition scoreDefinition, Termination solverTermination) {
+        //TODO do necessary checks:
+        // *check whether score toDoubleLevels is implemented for FPSelection
+        GeneticAlgorithmSolverPhase solverPhase = new GeneticAlgorithmSolverPhase();
+        configureSolverPhase(solverPhase, phaseIndex, environmentMode, scoreDefinition, solverTermination);
 
-		populationParametersConfig.buildPopulationParameters(solverPhase);
-		solverPhase.setSolutionSelector(buildSolutionSelector(solutionDescriptor));
-		solverPhase.setCrossoverOperator(buildCrossoverOperator(solutionDescriptor));
-		solverPhase.setMutationOperator(buildMutationOperator(environmentMode, solutionDescriptor));
-		solverPhase.setPopulationInitializer(buildPopulationInitializer(solutionDescriptor));
-		solverPhase.setReplacementStrategy(buildReplacementStrategy());
+        populationParametersConfig.buildPopulationParameters(solverPhase);
+        solverPhase.setSolutionSelector(buildSolutionSelector(solutionDescriptor));
+        solverPhase.setCrossoverOperator(buildCrossoverOperator(solutionDescriptor));
+        solverPhase.setMutationOperator(buildMutationOperator(environmentMode, solutionDescriptor));
+        PopulationInitializer initializer = buildPopulationInitializer(solutionDescriptor);
+        solverPhase.setPopulationInitializer(initializer);
+        solverPhase.setReplacementStrategy(buildReplacementStrategy(initializer));
 
-		if (environmentMode == EnvironmentMode.FAST_ASSERT || environmentMode == EnvironmentMode.FULL_ASSERT) {
-			solverPhase.setAssertStepScoreIsUncorrupted(true);
-		}
+        if (environmentMode == EnvironmentMode.FAST_ASSERT || environmentMode == EnvironmentMode.FULL_ASSERT) {
+            solverPhase.setAssertStepScoreIsUncorrupted(true);
+        }
 
-		return solverPhase;
-	}
+        return solverPhase;
+    }
 
-	private ReplacementStrategy buildReplacementStrategy() {
-		ReplacementStrategy replacementStrategy;
-		if (replacementStrategyType == null) {
-			//TODO set best option as default
-			replacementStrategy = new KeepBestStrategy();
-		} else {
-			switch (replacementStrategyType) {
-				case KEEP_NEW:
-					replacementStrategy = new KeepNewStrategy();
-					break;
-				case RANDOM:
-					replacementStrategy = new RandomStrategy();
-					break;
-				case STEADY_STATE:
-					replacementStrategy = new SteadyStateStrategy();
-				default:
-					//TODO default to best replacement strategy
-					replacementStrategy = new KeepBestStrategy();
-					break;
-			}
-		}
+    private ReplacementStrategy buildReplacementStrategy(PopulationInitializer initializer) {
+        if (replacementStrategyConfig == null) {
+            replacementStrategyConfig = new ReplacementStrategyConfig();
+            replacementStrategyConfig.setReplacementStrategyType(ReplacementStrategyType.KEEP_NEW);
+        }
+        return replacementStrategyConfig.buildReplacementStrategy(initializer);
+    }
 
-		return replacementStrategy;
-	}
+    private PopulationInitializer buildPopulationInitializer(SolutionDescriptor solutionDescriptor) {
+        PopulationInitializer populationInitializer;
+        if (CollectionUtils.isEmpty(populationInitializerConfigList)) {
+            //TODO set best as default
+            populationInitializer = new RandomPopulationInitializer();
+        } else if (populationInitializerConfigList.size() == 1) {
+            populationInitializer = populationInitializerConfigList.get(0).buildPopulationInitializer(
+                    solutionDescriptor);
+        } else {
+            throw new IllegalArgumentException("The populationInitializerConfigList (" + populationInitializerConfigList
+                    + ") must be a singleton or empty.");
+        }
+        return populationInitializer;
+    }
 
-	private PopulationInitializer buildPopulationInitializer(SolutionDescriptor solutionDescriptor) {
-		PopulationInitializer populationInitializer;
-		if (CollectionUtils.isEmpty(populationInitializerConfigList)) {
-			//TODO set best as default
-			populationInitializer = new RandomPopulationInitializer();
-		} else if (populationInitializerConfigList.size() == 1) {
-			populationInitializer = populationInitializerConfigList.get(0).buildPopulationInitializer(
-					solutionDescriptor);
-		} else {
-			throw new IllegalArgumentException("The populationInitializerConfigList (" + populationInitializerConfigList
-					+ ") must be a singleton or empty.");
-		}
-		return populationInitializer;
-	}
+    private MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
+            SolutionDescriptor solutionDescriptor) {
+        //TODO implement build method for mutation operator
+        MutationOperator mutationOperator = new MutationOperator();
+        SelectionCacheType defaultCacheType = SelectionCacheType.JUST_IN_TIME;
+        SelectionOrder defaultSelectionOrder = SelectionOrder.RANDOM;
+        if (CollectionUtils.isEmpty(mutationOperatorConfigList)) {
+            // Default to changeMoveSelector and swapMoveSelector
+            UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
+            unionMoveSelectorConfig.setMoveSelectorConfigList(Arrays.asList(
+                    new ChangeMoveSelectorConfig(), new SwapMoveSelectorConfig()));
+            mutationOperator.setMoveSelector(
+                    unionMoveSelectorConfig.buildMoveSelector(environmentMode, solutionDescriptor,
+                            defaultCacheType, defaultSelectionOrder));
+        } else if (mutationOperatorConfigList.size() == 1) {
+            mutationOperator = mutationOperatorConfigList.get(0).buildMutationOperator(
+                    environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
+        } else {
+            throw new IllegalArgumentException("The mutationOperatorConfigList (" + mutationOperatorConfigList
+                    + ") must be a singleton or empty.");
+        }
+        return mutationOperator;
+    }
 
-	private MutationOperator buildMutationOperator(EnvironmentMode environmentMode,
-			SolutionDescriptor solutionDescriptor) {
-		//TODO implement build method for mutation operator
-		MutationOperator mutationOperator = new MutationOperator();
-		SelectionCacheType defaultCacheType = SelectionCacheType.JUST_IN_TIME;
-		SelectionOrder defaultSelectionOrder = SelectionOrder.RANDOM;
-		if (CollectionUtils.isEmpty(mutationOperatorConfigList)) {
-			// Default to changeMoveSelector and swapMoveSelector
-			UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
-			unionMoveSelectorConfig.setMoveSelectorConfigList(Arrays.asList(
-					new ChangeMoveSelectorConfig(), new SwapMoveSelectorConfig()));
-			mutationOperator.setMoveSelector(
-					unionMoveSelectorConfig.buildMoveSelector(environmentMode, solutionDescriptor,
-							defaultCacheType, defaultSelectionOrder));
-		} else if (mutationOperatorConfigList.size() == 1) {
-			mutationOperator = mutationOperatorConfigList.get(0).buildMutationOperator(
-					environmentMode, solutionDescriptor, defaultCacheType, defaultSelectionOrder);
-		} else {
-			throw new IllegalArgumentException("The mutationOperatorConfigList (" + mutationOperatorConfigList
-					+ ") must be a singleton or empty.");
-		}
-		return mutationOperator;
-	}
+    private CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor) {
+        CrossoverOperator crossoverOperator;
+        if (CollectionUtils.isEmpty(crossoverOperatorConfigList)) {
+            //TODO to build a default crossover operator check whether solution uses chaining...
+            //TODO or keep using no crossover as default?
+            crossoverOperator = new NoOpCrossoverOperator();
+        } else if (crossoverOperatorConfigList.size() == 1) {
+            List<CrossoverOperator> crossoverOperators = crossoverOperatorConfigList.get(0).buildCrossoverOperator(
+                    null, solutionDescriptor);
+            if (crossoverOperators.size() > 1) {
+                UnionCrossoverOperator unionCrossoverOperator = new UnionCrossoverOperator();
+                for (CrossoverOperator co : crossoverOperators) {
+                    unionCrossoverOperator.addCrossoverOperator(co);
+                }
+                crossoverOperator = unionCrossoverOperator;
+            } else {
+                crossoverOperator = crossoverOperators.get(0);
+            }
+        } else {
+            throw new IllegalArgumentException("The crossoverOperatorConfigList (" + crossoverOperatorConfigList
+                    + ") cannot contain multiple items.");
+        }
+        return crossoverOperator;
+    }
 
-	private CrossoverOperator buildCrossoverOperator(SolutionDescriptor solutionDescriptor) {
-		CrossoverOperator crossoverOperator;
-		if (CollectionUtils.isEmpty(crossoverOperatorConfigList)) {
-			//TODO to build a default crossover operator check whether solution uses chaining...
-			//TODO or keep using no crossover as default?
-			crossoverOperator = new NoOpCrossoverOperator();
-		} else if (crossoverOperatorConfigList.size() == 1) {
-			List<CrossoverOperator> crossoverOperators = crossoverOperatorConfigList.get(0).buildCrossoverOperator(
-					null, solutionDescriptor);
-			if (crossoverOperators.size() > 1) {
-				UnionCrossoverOperator unionCrossoverOperator = new UnionCrossoverOperator();
-				for (CrossoverOperator co : crossoverOperators) {
-					unionCrossoverOperator.addCrossoverOperator(co);
-				}
-				crossoverOperator = unionCrossoverOperator;
-			} else {
-				crossoverOperator = crossoverOperators.get(0);
-			}
-		} else {
-			throw new IllegalArgumentException("The crossoverOperatorConfigList (" + crossoverOperatorConfigList
-					+ ") cannot contain multiple items.");
-		}
-		return crossoverOperator;
-	}
-
-	private SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
-		SolutionSelector solutionSelector;
-		if (CollectionUtils.isEmpty(solutionSelectorConfigList)) {
-			//TODO Choose best working solution selector as default if user didn't choose one
-			solutionSelector = new TournamentSelector();
-			((TournamentSelector) solutionSelector).setTournamentSize(5);
-		} else if (solutionSelectorConfigList.size() == 1) {
-			solutionSelector = solutionSelectorConfigList.get(0).buildSolutionSelector(solutionDescriptor);
-		} else {
-			throw new IllegalArgumentException("The solutionSelectorConfigList (" + solutionSelectorConfigList
-					+ ") must be a singleton or empty.");
-		}
-		return solutionSelector;
-	}
+    private SolutionSelector buildSolutionSelector(SolutionDescriptor solutionDescriptor) {
+        SolutionSelector solutionSelector;
+        if (CollectionUtils.isEmpty(solutionSelectorConfigList)) {
+            //TODO Choose best working solution selector as default if user didn't choose one
+            solutionSelector = new TournamentSelector();
+            ((TournamentSelector) solutionSelector).setTournamentSize(5);
+        } else if (solutionSelectorConfigList.size() == 1) {
+            solutionSelector = solutionSelectorConfigList.get(0).buildSolutionSelector(solutionDescriptor);
+        } else {
+            throw new IllegalArgumentException("The solutionSelectorConfigList (" + solutionSelectorConfigList
+                    + ") must be a singleton or empty.");
+        }
+        return solutionSelector;
+    }
 }

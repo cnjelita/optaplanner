@@ -22,27 +22,39 @@ import java.util.Random;
 
 import org.optaplanner.core.impl.geneticalgorithm.ScoreDirectorComparator;
 import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
+import org.optaplanner.core.impl.geneticalgorithm.initializer.PopulationInitializer;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPhaseScope;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 
 public abstract class AbstractReplacementStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-		ReplacementStrategy {
+        ReplacementStrategy {
 
-	protected Comparator<ScoreDirector> scoreDirectorComparator;
-	protected int populationSize;
-	protected int elitistSize;
-	protected Random workingRandom;
+    protected Comparator<ScoreDirector> scoreDirectorComparator;
+    protected int populationSize;
+    protected int elitistSize;
+    protected Random workingRandom;
+    protected double diversityRate;
+    protected PopulationInitializer initializer;
 
-	@Override
-	public abstract void createNewGeneration(GeneticAlgorithmStepScope stepScope);
+    @Override
+    public abstract void createNewGeneration(GeneticAlgorithmStepScope stepScope);
 
-	@Override
-	public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		super.phaseStarted(phaseScope);
-		scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
-		populationSize = phaseScope.getPopulationSize();
-		elitistSize = phaseScope.getElitistSize();
-		workingRandom = phaseScope.getWorkingRandom();
-	}
+    @Override
+    public void phaseStarted(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        super.phaseStarted(phaseScope);
+        scoreDirectorComparator = Collections.reverseOrder(new ScoreDirectorComparator());
+        populationSize = phaseScope.getPopulationSize();
+        elitistSize = phaseScope.getElitistSize();
+        workingRandom = phaseScope.getWorkingRandom();
+    }
+
+    public void setDiversityRate(double diversityRate) {
+        this.diversityRate = diversityRate;
+    }
+
+    public void setPopulationInitializer(PopulationInitializer initializer) {
+        this.initializer = initializer;
+    }
+
 }

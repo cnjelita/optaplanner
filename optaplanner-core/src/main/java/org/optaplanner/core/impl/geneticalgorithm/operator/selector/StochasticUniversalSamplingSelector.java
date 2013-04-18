@@ -18,22 +18,25 @@ package org.optaplanner.core.impl.geneticalgorithm.operator.selector;
 
 import org.optaplanner.core.impl.geneticalgorithm.Population;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.core.impl.util.RandomUtils;
 
 public class StochasticUniversalSamplingSelector extends AbstractFitnessProportionateSelector {
 
-	@Override
-	public void selectParents(GeneticAlgorithmStepScope stepScope) {
-		int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
-		double offset = RandomUtils.nextDouble(workingRandom, totalProbability / intermediatePopulationSize);
-		Population intermediatePopulation = new Population(intermediatePopulationSize);
-		double nextOffset = offset;
-		for (int i = 0; i < intermediatePopulationSize; i++) {
-			intermediatePopulation.addIndividual(fitnessMap.ceilingEntry(nextOffset).getValue().clone());
-			nextOffset += offset;
-		}
-		stepScope.setIntermediatePopulation(intermediatePopulation);
-		stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
+    @Override
+    public void selectParents(GeneticAlgorithmStepScope stepScope) {
+        int intermediatePopulationSize = populationSize % 2 == 0 ? populationSize : populationSize + 1;
+        double offset = totalProbability / intermediatePopulationSize;
+        Population intermediatePopulation = new Population(intermediatePopulationSize);
+        double nextOffset = RandomUtils.nextDouble(workingRandom, offset);
+        for (int i = 0; i < intermediatePopulationSize; i++) {
+            ScoreDirector nextIndividual = fitnessMap.ceilingEntry(nextOffset).getValue().clone();
+//            System.out.println(nextIndividual.getWorkingSolution().getScore());
+            intermediatePopulation.addIndividual(nextIndividual);
+            nextOffset += offset;
+        }
+        stepScope.setIntermediatePopulation(intermediatePopulation);
+        stepScope.setIntermediatePopulationSize(intermediatePopulationSize);
 
-	}
+    }
 }

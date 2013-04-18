@@ -16,16 +16,18 @@
 
 package org.optaplanner.core.impl.geneticalgorithm.replacementstrategy;
 
-import org.optaplanner.core.impl.geneticalgorithm.event.GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter;
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 
-public class SteadyStateStrategy extends GeneticAlgorithmSolverPhaseLifeCycleListenerAdapter implements
-		ReplacementStrategy {
+public class SteadyStateStrategy extends AbstractReplacementStrategy {
 
-	@Override
-	public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
-		//TODO implement
-	}
+    public SteadyStateStrategy() {
+        throw new UnsupportedOperationException("Class not implemented yet");
+    }
 
-	//TODO listen to lifecycle events?
+    @Override
+    public void createNewGeneration(GeneticAlgorithmStepScope stepScope) {
+        //TODO implement
+    }
+
+    //TODO listen to lifecycle events?
 }

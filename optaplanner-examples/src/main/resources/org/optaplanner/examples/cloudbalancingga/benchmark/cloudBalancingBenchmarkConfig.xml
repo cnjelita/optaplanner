@@ -26,14 +26,15 @@
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0002comp-0006proc.xml</inputSolutionFile>-->
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0003comp-0009proc.xml</inputSolutionFile>-->
       <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0004comp-0012proc.xml</inputSolutionFile>-->
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0100comp-0300proc.xml</inputSolutionFile>-->
       <inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>
-      <inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>-->
+      <!--<inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>-->
       <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
     </problemBenchmarks>
 
     <solver>
+      <environmentMode>PRODUCTION</environmentMode>
       <solutionClass>org.optaplanner.examples.cloudbalancingga.domain.CloudBalance</solutionClass>
       <planningEntityClass>org.optaplanner.examples.cloudbalancingga.domain.CloudProcess</planningEntityClass>
       <scoreDirectorFactory>
@@ -54,31 +55,34 @@
   <!--</solver>-->
   <!--</solverBenchmark>-->
 
-  <solverBenchmark>
-    <name>Genetic algorithm</name>
-    <solver>
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-        <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
-      </constructionHeuristic>
-      <geneticAlgorithm>
-        <populationParameters>
-          <populationSize>40</populationSize>
-          <elitistSize>0</elitistSize>
-        </populationParameters>
-        <mutationOperator>
-          <mutationRate>1</mutationRate>
-          <unionMoveSelector>
-            <swapMoveSelector/>
-            <changeMoveSelector/>
-          </unionMoveSelector>
-        </mutationOperator>
-        <rankBasedSelector/>
-        <replacementStrategyType>KEEP_NEW</replacementStrategyType>
-        <uniformCrossoverOperator/>
-      </geneticAlgorithm>
-    </solver>
-  </solverBenchmark>
+  <!--<solverBenchmark>-->
+  <!--<name>Genetic algorithm</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--<geneticAlgorithm>-->
+  <!--<populationParameters>-->
+  <!--<populationSize>80</populationSize>-->
+  <!--<elitistSize>0</elitistSize>-->
+  <!--</populationParameters>-->
+  <!--<mutationOperator>-->
+  <!--<mutationRate>1</mutationRate>-->
+  <!--<unionMoveSelector>-->
+  <!--<swapMoveSelector/>-->
+  <!--<changeMoveSelector/>-->
+  <!--</unionMoveSelector>-->
+  <!--</mutationOperator>-->
+  <!--<rankBasedSelector/>-->
+  <!--&lt;!&ndash;<replacementStrategy>&ndash;&gt;-->
+  <!--&lt;!&ndash;<replacementStrategyType>KEEP_NEW</replacementStrategyType>&ndash;&gt;-->
+  <!--&lt;!&ndash;<diversityRate>0.1</diversityRate>&ndash;&gt;-->
+  <!--&lt;!&ndash;</replacementStrategy>&ndash;&gt;-->
+  <!--<uniformCrossoverOperator/>-->
+  <!--</geneticAlgorithm>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
   <!--<solverBenchmark>-->
   <!--<name>First Fit</name>-->
   <!--<solver>-->
@@ -98,27 +102,27 @@
   <!--</solver>-->
   <!--</solverBenchmark>-->
 
-  <solverBenchmark>
-    <name>Tabu Search</name>
-    <solver>
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-        <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
-      </constructionHeuristic>
-      <localSearch>
-        <unionMoveSelector>
-          <changeMoveSelector/>
-          <swapMoveSelector/>
-        </unionMoveSelector>
-        <acceptor>
-          <planningEntityTabuSize>7</planningEntityTabuSize>
-        </acceptor>
-        <forager>
-          <minimalAcceptedSelection>1000</minimalAcceptedSelection>
-        </forager>
-      </localSearch>
-    </solver>
-  </solverBenchmark>
+  <!--<solverBenchmark>-->
+  <!--<name>Tabu Search</name>-->
+  <!--<solver>-->
+  <!--<constructionHeuristic>-->
+  <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+  <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+  <!--</constructionHeuristic>-->
+  <!--<localSearch>-->
+  <!--<unionMoveSelector>-->
+  <!--<changeMoveSelector/>-->
+  <!--<swapMoveSelector/>-->
+  <!--</unionMoveSelector>-->
+  <!--<acceptor>-->
+  <!--<planningEntityTabuSize>7</planningEntityTabuSize>-->
+  <!--</acceptor>-->
+  <!--<forager>-->
+  <!--<minimalAcceptedSelection>1000</minimalAcceptedSelection>-->
+  <!--</forager>-->
+  <!--</localSearch>-->
+  <!--</solver>-->
+  <!--</solverBenchmark>-->
   <solverBenchmark>
     <name>Simulated Annealing</name>
     <solver>

@@ -21,10 +21,10 @@ public class PFSBenchmarkApp extends CommonBenchmarkApp {
                 throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
             }
         } else {
-//            benchmarkConfig = DEFAULT_BENCHMARK_CONFIG2;
-            benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
-            new PFSBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
-            return;
+            benchmarkConfig = DEFAULT_BENCHMARK_CONFIG2;
+//            benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
+//            new PFSBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
+//            return;
         }
         new PFSBenchmarkApp().buildAndBenchmark(benchmarkConfig);
     }
