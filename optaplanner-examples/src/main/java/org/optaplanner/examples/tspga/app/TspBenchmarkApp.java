@@ -20,21 +20,25 @@ import org.optaplanner.examples.common.app.CommonBenchmarkApp;
 
 public class TspBenchmarkApp extends CommonBenchmarkApp {
 
-	public static final String DEFAULT_BENCHMARK_CONFIG
-			= "/org/optaplanner/examples/tsp/benchmarkga/tspBenchmarkConfig.xml";
+    public static final String DEFAULT_BENCHMARK_CONFIG
+            = "/org/optaplanner/examples/tspga/benchmark/tspBenchmarkConfig.xml";
+    public static final String TEMPLATE_BENCHMARK_CONFIG_TEMPLATE
+            = "/org/optaplanner/examples/tspga/benchmark/tspBenchmarkConfigTemplate.xml.ftl";
 
-	public static void main(String[] args) {
-		String benchmarkConfig;
-		if (args.length > 0) {
-			if (args[0].equals("default")) {
-				benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
-			} else {
-				throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
-			}
-		} else {
-			benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
-		}
-		new TspBenchmarkApp().buildAndBenchmark(benchmarkConfig);
-	}
+    public static void main(String[] args) {
+        String benchmarkConfig;
+        if (args.length > 0) {
+            if (args[0].equals("default")) {
+                benchmarkConfig = DEFAULT_BENCHMARK_CONFIG;
+            } else {
+                throw new IllegalArgumentException("The program argument (" + args[0] + ") is not supported.");
+            }
+        } else {
+            benchmarkConfig = TEMPLATE_BENCHMARK_CONFIG_TEMPLATE;
+            new TspBenchmarkApp().buildFromTemplateAndBenchmark(benchmarkConfig);
+            return;
+        }
+        new TspBenchmarkApp().buildAndBenchmark(benchmarkConfig);
+    }
 
 }

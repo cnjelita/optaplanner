@@ -25,137 +25,144 @@ import org.optaplanner.core.impl.solution.Solution;
  * Incremental java implementation of {@link ScoreDirector}, which only recalculates the {@link Score}
  * of the part of the {@link Solution} workingSolution that changed,
  * instead of the going through the entire {@link Solution}. This is incremental calculation, which is fast.
+ *
  * @see ScoreDirector
  */
 public class IncrementalScoreDirector extends AbstractScoreDirector<IncrementalScoreDirectorFactory> {
 
-	private final IncrementalScoreCalculator incrementalScoreCalculator;
+    private final IncrementalScoreCalculator incrementalScoreCalculator;
 
-	public IncrementalScoreDirector(IncrementalScoreDirectorFactory scoreDirectorFactory,
-			IncrementalScoreCalculator incrementalScoreCalculator) {
-		super(scoreDirectorFactory);
-		this.incrementalScoreCalculator = incrementalScoreCalculator;
-	}
+    public IncrementalScoreDirector(IncrementalScoreDirectorFactory scoreDirectorFactory,
+                                    IncrementalScoreCalculator incrementalScoreCalculator) {
+        super(scoreDirectorFactory);
+        this.incrementalScoreCalculator = incrementalScoreCalculator;
+    }
 
-	public IncrementalScoreCalculator getIncrementalScoreCalculator() {
-		return incrementalScoreCalculator;
-	}
+    public IncrementalScoreCalculator getIncrementalScoreCalculator() {
+        return incrementalScoreCalculator;
+    }
 
-	// ************************************************************************
-	// Complex methods
-	// ************************************************************************
+    // ************************************************************************
+    // Complex methods
+    // ************************************************************************
 
-	@Override
-	public void setWorkingSolution(Solution workingSolution) {
-		super.setWorkingSolution(workingSolution);
-		incrementalScoreCalculator.resetWorkingSolution(workingSolution);
-	}
+    @Override
+    public void setWorkingSolution(Solution workingSolution) {
+        super.setWorkingSolution(workingSolution);
+        incrementalScoreCalculator.resetWorkingSolution(workingSolution);
+    }
 
-	@Override
-	public void beforeEntityAdded(Object entity) {
-		incrementalScoreCalculator.beforeEntityAdded(entity);
-		super.beforeEntityAdded(entity);
-	}
+    @Override
+    public void beforeEntityAdded(Object entity) {
+        incrementalScoreCalculator.beforeEntityAdded(entity);
+        super.beforeEntityAdded(entity);
+    }
 
-	@Override
-	public void afterEntityAdded(Object entity) {
-		super.afterEntityAdded(entity);
-		incrementalScoreCalculator.afterEntityAdded(entity);
-	}
+    @Override
+    public void afterEntityAdded(Object entity) {
+        super.afterEntityAdded(entity);
+        incrementalScoreCalculator.afterEntityAdded(entity);
+    }
 
-	@Override
-	public void beforeAllVariablesChanged(Object entity) {
-		incrementalScoreCalculator.beforeAllVariablesChanged(entity);
-		super.beforeAllVariablesChanged(entity);
-	}
+    @Override
+    public void beforeAllVariablesChanged(Object entity) {
+        incrementalScoreCalculator.beforeAllVariablesChanged(entity);
+        super.beforeAllVariablesChanged(entity);
+    }
 
-	@Override
-	public void afterAllVariablesChanged(Object entity) {
-		super.afterAllVariablesChanged(entity);
-		incrementalScoreCalculator.afterAllVariablesChanged(entity);
-	}
+    @Override
+    public void afterAllVariablesChanged(Object entity) {
+        super.afterAllVariablesChanged(entity);
+        incrementalScoreCalculator.afterAllVariablesChanged(entity);
+    }
 
-	@Override
-	public void beforeVariableChanged(Object entity, String variableName) {
-		incrementalScoreCalculator.beforeVariableChanged(entity, variableName);
-		super.beforeVariableChanged(entity, variableName);
-	}
+    @Override
+    public void beforeVariableChanged(Object entity, String variableName) {
+        incrementalScoreCalculator.beforeVariableChanged(entity, variableName);
+        super.beforeVariableChanged(entity, variableName);
+    }
 
-	@Override
-	public void afterVariableChanged(Object entity, String variableName) {
-		super.afterVariableChanged(entity, variableName);
-		incrementalScoreCalculator.afterVariableChanged(entity, variableName);
-	}
+    @Override
+    public void afterVariableChanged(Object entity, String variableName) {
+        super.afterVariableChanged(entity, variableName);
+        incrementalScoreCalculator.afterVariableChanged(entity, variableName);
+    }
 
-	@Override
-	public void beforeEntityRemoved(Object entity) {
-		incrementalScoreCalculator.beforeEntityRemoved(entity);
-		super.beforeEntityRemoved(entity);
-	}
+    @Override
+    public void beforeEntityRemoved(Object entity) {
+        incrementalScoreCalculator.beforeEntityRemoved(entity);
+        super.beforeEntityRemoved(entity);
+    }
 
-	@Override
-	public void afterEntityRemoved(Object entity) {
-		super.afterEntityRemoved(entity);
-		incrementalScoreCalculator.afterEntityRemoved(entity);
-	}
+    @Override
+    public void afterEntityRemoved(Object entity) {
+        super.afterEntityRemoved(entity);
+        incrementalScoreCalculator.afterEntityRemoved(entity);
+    }
 
-	@Override
-	public void beforeProblemFactAdded(Object problemFact) {
-		super.beforeProblemFactAdded(problemFact);
-	}
+    @Override
+    public void beforeProblemFactAdded(Object problemFact) {
+        super.beforeProblemFactAdded(problemFact);
+    }
 
-	@Override
-	public void afterProblemFactAdded(Object problemFact) {
-		super.afterProblemFactAdded(problemFact);
-		incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
-	}
+    @Override
+    public void afterProblemFactAdded(Object problemFact) {
+        super.afterProblemFactAdded(problemFact);
+        incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
+    }
 
-	@Override
-	public void beforeProblemFactChanged(Object problemFact) {
-		super.beforeProblemFactChanged(problemFact);
-	}
+    @Override
+    public void beforeProblemFactChanged(Object problemFact) {
+        super.beforeProblemFactChanged(problemFact);
+    }
 
-	@Override
-	public void afterProblemFactChanged(Object problemFact) {
-		super.afterProblemFactChanged(problemFact);
-		incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
-	}
+    @Override
+    public void afterProblemFactChanged(Object problemFact) {
+        super.afterProblemFactChanged(problemFact);
+        incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
+    }
 
-	@Override
-	public void beforeProblemFactRemoved(Object problemFact) {
-		super.beforeProblemFactRemoved(problemFact);
-	}
+    @Override
+    public void beforeProblemFactRemoved(Object problemFact) {
+        super.beforeProblemFactRemoved(problemFact);
+    }
 
-	@Override
-	public void afterProblemFactRemoved(Object problemFact) {
-		super.afterProblemFactRemoved(problemFact);
-		incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
-	}
+    @Override
+    public void afterProblemFactRemoved(Object problemFact) {
+        super.afterProblemFactRemoved(problemFact);
+        incrementalScoreCalculator.resetWorkingSolution(workingSolution); // TODO do not nuke it
+    }
 
-	public Score calculateScore() {
-		Score score = incrementalScoreCalculator.calculateScore();
-		setCalculatedScore(score);
-		return score;
-	}
+    public Score calculateScore() {
+        Score score = incrementalScoreCalculator.calculateScore();
+        setCalculatedScore(score);
+        return score;
+    }
 
-	@Override
-	public AbstractScoreDirector clone() {
-		IncrementalScoreDirector clone = scoreDirectorFactory.buildScoreDirector(this);
-		clone.workingSolution = cloneWorkingSolution();
-		clone.resetTrailingEntityMap();
-		return clone;
-	}
+    @Override
+    public AbstractScoreDirector clone() {
+        IncrementalScoreDirector clone = null;
+        if (incrementalScoreCalculator.isCloneable()) {
+            clone = scoreDirectorFactory.buildScoreDirector(this);
+            clone.workingSolution = cloneWorkingSolution();
+            clone.resetTrailingEntityMap();
+        } else {
+            clone = scoreDirectorFactory.buildScoreDirector();
+            clone.setWorkingSolution(cloneWorkingSolution());
+        }
+        return clone;
+    }
 
-	@Override
-	protected String buildScoreCorruptionAnalysis(ScoreDirector uncorruptedScoreDirector) {
-		if (!(uncorruptedScoreDirector instanceof IncrementalScoreDirector)) {
-			return "Unable to analyze: the uncorruptedScoreDirector class (" + uncorruptedScoreDirector.getClass()
-					+ ") is not an instance of the scoreDirector class (" + IncrementalScoreDirector.class + ").";
-		}
-		IncrementalScoreDirector uncorruptedIncrementalScoreDirector
-				= (IncrementalScoreDirector) uncorruptedScoreDirector;
-		return incrementalScoreCalculator.buildScoreCorruptionAnalysis(
-				uncorruptedIncrementalScoreDirector.incrementalScoreCalculator);
-	}
+    @Override
+    protected String buildScoreCorruptionAnalysis(ScoreDirector uncorruptedScoreDirector) {
+        if (!(uncorruptedScoreDirector instanceof IncrementalScoreDirector)) {
+            return "Unable to analyze: the uncorruptedScoreDirector class (" + uncorruptedScoreDirector.getClass()
+                    + ") is not an instance of the scoreDirector class (" + IncrementalScoreDirector.class + ").";
+        }
+        IncrementalScoreDirector uncorruptedIncrementalScoreDirector
+                = (IncrementalScoreDirector) uncorruptedScoreDirector;
+        return incrementalScoreCalculator.buildScoreCorruptionAnalysis(
+                uncorruptedIncrementalScoreDirector.incrementalScoreCalculator);
+    }
 
 }

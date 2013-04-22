@@ -16,16 +16,17 @@
 
 package org.optaplanner.examples.cloudbalancingga.solver.score;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.impl.score.director.incremental.AbstractIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancingga.domain.CloudProcess;
 
-public class CloudBalancingIncrementalScoreCalculator extends AbstractIncrementalScoreCalculator<CloudBalance> {
+import java.util.HashMap;
+import java.util.Map;
+
+public class CloudBalancingIncrementalScoreCalculatorWithoutCloning
+        extends AbstractIncrementalScoreCalculator<CloudBalance> {
 
     private Map<CloudComputer, Integer> cpuPowerUsageMap;
     private Map<CloudComputer, Integer> memoryUsageMap;
@@ -164,13 +165,8 @@ public class CloudBalancingIncrementalScoreCalculator extends AbstractIncrementa
         return HardSoftScore.valueOf(hardScore, softScore);
     }
 
-    @Override
-    public boolean isCloneable() {
-        return true;
-    }
-
-    public CloudBalancingIncrementalScoreCalculator clone() {
-        CloudBalancingIncrementalScoreCalculator clone = new CloudBalancingIncrementalScoreCalculator();
+    public CloudBalancingIncrementalScoreCalculatorWithoutCloning clone() {
+        CloudBalancingIncrementalScoreCalculatorWithoutCloning clone = new CloudBalancingIncrementalScoreCalculatorWithoutCloning();
         clone.softScore = softScore;
         clone.hardScore = hardScore;
         clone.cpuPowerUsageMap = new HashMap<CloudComputer, Integer>(cpuPowerUsageMap);

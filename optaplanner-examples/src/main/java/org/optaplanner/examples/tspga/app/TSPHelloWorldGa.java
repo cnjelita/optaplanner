@@ -34,8 +34,8 @@ public class TSPHelloWorldGa {
 		// Build the Solver
 		XmlSolverFactory solverFactory = new XmlSolverFactory();
 		Solver solver = solverFactory.configure(SOLVER_CONFIG).buildSolver();
-		File f = new File("optaplanner-examples/data/tsp/input/eil76.tsp");
-//		System.out.println(f.getAbsolutePath());
+		File f = new File("data/tsp/input/eil76.tsp");
+		System.out.println(f.getAbsolutePath());
 		TravelingSalesmanTour tour = (TravelingSalesmanTour) new TspSolutionImporter().readSolution(f);
 
 		solver.setPlanningProblem(tour);
