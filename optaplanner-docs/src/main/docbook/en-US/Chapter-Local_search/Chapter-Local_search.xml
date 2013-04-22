@@ -280,7 +280,7 @@ INFO  Solving ended: time spend (41), best score (0), average calculate count pe
     the decision making is shown in the log:</para>
 
     <programlisting>INFO  Solver started: time spend (0), score (-6), new best score (-6), random seed (0).
-TRACE         Ignoring not doable move (col0@row0 =&gt; row0).
+TRACE         Move index (0) not doable, ignoring move (col0@row0 =&gt; row0).
 TRACE         Move index (1), score (-4), accepted (true) for move (col0@row0 =&gt; row1).
 TRACE         Move index (2), score (-4), accepted (true) for move (col0@row0 =&gt; row2).
 TRACE         Move index (3), score (-4), accepted (true) for move (col0@row0 =&gt; row3).
@@ -449,8 +449,7 @@ DEBUG     Step index (0), time spend (6), score (-3), new best score (-3), accep
         <itemizedlist>
           <listitem>
             <para>An <literal>minimalAcceptedSelection</literal> integer, which specifies how many accepted moves should
-            have be evaluated during each step. By default it is positive infinity, so all accepted moves are evaluated
-            at every step.</para>
+            be evaluated during each step. By default, all accepted moves are evaluated at every step.</para>
 
             <programlisting language="xml">  &lt;forager&gt;
     &lt;minimalAcceptedSelection&gt;1000&lt;/minimalAcceptedSelection&gt;

@@ -29,6 +29,8 @@ public interface SolutionDao {
 
     File getDataDir();
 
+    String getFileSuffix();
+
     Solution readSolution(File inputSolutionFile);
 
     void writeSolution(Solution solution, File outputSolutionFile);
