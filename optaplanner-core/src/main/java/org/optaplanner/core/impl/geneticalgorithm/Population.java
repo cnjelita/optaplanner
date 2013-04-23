@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.optaplanner.core.impl.score.director.ScoreDirector;
 
-//TODO should be in other package?
 public class Population implements Iterable<ScoreDirector> {
 
     private List<ScoreDirector> individuals;

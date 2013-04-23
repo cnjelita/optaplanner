@@ -17,9 +17,9 @@
 package org.optaplanner.examples.cloudbalancingga.persistence;
 
 import org.optaplanner.examples.cloudbalancingga.domain.CloudBalance;
-import org.optaplanner.examples.common.persistence.XStreamSolutionDaoImpl;
+import org.optaplanner.examples.common.persistence.XStreamSolutionDao;
 
-public class CloudBalancingDaoImpl extends XStreamSolutionDaoImpl {
+public class CloudBalancingDaoImpl extends XStreamSolutionDao {
 
 	public CloudBalancingDaoImpl() {
 		super("cloudbalancing", CloudBalance.class);

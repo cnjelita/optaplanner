@@ -31,9 +31,9 @@
     <!--</assertionScoreDirectorFactory>-->
   </scoreDirectorFactory>
 
-  <constructionHeuristic>
-    <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-  </constructionHeuristic>
+  <!--<constructionHeuristic>-->
+    <!--<constructionHeuristicType>FIRST_FIT</constructionHeuristicType>-->
+  <!--</constructionHeuristic>-->
   <!--<localSearch>-->
     <!--<unionMoveSelector>-->
       <!--<changeMoveSelector/>-->
@@ -55,37 +55,38 @@
       <!--<minimalAcceptedSelection>5000</minimalAcceptedSelection>-->
     <!--</forager>-->
   <!--</localSearch>-->
-  <geneticAlgorithm>
-    <termination>
-      <maximumStepCount>10000</maximumStepCount>
-      <!--<maximumSecondsSpend>120</maximumSecondsSpend>-->
-    </termination>
-    <populationParameters>
-      <populationSize>800</populationSize>
-      <!--<elitistSize>1</elitistSize>-->
-    </populationParameters>
-    <!--<stochasticUniversalSamplingSelector/>-->
-    <rankBasedSelector/>
-    <!--<orderBasedCrossoverOperator/>-->
-    <!--<unionCrossoverOperator>-->
-      <!--<cycleCrossoverOperator/>-->
-      <!--&lt;!&ndash;<orderBasedCrossoverOperator/>&ndash;&gt;-->
-        <!--&lt;!&ndash;<uniformOrderCrossoverOperator/>&ndash;&gt;-->
-    <!--</unionCrossoverOperator>-->
-    <mutationOperator>
-      <unionMoveSelector>
-        <swapMoveSelector/>
-        <changeMoveSelector/>
-        <subChainChangeMoveSelector>
-          <selectReversingMoveToo>true</selectReversingMoveToo>
-        </subChainChangeMoveSelector>
-          <!--<subChainSwapMoveSelector>-->
-              <!--<selectReversingMoveToo>true</selectReversingMoveToo>-->
-          <!--</subChainSwapMoveSelector>-->
-      </unionMoveSelector>
-    </mutationOperator>
-      <replacementStrategy>
-          <replacementStrategyType>KEEP_BEST</replacementStrategyType>
-      </replacementStrategy>
-  </geneticAlgorithm>
+    <geneticAlgorithm>
+        <termination>
+            <!--<maximumStepCount>500</maximumStepCount>-->
+            <maximumSecondsSpend>120</maximumSecondsSpend>
+        </termination>
+        <populationParameters>
+            <populationSize>600</populationSize>
+            <!--<elitistSize>1</elitistSize>-->
+        </populationParameters>
+        <!--<stochasticUniversalSamplingSelector/>-->
+        <rankBasedSelector/>
+        <!--<orderBasedCrossoverOperator/>-->
+        <unionCrossoverOperator>
+            <cycleCrossoverOperator/>
+            <orderBasedCrossoverOperator/>
+            <!--<uniformOrderCrossoverOperator/>-->
+            <!--<partiallyMatchedCrossoverOperator/>-->
+        </unionCrossoverOperator>
+        <mutationOperator>
+            <unionMoveSelector>
+                <swapMoveSelector/>
+                <changeMoveSelector/>
+                <subChainChangeMoveSelector>
+                    <subChainSelector>
+                        <maximumSubChainSize>170</maximumSubChainSize>
+                    </subChainSelector>
+                    <selectReversingMoveToo>true</selectReversingMoveToo>
+                </subChainChangeMoveSelector>
+            </unionMoveSelector>
+        </mutationOperator>
+        <replacementStrategy>
+            <replacementStrategyType>KEEP_NEW</replacementStrategyType>
+        </replacementStrategy>
+    </geneticAlgorithm>
 </solver>

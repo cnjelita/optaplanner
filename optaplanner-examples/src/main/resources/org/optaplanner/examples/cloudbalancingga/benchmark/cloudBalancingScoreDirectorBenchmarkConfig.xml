@@ -14,6 +14,7 @@
             <inputSolutionFile>data/cloudbalancing/unsolved/cb-0200comp-0600proc.xml</inputSolutionFile>
             <inputSolutionFile>data/cloudbalancing/unsolved/cb-0400comp-1200proc.xml</inputSolutionFile>
             <inputSolutionFile>data/cloudbalancing/unsolved/cb-0800comp-2400proc.xml</inputSolutionFile>
+            <inputSolutionFile>data/cloudbalancing/unsolved/cb-1600comp-4800proc.xml</inputSolutionFile>
             <problemStatisticType>BEST_SOLUTION_CHANGED</problemStatisticType>
         </problemBenchmarks>
 
@@ -24,15 +25,15 @@
                 <scoreDefinitionType>HARD_SOFT</scoreDefinitionType>
             </scoreDirectorFactory>
             <termination>
-                <maximumSecondsSpend>60</maximumSecondsSpend>
+                <maximumSecondsSpend>15</maximumSecondsSpend>
             </termination>
-            <constructionHeuristic>
-                <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-                <constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>
-            </constructionHeuristic>
+            <!--<constructionHeuristic>-->
+                <!--<constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>-->
+                <!--<constructionHeuristicPickEarlyType>FIRST_LAST_STEP_SCORE_EQUAL_OR_IMPROVING</constructionHeuristicPickEarlyType>-->
+            <!--</constructionHeuristic>-->
             <geneticAlgorithm>
                 <populationParameters>
-                    <populationSize>40</populationSize>
+                    <populationSize>80</populationSize>
                     <elitistSize>0</elitistSize>
                 </populationParameters>
                 <mutationOperator>
@@ -59,20 +60,20 @@
             </scoreDirectorFactory>
         </solver>
     </solverBenchmark>
-    <solverBenchmark>
-        <name>GA met Incremental Java - zonder cloning</name>
-        <solver>
-            <scoreDirectorFactory>
-                <incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculatorWithoutCloning</incrementalScoreCalculatorClass>
-            </scoreDirectorFactory>
-        </solver>
-    </solverBenchmark>
-    <solverBenchmark>
-        <name>GA met Simple map based</name>
-        <solver>
-            <scoreDirectorFactory>
-                <simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingMapBasedSimpleScoreCalculator</simpleScoreCalculatorClass>
-            </scoreDirectorFactory>
-        </solver>
-    </solverBenchmark>
+    <!--<solverBenchmark>-->
+        <!--<name>GA met Incremental Java - zonder cloning</name>-->
+        <!--<solver>-->
+            <!--<scoreDirectorFactory>-->
+                <!--<incrementalScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingIncrementalScoreCalculatorWithoutCloning</incrementalScoreCalculatorClass>-->
+            <!--</scoreDirectorFactory>-->
+        <!--</solver>-->
+    <!--</solverBenchmark>-->
+    <!--<solverBenchmark>-->
+        <!--<name>GA met Simple map based</name>-->
+        <!--<solver>-->
+            <!--<scoreDirectorFactory>-->
+                <!--<simpleScoreCalculatorClass>org.optaplanner.examples.cloudbalancingga.solver.score.CloudBalancingMapBasedSimpleScoreCalculator</simpleScoreCalculatorClass>-->
+            <!--</scoreDirectorFactory>-->
+        <!--</solver>-->
+    <!--</solverBenchmark>-->
 </plannerBenchmark>

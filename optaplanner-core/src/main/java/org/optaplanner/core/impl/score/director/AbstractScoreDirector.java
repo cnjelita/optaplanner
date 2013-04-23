@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
  * <li>before* method: last statement should be a call to the super method</li>
  * <li>after* method: first statement should be a call to the super method</li>
  * </ul>
+ *
  * @see ScoreDirector
  */
 public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFactory> implements ScoreDirector {
@@ -380,7 +381,7 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
 
     @Deprecated // TODO remove in 6.1.0
     protected void appendLegacyConstraintOccurrences(StringBuilder analysis,
-            ScoreDirector corruptedScoreDirector, ScoreDirector uncorruptedScoreDirector) {
+                                                     ScoreDirector corruptedScoreDirector, ScoreDirector uncorruptedScoreDirector) {
         // Do nothing unless overwritten
     }
 
@@ -412,8 +413,8 @@ public abstract class AbstractScoreDirector<F extends AbstractScoreDirectorFacto
         return getClass().getSimpleName() + "(" + calculateCount + ")";
     }
 
-    public void addToCalculationCount(int calculateCount) {
-        this.calculateCount += calculateCount;
+    public void setCalculateCount(long calculateCount) {
+        this.calculateCount = calculateCount;
     }
 
 }

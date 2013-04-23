@@ -180,7 +180,7 @@ public class DefaultSolverScope {
         return isBestSolutionInitialized() ? bestScore.toString() : "uninitialized/" + bestScore;
     }
 
-    public void addToCalculationCount(int numberOfCalculations) {
-        scoreDirector.addToCalculationCount(numberOfCalculations);
+    public void setCalculateCount(long numberOfCalculations) {
+        scoreDirector.setCalculateCount(numberOfCalculations);
     }
 }

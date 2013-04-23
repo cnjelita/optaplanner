@@ -25,66 +25,75 @@ import org.optaplanner.core.impl.solver.scope.DefaultSolverScope;
 
 public class GeneticAlgorithmSolverPhaseScope extends AbstractSolverPhaseScope {
 
-	private final int elitistSize;
-	private final int populationSize;
-	private Population generation;
-	private GeneticAlgorithmStepScope lastCompletedStepScope;
+    private final int elitistSize;
+    private final int populationSize;
+    private Population generation;
+    private GeneticAlgorithmStepScope lastCompletedStepScope;
+    //TODO hack in order to keep track of calculate count
+    private long calculateCount;
 
-	public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize, int elitistSize) {
-		//TODO make complete
-		super(solverScope);
-		this.populationSize = populationSize;
-		this.elitistSize = elitistSize;
-	}
+    public GeneticAlgorithmSolverPhaseScope(DefaultSolverScope solverScope, int populationSize, int elitistSize) {
+        //TODO make complete
+        super(solverScope);
+        this.populationSize = populationSize;
+        this.elitistSize = elitistSize;
+        this.calculateCount = solverScope.getCalculateCount();
+    }
 
-	public int getElitistSize() {
-		return elitistSize;
-	}
+    public int getElitistSize() {
+        return elitistSize;
+    }
 
-	//TODO why should this method be implemented for all phases? Useless for genetic algorithm
-	//Seems like it's used to assert undoMoves.
-	@Override
-	public AbstractStepScope getLastCompletedStepScope() {
-		return lastCompletedStepScope;
-	}
+    //TODO why should this method be implemented for all phases? Useless for genetic algorithm
+    //Seems like it's used to assert undoMoves.
+    @Override
+    public AbstractStepScope getLastCompletedStepScope() {
+        return lastCompletedStepScope;
+    }
 
-	//TODO overridden because might be used to calculate population fitness
-	@Override
-	public Score calculateScore() {
-		return null; //TODO return something
-	}
+    //TODO overridden because might be used to calculate population fitness
+    @Override
+    public Score calculateScore() {
+        return null; //TODO return something
+    }
 
-	public Population getGeneration() {
-		return generation;
-	}
+    public Population getGeneration() {
+        return generation;
+    }
 
-	public int getPopulationSize() {
-		return populationSize;
-	}
+    public int getPopulationSize() {
+        return populationSize;
+    }
 
-	public void setNewGeneration(Population newGeneration) {
-		this.generation = newGeneration;
+    public void setNewGeneration(Population newGeneration) {
+        this.generation = newGeneration;
 //        //FIXME necessary because bestsolutionrecaller requires best solution to be in workingSolution
 //        if (generation.getBestIndividual() != null) {
 //            getScoreDirector().setWorkingSolution(generation.getBestIndividual().getWorkingSolution());
 //            getScoreDirector().calculateScore();
 //        }
-	}
+    }
 
-	@Override
-	public Score getBestScore() {
-		return solverScope.getBestScore();
-	}
+    @Override
+    public Score getBestScore() {
+        return solverScope.getBestScore();
+    }
 
-	public Solution getBestIndividual() {
-		return generation.getBestIndividual().getWorkingSolution();
-	}
+    public Solution getBestIndividual() {
+        return generation.getBestIndividual().getWorkingSolution();
+    }
 
-	public Score getBestIndividualScore() {
-		return generation.getBestIndividual().getWorkingSolution().getScore();
-	}
+    public Score getBestIndividualScore() {
+        return generation.getBestIndividual().getWorkingSolution().getScore();
+    }
 
-	public void setLastCompletedStepScope(GeneticAlgorithmStepScope lastCompletedStepScope) {
-		this.lastCompletedStepScope = lastCompletedStepScope;
-	}
+    public void setLastCompletedStepScope(GeneticAlgorithmStepScope lastCompletedStepScope) {
+        this.lastCompletedStepScope = lastCompletedStepScope;
+    }
+
+    public void addToCalculateCount(long calculateCount) {
+        //TODO hack in order to keep track of calculate count
+        this.calculateCount += calculateCount;
+        solverScope.setCalculateCount(this.calculateCount);
+    }
 }

@@ -19,69 +19,79 @@ package org.optaplanner.core.impl.geneticalgorithm.scope;
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.impl.geneticalgorithm.Population;
 import org.optaplanner.core.impl.phase.step.AbstractStepScope;
+import org.optaplanner.core.impl.score.director.ScoreDirector;
 import org.optaplanner.core.impl.solution.Solution;
 
 public class GeneticAlgorithmStepScope extends AbstractStepScope {
 
-	private final GeneticAlgorithmSolverPhaseScope phaseScope;
-	private Population intermediatePopulation;
-	private int intermediatePopulationSize;
+    private final GeneticAlgorithmSolverPhaseScope phaseScope;
+    private Population intermediatePopulation;
+    private int intermediatePopulationSize;
 
-	public GeneticAlgorithmStepScope(GeneticAlgorithmSolverPhaseScope phaseScope) {
-		this.phaseScope = phaseScope;
-	}
+    public GeneticAlgorithmStepScope(GeneticAlgorithmSolverPhaseScope phaseScope) {
+        this.phaseScope = phaseScope;
+    }
 
-	@Override
-	public GeneticAlgorithmSolverPhaseScope getPhaseScope() {
-		return phaseScope;
-	}
+    @Override
+    public GeneticAlgorithmSolverPhaseScope getPhaseScope() {
+        return phaseScope;
+    }
 
-	//TODO what is this for?
-	@Override
-	public boolean isBestSolutionCloningDelayed() {
-		return false;
-	}
+    //TODO what is this for?
+    @Override
+    public boolean isBestSolutionCloningDelayed() {
+        return false;
+    }
 
-	//TODO what is this for?
-	@Override
-	public int getUninitializedVariableCount() {
-		return 0;
-	}
+    //TODO what is this for?
+    @Override
+    public int getUninitializedVariableCount() {
+        return 0;
+    }
 
-	public Population getIntermediatePopulation() {
-		return intermediatePopulation;
-	}
+    public Population getIntermediatePopulation() {
+        return intermediatePopulation;
+    }
 
-	//TODO should ..OnIntermediatePopulation be added to method name?
-	public void performScoreCalculation() {
-		intermediatePopulation.performScoreCalculation();
-	}
+    //TODO should ..OnIntermediatePopulation be added to method name?
+    public void performScoreCalculation() {
+        intermediatePopulation.performScoreCalculation();
+    }
 
-	public Population getCurrentGeneration() {
-		return phaseScope.getGeneration();
-	}
+    public Population getCurrentGeneration() {
+        return phaseScope.getGeneration();
+    }
 
-	public void setNewGeneration(Population newGeneration) {
-		phaseScope.setNewGeneration(newGeneration);
-	}
+    public void setNewGeneration(Population newGeneration) {
+        phaseScope.setNewGeneration(newGeneration);
+    }
 
-	public void setIntermediatePopulation(Population intermediatePopulation) {
-		this.intermediatePopulation = intermediatePopulation;
-	}
+    public void setIntermediatePopulation(Population intermediatePopulation) {
+        this.intermediatePopulation = intermediatePopulation;
+    }
 
-	public void setIntermediatePopulationSize(int intermediatePopulationSize) {
-		this.intermediatePopulationSize = intermediatePopulationSize;
-	}
+    public void setIntermediatePopulationSize(int intermediatePopulationSize) {
+        this.intermediatePopulationSize = intermediatePopulationSize;
+    }
 
-	public int getIntermediatePopulationSize() {
-		return intermediatePopulationSize;
-	}
+    public int getIntermediatePopulationSize() {
+        return intermediatePopulationSize;
+    }
 
-	public Score getScore() {
-		return phaseScope.getBestIndividualScore();
-	}
+    public Score getScore() {
+        return phaseScope.getBestIndividualScore();
+    }
 
-	public Solution createOrGetClonedSolution() {
-		return phaseScope.getBestIndividual();
-	}
+    public Solution createOrGetClonedSolution() {
+        return phaseScope.getBestIndividual();
+    }
+
+    public void updateCalculateCount() {
+        long calculateCount = 0;
+        //TODO HACK in order to keep track of calculatecount
+        for (ScoreDirector individual : intermediatePopulation) {
+            calculateCount += individual.getCalculateCount();
+        }
+        phaseScope.addToCalculateCount(calculateCount);
+    }
 }

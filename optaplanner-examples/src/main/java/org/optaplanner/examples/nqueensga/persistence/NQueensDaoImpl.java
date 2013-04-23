@@ -16,10 +16,10 @@
 
 package org.optaplanner.examples.nqueensga.persistence;
 
-import org.optaplanner.examples.common.persistence.XStreamSolutionDaoImpl;
+import org.optaplanner.examples.common.persistence.XStreamSolutionDao;
 import org.optaplanner.examples.nqueensga.domain.NQueens;
 
-public class NQueensDaoImpl extends XStreamSolutionDaoImpl {
+public class NQueensDaoImpl extends XStreamSolutionDao {
 
     public NQueensDaoImpl() {
         super("nqueens", NQueens.class);

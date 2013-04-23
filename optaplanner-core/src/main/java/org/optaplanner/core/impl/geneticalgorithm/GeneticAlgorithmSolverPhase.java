@@ -26,7 +26,6 @@ import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmSolverPh
 import org.optaplanner.core.impl.geneticalgorithm.scope.GeneticAlgorithmStepScope;
 import org.optaplanner.core.impl.phase.AbstractSolverPhase;
 import org.optaplanner.core.impl.solver.scope.DefaultSolverScope;
-import org.uncommons.maths.random.CellularAutomatonRNG;
 
 public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         implements GeneticAlgorithmSolverPhaseLifeCycleListener {
@@ -103,7 +102,7 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
 
     //TODO do genetic algorithms really use step index, or can this method be removed?
     private GeneticAlgorithmStepScope createNextStepScope(GeneticAlgorithmSolverPhaseScope phaseScope,
-            GeneticAlgorithmStepScope completedStepScope) {
+                                                          GeneticAlgorithmStepScope completedStepScope) {
         if (completedStepScope == null) {
             completedStepScope = new GeneticAlgorithmStepScope(phaseScope);
             completedStepScope.setScore(phaseScope.getStartingScore());
@@ -148,9 +147,6 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
         solutionSelector.phaseEnded(phaseScope);
         populationInitializer.phaseEnded(phaseScope);
         replacementStrategy.phaseEnded(phaseScope);
-        phaseScope.getSolverScope()
-                .addToCalculationCount(phaseScope.getPopulationSize() * phaseScope.getLastCompletedStepScope()
-                        .getStepIndex());
         logger.info("Phase ({}) geneticAlgorithm ended: step total ({}), time spend ({}), best score ({}).",
                 phaseIndex,
                 phaseScope.getLastCompletedStepScope().getStepIndex() + 1,
@@ -174,6 +170,8 @@ public class GeneticAlgorithmSolverPhase extends AbstractSolverPhase
     public void stepEnded(GeneticAlgorithmStepScope stepScope) {
         //TODO Should something else be done when step ends?
         super.stepEnded(stepScope);
+        //TODO hack in order to keep track of calculate count
+        stepScope.updateCalculateCount();
         mutationOperator.stepEnded(stepScope);
         crossoverOperator.stepEnded(stepScope);
         solutionSelector.stepEnded(stepScope);

@@ -19,11 +19,27 @@ package org.optaplanner.core.impl.geneticalgorithm;
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.impl.solution.Solution;
 
+//TODO HACK in order to be able to support crossover operation
+//(helps find corresponding entities in different solutions)
 public interface Individual<S extends Score> extends Solution<S> {
 
-	public Object getEntityByClassAndId(Class clazz, Long id);
+    /**
+     * Returns an entity given an id. The id should be the
+     * same for corresponding entities in different solutions.
+     *
+     * @param clazz - the class of the entity
+     * @param id    - the id of the entity
+     * @return the entity itself
+     */
+    public Object getEntityByClassAndId(Class clazz, Long id);
 
-	public long getEntityId(Object entity);
+    /**
+     * Returns the id of a given planning entity
+     *
+     * @param entity - the entity of which we want the id
+     * @return
+     */
+    public long getEntityId(Object entity);
 
-	int getEntitySize(Class<?> entityClass);
+    int getEntitySize(Class<?> entityClass);
 }

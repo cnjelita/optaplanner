@@ -16,10 +16,10 @@
 
 package org.optaplanner.examples.tspga.persistence;
 
-import org.optaplanner.examples.common.persistence.XStreamSolutionDaoImpl;
+import org.optaplanner.examples.common.persistence.XStreamSolutionDao;
 import org.optaplanner.examples.tspga.domain.TravelingSalesmanTour;
 
-public class TspDaoImpl extends XStreamSolutionDaoImpl {
+public class TspDaoImpl extends XStreamSolutionDao {
 
 	public TspDaoImpl() {
 		super("tsp", TravelingSalesmanTour.class);
